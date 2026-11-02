@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Buharkent · Ürünün Hikâyesi — YEGFEST Prototip</title>
+<meta name="description" content="YEGFEST dijital tanıtım platformu prototipi: Buharkent ilçe sayfası.">
+<meta name="theme-color" content="#1F3A5F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F1E8;--white:#fff;--navy:#1F3A5F;--ink:#14263F;--gold:#C9A227;--gold2:#B8900F;--gold3:#E3B341;--blue:#2E78C7;--green:#5E8C4A;--muted:rgba(20,38,63,.66);--line:rgba(31,58,95,.13)}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.55}
+em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;color:var(--gold2)}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+
+/* top */
+.top{position:sticky;top:0;z-index:20;background:rgba(244,241,232,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:12px;height:60px}
+.logo{font-weight:800;letter-spacing:.08em;color:var(--navy);font-size:18px}
+.logo span{color:var(--gold2)}
+.proto{margin-left:auto;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--gold);color:#fff;padding:5px 10px;border-radius:20px}
+
+/* hero */
+.hero{position:relative;overflow:hidden;background:linear-gradient(160deg,#1F3A5F 0%,#2A4C76 55%,#3A5E7E 100%);color:#fff}
+.hero .wrap{position:relative;padding:54px 20px 64px;display:grid;grid-template-columns:1.2fr .8fr;gap:30px;align-items:center}
+.hero .loc{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold3)}
+.hero h1{font-size:clamp(38px,7vw,68px);line-height:1.02;font-weight:800;letter-spacing:-.03em;margin:12px 0 16px}
+.hero h1 em{color:var(--gold3)}
+.hero p{font-size:clamp(16px,2.2vw,19px);color:rgba(255,255,255,.82);max-width:520px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.chips span{font-size:13px;font-weight:700;padding:7px 12px;border-radius:20px;background:rgba(255,255,255,.12);color:#fff}
+.hero svg{width:100%;max-width:340px;justify-self:center;filter:drop-shadow(0 30px 40px rgba(0,0,0,.3))}
+.sun{position:absolute;right:-120px;top:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(227,179,65,.55),rgba(227,179,65,0) 70%)}
+.hero .ph{width:100%;aspect-ratio:1;border-radius:24px;background-size:cover;background-position:center;display:none;box-shadow:0 30px 60px -20px rgba(0,0,0,.5)}
+.hero.hasimg .ph{display:block}.hero.hasimg svg{display:none}
+
+/* tabs */
+.tabs{position:sticky;top:60px;z-index:15;background:var(--bg);border-bottom:1px solid var(--line)}
+.tabs .wrap{display:flex;gap:6px;overflow-x:auto;padding:12px 20px;scrollbar-width:none}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tabs a{flex-shrink:0;text-decoration:none;font-size:14px;font-weight:700;padding:9px 15px;border-radius:24px;background:rgba(31,58,95,.07);color:var(--navy)}
+.tabs a.on{background:var(--navy);color:#fff}
+
+section.sec{padding:56px 0 20px;scroll-margin-top:120px}
+.kick{font-size:12px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;color:var(--gold2);display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.kick::before{content:"";width:28px;height:2px;background:var(--gold)}
+h2{font-size:clamp(28px,4.5vw,42px);line-height:1.1;letter-spacing:-.02em;color:var(--navy);font-weight:800;margin-bottom:14px}
+.lead{font-size:17px;color:var(--muted);max-width:720px}
+.card{background:var(--white);border-radius:22px;box-shadow:0 0 0 1px var(--line),0 18px 40px -28px rgba(20,38,63,.35)}
+
+/* journey */
+.journey{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:28px}
+.st{padding:20px 18px;position:relative}
+.st .ic{font-size:30px}
+.st small{display:block;font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--gold2);margin:10px 0 4px}
+.st b{display:block;font-size:17px;color:var(--navy);margin-bottom:6px}
+.st p{font-size:14px;color:var(--muted);line-height:1.5}
+.quote{margin-top:26px;padding:24px 26px;border-left:4px solid var(--gold);background:rgba(201,162,39,.1);border-radius:0 18px 18px 0;font-family:'Fraunces',Georgia,serif;font-style:italic;font-size:20px;color:var(--navy)}
+.quote small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-style:normal;font-size:13px;color:var(--muted);margin-top:8px}
+
+/* recipe */
+.recipe{display:grid;grid-template-columns:.9fr 1.1fr;gap:20px;margin-top:26px}
+.recipe .card{padding:26px}
+.recipe h3{font-size:22px;color:var(--navy);margin-bottom:12px}
+.ing{list-style:none}
+.ing li{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-top:1px dashed var(--line);font-size:16px}
+.ing li:first-child{border-top:0}
+.ing b{color:var(--blue);white-space:nowrap}
+.steps{list-style:none;counter-reset:s}
+.steps li{counter-increment:s;position:relative;padding:10px 0 10px 46px;font-size:16px;border-top:1px solid var(--line)}
+.steps li:first-child{border-top:0}
+.steps li::before{content:counter(s);position:absolute;left:0;top:9px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold3);font-weight:800;font-size:14px;display:flex;align-items:center;justify-content:center}
+.tip{margin-top:14px;font-size:14px;background:rgba(94,140,74,.1);border-radius:12px;padding:12px 14px;color:var(--ink)}
+.timer{display:flex;align-items:center;gap:12px;margin-top:14px}
+.btn{font:inherit;font-weight:800;font-size:14px;border:0;border-radius:30px;padding:11px 18px;background:var(--navy);color:#fff;cursor:pointer}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.ghost{background:transparent;color:var(--navy);box-shadow:0 0 0 2px var(--navy)}
+
+/* producer */
+.prod{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:center;padding:26px;margin-top:26px}
+.avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#E8E2D2,#D9E4EE);display:flex;align-items:center;justify-content:center;font-size:52px;background-size:cover;background-position:center}
+.prod h3{font-size:22px;color:var(--navy)}
+.prod p{font-size:15px;color:var(--muted);margin-top:6px}
+.tagx{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:4px 9px;border-radius:12px;background:rgba(46,120,199,.12);color:var(--blue);margin-bottom:6px}
+
+/* video */
+.vid{display:grid;grid-template-columns:320px 1fr;gap:26px;margin-top:26px;align-items:center}
+.vframe{aspect-ratio:9/16;border-radius:26px;background:var(--navy);overflow:hidden;position:relative;box-shadow:0 30px 60px -30px rgba(20,38,63,.6)}
+.vframe video{width:100%;height:100%;object-fit:cover;display:none}
+.vframe.has video{display:block}.vframe.has .vph{display:none}
+.vph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#fff;padding:24px}
+.vph .play{width:74px;height:74px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:18px}
+.vph b{font-size:18px}.vph span{font-size:13px;opacity:.75;margin-top:6px}
+.beats{list-style:none}
+.beats li{display:grid;grid-template-columns:78px 1fr;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
+.beats li:first-child{border-top:0}
+.beats b{color:var(--blue)}
+
+/* passport */
+.pass{padding:28px;margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center;background:linear-gradient(135deg,#fff,#FBF3DA)}
+.stamps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:300px}
+.stamps i{aspect-ratio:1;border-radius:50%;border:2px dashed rgba(31,58,95,.28);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:26px;background:#fff;transition:.4s}
+.stamps i.f{border:3px solid var(--gold);background:rgba(201,162,39,.16);animation:pop .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.12)}100%{transform:none}}
+.count{font-size:15px;font-weight:700;color:var(--navy);margin:14px 0}
+
+/* map teaser */
+.near{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.near div{padding:16px;border-radius:16px;background:#fff;box-shadow:0 0 0 1px var(--line);font-size:14px}
+.near b{display:block;font-size:16px;color:var(--navy)}
+.near .on{box-shadow:0 0 0 2px var(--gold)}
+.near .soon{opacity:.55}
+
+footer{margin-top:60px;background:var(--navy);color:rgba(255,255,255,.8);font-size:13px}
+footer .wrap{padding:30px 20px}
+footer b{color:#fff}
+
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+
+@media(max-width:760px){
+  .hero .wrap{grid-template-columns:1fr;padding:36px 20px 44px}
+  .hero svg,.hero .ph{max-width:240px;justify-self:start}
+  .journey{grid-template-columns:1fr 1fr}
+  .recipe,.vid,.pass{grid-template-columns:1fr}
+  .vframe{max-width:280px}
+  .near{grid-template-columns:1fr 1fr}
+  .prod{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="top"><div class="wrap"><div class="logo">YEG<span>FEST</span></div><span style="font-size:13px;color:var(--muted);font-weight:600">Ürünün Hikâyesi</span><span class="proto">Prototip</span></div></header>
+
+<div class="hero" id="hero"><div class="sun"></div><div class="wrap">
+  <div>
+    <div class="loc">Buharkent · Aydın · Büyük Menderes Vadisi</div>
+    <h1>Güneşte kuruyan <em>miras</em></h1>
+    <p>Dalda olgunlaşan, kendiliğinden düşen ve günlerce güneşte kuruyan incir. Buharkent'in emeği, bir paketin içinde değil, hikâyesinde saklı.</p>
+    <div class="chips"><span>🌿 Kuru incir</span><span>☀️ Doğal kurutma</span><span>🍮 İncir uyutması</span></div>
+  </div>
+  <div class="ph" data-img="/ilce/buharkent/kapak.jpg"></div>
+  <svg viewBox="0 0 300 300" aria-hidden="true">
+    <defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7A4A6A"/><stop offset="1" stop-color="#4A2840"/></linearGradient>
+    <linearGradient id="lf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7FA85F"/><stop offset="1" stop-color="#4E7A3A"/></linearGradient></defs>
+    <path d="M150 40 C120 70 60 60 50 110 C90 100 110 120 120 150 C130 110 160 90 150 40Z" fill="url(#lf)"/>
+    <path d="M160 46 C190 70 250 66 256 116 C218 104 196 124 186 150 C178 110 150 92 160 46Z" fill="url(#lf)" opacity=".9"/>
+    <path d="M150 100 C200 100 240 160 230 210 C220 260 180 280 150 280 C120 280 80 260 70 210 C60 160 100 100 150 100Z" fill="url(#fg)"/>
+    <path d="M150 100 C142 92 146 80 156 76" stroke="#5B3A2A" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <ellipse cx="120" cy="170" rx="18" ry="34" fill="#fff" opacity=".12" transform="rotate(-20 120 170)"/>
+  </svg>
+</div></div>
+
+<nav class="tabs"><div class="wrap">
+  <a href="#hikaye" class="on">Ürünün Hikâyesi</a><a href="#sofra">Yöresel Sofra</a><a href="#uretici">Üretici</a><a href="#video">Video</a><a href="#pasaport">Dijital Pasaport</a><a href="#harita">Lezzet Haritası</a>
+</div></nav>
+
+<main class="wrap">
+
+<section class="sec" id="hikaye">
+  <div class="kick reveal">Ürünün hikâyesi</div>
+  <h2 class="reveal">Topraktan sofraya <em>beş adım</em></h2>
+  <p class="lead reveal">Kuru incir acele etmeyi sevmez. Ağaç, güneş ve insan emeği aynı ritimde çalışır.</p>
+  <div class="journey">
+    <div class="card st reveal"><div class="ic">🌳</div><small>01 · OLGUNLAŞMA</small><b>Dalda bekler</b><p>İncir ağaçta olgunlaşır, şekerini güneşten alır.</p></div>
+    <div class="card st reveal"><div class="ic">🧺</div><small>02 · HASAT</small><b>Kendiliğinden düşer</b><p>Olgunlaşan meyve yere düşer; sabahın serinliğinde elle toplanır.</p></div>
+    <div class="card st reveal"><div class="ic">☀️</div><small>03 · KURUTMA</small><b>Güneşe emanet</b><p>Sergilerde günlerce doğal yolla kurutulur.</p></div>
+    <div class="card st reveal"><div class="ic">✋</div><small>04 · AYIKLAMA</small><b>Tek tek seçilir</b><p>Kuruyan incirler boy ve kaliteye göre elle ayrılır.</p></div>
+    <div class="card st reveal"><div class="ic">📦</div><small>05 · PAKETLEME</small><b>Sofraya hazır</b><p>Paketlenir; kahvaltıdan tatlıya her sofraya ulaşır.</p></div>
+  </div>
+  <div class="quote reveal">“Üç kuşaktır bu bahçedeyiz. İncir dalda olgunlaşır, kendiliğinden düşer. Biz sadece güneşe emanet ederiz.”<small>Örnek içerik · Pilot çekimle gerçek üretici sözleriyle güncellenecek</small></div>
+</section>
+
+<section class="sec" id="sofra">
+  <div class="kick reveal">Yöresel sofra</div>
+  <h2 class="reveal">İncir <em>uyutması</em></h2>
+  <p class="lead reveal">Sütün içinde “uyuyan” incir: Ege'nin sade, ocakta pişmeyen tatlısı. İncirin kendi doğası sütü kıvamlandırır.</p>
+  <div class="recipe">
+    <div class="card reveal"><h3>Malzemeler · 4 kişilik</h3>
+      <ul class="ing"><li>Süt<b>1 litre</b></li><li>Kuru incir<b>10–12 adet</b></li><li>Ceviz içi (servis için)<b>1 avuç</b></li><li>Tarçın (isteğe bağlı)<b>1 tutam</b></li></ul>
+    </div>
+    <div class="card reveal"><h3>Hazırlanışı</h3>
+      <ol class="steps">
+        <li>İncirlerin saplarını alıp ılık suda yumuşayana kadar bekletin.</li>
+        <li>Sütü kaynatın, elinizi yakmayacak kadar ılıyana dek soğutun.</li>
+        <li>İncirleri ılık sütün bir kısmıyla pürüzsüz olana dek çekin, kalan sütle karıştırın.</li>
+        <li>Kâselere paylaştırın, üzerini örtüp oda sıcaklığında birkaç saat “uyutun”.</li>
+        <li>Kıvam aldığında buzdolabında soğutun, cevizle servis edin.</li>
+      </ol>
+      <div class="tip">💡 Süt fazla sıcak ya da soğuksa tatlı kıvam almaz; ılık olması püf noktasıdır.</div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="uretici">
+  <div class="kick reveal">Üretici</div>
+  <h2 class="reveal">Ürünün arkasındaki <em>insan</em></h2>
+  <div class="card prod reveal">
+    <div class="avatar" data-img="/ilce/buharkent/uretici.jpg">👵</div>
+    <div><span class="tagx">Örnek profil</span><h3>Üç kuşaktır incir üreten bir aile</h3>
+      <p>Pilot çekimde gerçek üreticinin portresi, adı ve kendi anlatımıyla güncellenecek. Her profil, çekim öncesi imzalanan açık rıza formuyla yayımlanır.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="video">
+  <div class="kick reveal">Video</div>
+  <h2 class="reveal">Bir İlçe, <em>Bir Hikâye</em> · 60 sn</h2>
+  <div class="vid">
+    <div class="vframe reveal" id="vf"><video id="vv" controls playsinline preload="metadata" src="/ilce/buharkent/video.mp4"></video>
+      <div class="vph"><div class="play">▶</div><b>Pilot video</b><span>Buharkent'te çekilen 60 saniyelik video bu alana yerleşecek</span></div></div>
+    <div class="reveal"><ul class="beats">
+      <li><b>0–5 sn</b>Kanca: gün doğumunda incir ağacı</li>
+      <li><b>5–15 sn</b>İnsan: üreticinin kendi sözleri</li>
+      <li><b>15–40 sn</b>Süreç: toplama, kurutma, ayıklama, paketleme</li>
+      <li><b>40–52 sn</b>Sofra: incir uyutması</li>
+      <li><b>52–60 sn</b>Kapanış: “155 hikâyeden biri”</li>
+    </ul></div>
+  </div>
+</section>
+
+<section class="sec" id="pasaport">
+  <div class="kick reveal">Festival modu</div>
+  <h2 class="reveal">Dijital <em>Pasaport</em></h2>
+  <div class="card pass reveal">
+    <div><p class="lead" style="font-size:16px">Festivalde her stantta bir QR var. Okut, damganı al. Dokuz damgayı tamamlayana festival hediyesi.</p>
+      <div class="count" id="pc">0 / 9 damga</div>
+      <button class="btn gold" id="stampBtn">Bu stantta damgamı al</button>
+      <button class="btn ghost" id="resetBtn" style="margin-left:8px">Sıfırla</button></div>
+    <div class="stamps" id="stamps"></div>
+  </div>
+</section>
+
+<section class="sec" id="harita">
+  <div class="kick reveal">Lezzet haritası</div>
+  <h2 class="reveal">155 ilçe, <em>tek adres</em></h2>
+  <p class="lead reveal">Her ilçenin ürün, sofra ve üretici hikâyeleri aynı yapıda yayımlanır. Prototipte yalnızca Buharkent sayfası etkindir.</p>
+  <div class="near reveal">
+    <div class="on"><b>Buharkent</b>Aydın · etkin</div>
+    <div class="soon"><b>İlçe 2</b>yakında</div>
+    <div class="soon"><b>İlçe 3</b>yakında</div>
+    <div class="soon"><b>… 155</b>yakında</div>
+  </div>
+</section>
+
+</main>
+
+<footer><div class="wrap">
+  <b>Bu sayfa bir prototiptir.</b> YEGFEST dijital tanıtım platformu önerisi kapsamında örnek olarak hazırlanmıştır; resmî bir site değildir.<br>
+  Hazırlayan: Harun Eymen Vural
+</div></footer>
+
+<script>
+/* reveal */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach((el,i)=>{el.style.transitionDelay=(i%5)*60+'ms';io.observe(el)});
+
+/* tabs follow scroll */
+const tabs=[...document.querySelectorAll('.tabs a')],secs=tabs.map(a=>document.querySelector(a.getAttribute('href')));
+addEventListener('scroll',()=>{let k=0;secs.forEach((s,i)=>{if(s.getBoundingClientRect().top<160)k=i});tabs.forEach((t,i)=>t.classList.toggle('on',i===k))},{passive:true});
+
+/* optional images */
+document.querySelectorAll('[data-img]').forEach(el=>{const im=new Image();im.onload=()=>{el.style.backgroundImage=`url("${im.src}")`;el.textContent='';if(el.classList.contains('ph'))document.getElementById('hero').classList.add('hasimg')};im.src=el.dataset.img});
+
+/* optional video */
+const vv=document.getElementById('vv');vv.addEventListener('loadedmetadata',()=>document.getElementById('vf').classList.add('has'));
+
+/* passport */
+const icons=['🌿','🧀','🫒','🍯','🍇','🌾','🍅','🧶','🍊'],st=document.getElementById('stamps');
+let n=0;try{n=+localStorage.getItem('yegfest-pass')||0}catch(e){}
+function draw(anim){st.innerHTML='';icons.forEach((ic,i)=>{const x=document.createElement('i');if(i<n){x.className='f';x.textContent=ic;if(!(anim&&i===n-1))x.style.animation='none'}else x.textContent='?';st.appendChild(x)});
+  document.getElementById('pc').textContent=n>=9?'9 / 9 damga · Tebrikler, hediyeni standından alabilirsin!':n+' / 9 damga'}
+draw();
+document.getElementById('stampBtn').onclick=()=>{if(n<9)n++;try{localStorage.setItem('yegfest-pass',n)}catch(e){}draw(true)};
+document.getElementById('resetBtn').onclick=()=>{n=0;try{localStorage.setItem('yegfest-pass',0)}catch(e){}draw()};
+</script>
+</body>
+</html>
