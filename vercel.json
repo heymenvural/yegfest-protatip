@@ -1,1 +1,1 @@
-{"cleanUrls":true,"trailingSlash":false}
+{"cleanUrls": true, "rewrites": [{"source": "/ilce/:slug", "destination": "/index.html"}]}

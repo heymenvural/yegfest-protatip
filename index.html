@@ -1,4 +1,608 @@
-<!DOCTYPE html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>YEGFEST · Ürünün Hikâyesi — Prototip</title><meta http-equiv="refresh" content="0; url=/ilce/buharkent">
-<style>body{font-family:system-ui,sans-serif;background:#F4F1E8;color:#1F3A5F;display:flex;align-items:center;justify-content:center;height:100vh;margin:0}</style>
-</head><body><a href="/ilce/buharkent">Buharkent sayfasına git →</a></body></html>
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>YEGFEST · Dijital Platform Simülasyonu</title>
+<meta name="description" content="YEGFEST dijital tanıtım platformu prototipi ve festival simülasyonu.">
+<meta name="theme-color" content="#1F3A5F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F4F1E8;--white:#fff;--navy:#1F3A5F;--ink:#14263F;--gold:#C9A227;--gold2:#B8900F;--gold3:#E3B341;--blue:#2E78C7;--green:#5E8C4A;--red:#C0392B;
+  --muted:rgba(20,38,63,.66);--dim:rgba(20,38,63,.42);--line:rgba(31,58,95,.13);--ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;color:var(--gold2)}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+.btn{font-weight:800;font-size:14px;border-radius:30px;padding:11px 18px;background:var(--navy);color:#fff;transition:transform .2s,box-shadow .2s;display:inline-flex;align-items:center;gap:8px}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px -12px rgba(20,38,63,.6)}
+.btn.gold{background:var(--gold)}
+.btn.ghost{background:rgba(255,255,255,.9);color:var(--navy);box-shadow:0 0 0 1.5px var(--line)}
+.btn.sm{padding:8px 13px;font-size:13px}
+
+/* ---------- top bar ---------- */
+.bar{position:fixed;left:0;right:0;top:0;height:64px;z-index:40;display:flex;align-items:center;gap:14px;padding:0 20px;background:rgba(244,241,232,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.logo{font-weight:800;letter-spacing:.08em;color:var(--navy);font-size:19px;cursor:pointer;white-space:nowrap}
+.logo span{color:var(--gold2)}
+.proto{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;background:var(--gold);color:#fff;padding:4px 9px;border-radius:20px}
+.persp{display:flex;gap:6px;margin-left:16px}
+.persp button{font-size:13px;font-weight:700;padding:8px 13px;border-radius:22px;background:rgba(31,58,95,.07);color:var(--navy);white-space:nowrap}
+.persp button.on{background:var(--navy);color:#fff}
+.hud{margin-left:auto;display:flex;align-items:center;gap:8px;background:#fff;border-radius:30px;padding:6px 8px 6px 14px;box-shadow:0 0 0 1px var(--line)}
+.hud small{font-size:11px;font-weight:800;letter-spacing:.12em;color:var(--gold2);text-transform:uppercase;margin-right:4px}
+.hud i{width:32px;height:32px;border-radius:50%;border:2px dashed rgba(31,58,95,.25);display:flex;align-items:center;justify-content:center;font-style:normal;font-size:16px;transition:.4s}
+.hud i.f{border:2px solid var(--gold);background:rgba(201,162,39,.18);animation:pop .6s var(--ease)}
+@keyframes pop{0%{transform:scale(.3)}70%{transform:scale(1.2)}100%{transform:none}}
+
+.view{display:none;min-height:100vh;padding-top:64px}
+.view.on{display:block;animation:fadein .6s var(--ease)}
+@keyframes fadein{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ---------- intro ---------- */
+#v-intro{position:relative;overflow:hidden}
+.intro{max-width:1180px;margin:0 auto;padding:70px 24px 60px;position:relative;z-index:2}
+.kick{font-size:12px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;color:var(--gold2);display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.kick::before{content:"";width:34px;height:2px;background:var(--gold)}
+.intro h1{font-size:clamp(40px,6.4vw,80px);line-height:1;letter-spacing:-.035em;color:var(--navy);font-weight:800}
+.intro p.lead{font-size:clamp(16px,2vw,21px);color:var(--muted);max-width:760px;margin-top:20px}
+.pcards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:46px}
+.pc{text-align:left;background:#fff;border-radius:28px;padding:30px 28px;box-shadow:0 0 0 1px var(--line),0 24px 50px -32px rgba(20,38,63,.45);transition:transform .35s var(--ease),box-shadow .35s;position:relative;overflow:hidden}
+.pc:hover{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),0 34px 60px -30px rgba(20,38,63,.55)}
+.pc .ic{width:68px;height:68px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--bg)}
+.pc small{display:block;font-size:12px;font-weight:800;letter-spacing:.16em;color:var(--gold2);margin:20px 0 6px;text-transform:uppercase}
+.pc h3{font-size:25px;color:var(--navy);line-height:1.2}
+.pc p{font-size:15px;color:var(--muted);margin-top:10px}
+.pc .go{margin-top:20px;font-size:14px;font-weight:800;color:var(--blue)}
+.pc::after{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(201,162,39,.25),transparent 70%)}
+.introfoot{margin-top:34px;font-size:13px;color:var(--dim)}
+.blob{position:absolute;border-radius:50%;filter:blur(120px);opacity:.3;pointer-events:none}
+
+/* ---------- festival 3D ---------- */
+#v-fest{padding-top:64px;height:100vh;overflow:hidden}
+#scene{position:relative;height:calc(100vh - 64px);overflow:hidden;perspective:1400px;perspective-origin:50% 30%;
+  background:linear-gradient(180deg,#0F1E33 0%,#1F3A5F 40%,#2A4766 50%,#8C7C5F 50.2%,#A3936F 100%)}
+#world{position:absolute;left:50%;top:66%;transform-style:preserve-3d;transition:transform 1.3s cubic-bezier(.65,.05,.25,1)}
+.f{position:absolute;left:0;top:0;transform-origin:0 0;backface-visibility:visible}
+.floor{width:5000px;height:3000px;transform:translate3d(-2500px,0,-1600px) rotateX(90deg);
+  background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 2px,transparent 2px 200px),repeating-linear-gradient(0deg,rgba(255,255,255,.05) 0 2px,transparent 2px 200px),radial-gradient(ellipse at 50% 55%,#C9B994 0%,#8F7F62 45%,#3B3A3F 85%)}
+.wall{width:5000px;height:1300px;transform:translate3d(-2500px,-1300px,-1600px);
+  background:radial-gradient(ellipse at 50% 100%,rgba(227,179,65,.25),transparent 60%),linear-gradient(180deg,#132640,#24405F)}
+.wall .big{position:absolute;left:50%;top:600px;transform:translateX(-50%);text-align:center;color:#fff;white-space:nowrap}
+.wall .big b{display:block;font-size:150px;font-weight:800;letter-spacing:.06em;line-height:1}
+.wall .big b span{color:var(--gold3)}
+.wall .big i{font-family:'Fraunces',serif;font-size:46px;color:rgba(255,255,255,.75)}
+.bunting{position:absolute;left:0;right:0;top:60px;height:80px;background:
+  conic-gradient(from 150deg at 50% 0,var(--gold3) 0 60deg,transparent 0) 0 0/90px 70px repeat-x;opacity:.8}
+.bunting.b2{top:120px;background:conic-gradient(from 150deg at 50% 0,#E0735F 0 60deg,transparent 0) 45px 0/90px 70px repeat-x;opacity:.55}
+.lamp{position:absolute;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(255,236,190,.35),transparent 65%);pointer-events:none}
+
+#stands{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.stand{position:absolute;left:0;top:0;transform-style:preserve-3d;cursor:pointer}
+.stand .f{border-radius:4px}
+.s-back{width:600px;height:440px;transform:translate3d(-300px,-440px,-110px);overflow:hidden;color:#fff;padding:40px 40px;display:flex;flex-direction:column;justify-content:flex-end}
+.s-back .art{position:absolute;right:30px;top:40px;font-size:170px;line-height:1;filter:drop-shadow(0 20px 30px rgba(0,0,0,.35))}
+.s-back .tl{font-family:'Fraunces',serif;font-style:italic;font-size:36px;line-height:1.05;max-width:360px}
+.s-back .rg{font-size:14px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;opacity:.85;margin-bottom:10px}
+.s-side{width:220px;height:440px;filter:brightness(.72)}
+.s-sideL{transform:translate3d(-300px,-440px,-110px) rotateY(-90deg)}
+.s-sideR{transform:translate3d(300px,-440px,-110px) rotateY(-90deg)}
+.s-head{width:640px;height:84px;transform:translate3d(-320px,-524px,110px);display:flex;align-items:center;justify-content:center;gap:16px;color:#fff;font-weight:800;font-size:40px;letter-spacing:.03em;box-shadow:0 20px 40px -20px rgba(0,0,0,.5)}
+.s-head small{font-size:18px;font-weight:700;opacity:.8;letter-spacing:.1em}
+.s-post{width:14px;height:524px;background:#E9E2D0}
+.s-postL{transform:translate3d(-318px,-524px,110px)}
+.s-postR{transform:translate3d(304px,-524px,110px)}
+.s-cfront{width:540px;height:150px;transform:translate3d(-270px,-150px,100px);background:#FBF7EE;display:flex;align-items:center;justify-content:center;gap:20px;border-top:8px solid var(--gold)}
+.s-cfront b{font-size:20px;color:var(--navy);letter-spacing:.06em}
+.s-ctop{width:540px;height:70px;transform:translate3d(-270px,-150px,30px) rotateX(90deg);background:#E9E0CC}
+.s-prod{width:80px;height:80px;font-size:62px;line-height:80px;text-align:center;filter:drop-shadow(0 10px 8px rgba(0,0,0,.3))}
+.s-qr{width:118px;height:156px;transform:translate3d(130px,-310px,80px);background:#fff;border-radius:12px;padding:10px;box-shadow:0 18px 30px -12px rgba(0,0,0,.5);text-align:center}
+.s-qr svg{width:98px;height:98px;display:block}
+.s-qr span{display:block;font-size:12px;font-weight:800;color:var(--navy);margin-top:6px;letter-spacing:.04em}
+.stand.near .s-qr{animation:qrp 1.4s ease-in-out infinite}
+@keyframes qrp{0%,100%{box-shadow:0 0 0 0 rgba(227,179,65,.9),0 18px 30px -12px rgba(0,0,0,.5)}50%{box-shadow:0 0 0 14px rgba(227,179,65,0),0 18px 30px -12px rgba(0,0,0,.5)}}
+.s-shadow{width:700px;height:360px;transform:translate3d(-350px,0,-150px) rotateX(90deg);background:radial-gradient(ellipse,rgba(0,0,0,.35),transparent 65%)}
+
+.fui{position:absolute;left:0;right:0;bottom:26px;display:flex;justify-content:center;align-items:center;gap:12px;z-index:5;pointer-events:none}
+.fui > *{pointer-events:auto}
+.nav-arrow{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.92);color:var(--navy);font-size:22px;font-weight:800;box-shadow:0 12px 30px -12px rgba(0,0,0,.6)}
+.info{position:absolute;left:24px;top:24px;z-index:5;max-width:380px;background:rgba(255,255,255,.95);border-radius:22px;padding:20px 22px;box-shadow:0 20px 50px -24px rgba(0,0,0,.6);transition:opacity .5s,transform .5s}
+.info.hide{opacity:0;transform:translateY(-10px);pointer-events:none}
+.info small{font-size:11px;font-weight:800;letter-spacing:.16em;color:var(--gold2);text-transform:uppercase}
+.info h3{font-size:24px;color:var(--navy);margin:4px 0 6px}
+.info p{font-size:14px;color:var(--muted)}
+.info .row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+.hint{position:absolute;left:50%;top:22px;transform:translateX(-50%);z-index:5;background:rgba(15,30,51,.75);color:#fff;font-size:14px;font-weight:600;padding:10px 18px;border-radius:30px;backdrop-filter:blur(6px);white-space:nowrap}
+
+/* ---------- phone overlay ---------- */
+#phoneWrap{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(10,20,35,.55);backdrop-filter:blur(4px)}
+#phoneWrap.on{display:flex;animation:fadein .4s var(--ease)}
+.phone{width:390px;height:min(800px,92vh);border-radius:54px;background:#0E1626;padding:14px;box-shadow:0 50px 100px -30px rgba(0,0,0,.8);position:relative}
+.phone::before{content:"";position:absolute;left:50%;top:22px;transform:translateX(-50%);width:110px;height:28px;border-radius:20px;background:#000;z-index:3}
+.screen{width:100%;height:100%;border-radius:42px;overflow:hidden;background:var(--bg);position:relative}
+.pclose{position:absolute;right:-60px;top:10px;width:46px;height:46px;border-radius:50%;background:#fff;color:var(--navy);font-size:20px;font-weight:800}
+.pfull{position:absolute;right:-60px;top:66px;width:46px;height:46px;border-radius:50%;background:var(--gold);color:#fff;font-size:18px;font-weight:800}
+.scan{position:absolute;inset:0;z-index:20;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;z-index:2;transition:opacity .5s}
+.scan .vf{width:250px;height:250px;position:relative;border-radius:24px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center}
+.scan .vf svg{width:170px;height:170px;background:#fff;padding:10px;border-radius:10px;filter:blur(1.5px);transition:filter .6s}
+.scan.ok .vf svg{filter:none}
+.scan .vf::before,.scan .vf::after{content:"";position:absolute;inset:-4px;border:4px solid var(--gold3);border-radius:28px;clip-path:polygon(0 0,22% 0,22% 4%,4% 4%,4% 22%,0 22%,0 78%,4% 78%,4% 96%,22% 96%,22% 100%,78% 100%,78% 96%,96% 96%,96% 78%,100% 78%,100% 22%,96% 22%,96% 4%,78% 4%,78% 0,100% 0,100% 100%,0 100%)}
+.scan .line{position:absolute;left:12px;right:12px;height:3px;background:linear-gradient(90deg,transparent,var(--gold3),transparent);box-shadow:0 0 18px var(--gold3);animation:sl 1.2s ease-in-out infinite alternate}
+@keyframes sl{from{top:14px}to{top:232px}}
+.scan.ok .line{display:none}
+.scan p{margin-top:26px;font-size:15px;opacity:.85}
+.scan .okb{margin-top:14px;font-size:15px;font-weight:800;color:var(--gold3);opacity:0;transition:opacity .4s}
+.scan.ok .okb{opacity:1}
+.pscroll{position:absolute;inset:0;overflow-y:auto;scrollbar-width:none}
+.pscroll .ih{padding-top:58px}
+.pscroll::-webkit-scrollbar{display:none}
+
+/* ---------- ilçe page ---------- */
+.ip{--c:#7A4A6A;--c2:#4A2840;background:var(--bg);min-height:100%}
+.ih{position:relative;overflow:hidden;color:#fff;background:linear-gradient(150deg,var(--c) 0%,var(--c2) 100%);padding:34px 24px 30px;background-size:cover;background-position:center}
+.ih.img::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.15),rgba(0,0,0,.65))}
+.ih > *{position:relative}
+.ih .art{position:absolute;right:-10px;top:10px;font-size:150px;opacity:.95;filter:drop-shadow(0 20px 30px rgba(0,0,0,.35))}
+.ih.img .art{display:none}
+.ih .loc{font-size:11px;font-weight:800;letter-spacing:.2em;text-transform:uppercase;opacity:.85}
+.ih h1{font-size:44px;line-height:1;font-weight:800;letter-spacing:-.03em;margin:10px 0 8px;max-width:72%}
+.ih .tl{font-family:'Fraunces',serif;font-style:italic;font-size:22px;color:var(--gold3);max-width:80%}
+.ih .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.ih .chips span{font-size:12px;font-weight:700;padding:6px 10px;border-radius:20px;background:rgba(255,255,255,.16)}
+.ih .acts{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.ih .btn.lst{background:#fff;color:var(--navy)}
+.ih .btn.lst.on{background:var(--gold3)}
+.itabs{position:sticky;top:0;z-index:5;background:var(--bg);display:flex;gap:6px;overflow-x:auto;padding:10px 16px;border-bottom:1px solid var(--line);scrollbar-width:none}
+.itabs::-webkit-scrollbar{display:none}
+.itabs a{flex-shrink:0;text-decoration:none;font-size:13px;font-weight:700;padding:8px 13px;border-radius:22px;background:rgba(31,58,95,.07);color:var(--navy);cursor:pointer}
+.itabs a.on{background:var(--navy);color:#fff}
+.isec{padding:28px 20px 6px}
+.isec h2{font-size:26px;line-height:1.15;color:var(--navy);letter-spacing:-.02em;margin-bottom:10px}
+.isec .k{font-size:11px;font-weight:800;letter-spacing:.2em;color:var(--gold2);text-transform:uppercase;margin-bottom:6px}
+.isec p{font-size:15px;color:var(--muted)}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.facts div{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:0 0 0 1px var(--line)}
+.facts small{display:block;font-size:10px;font-weight:800;letter-spacing:.14em;color:var(--gold2);text-transform:uppercase}
+.facts b{font-size:15px;color:var(--navy)}
+.prods{display:grid;gap:10px;margin-top:12px}
+.prd{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:14px;box-shadow:0 0 0 1px var(--line)}
+.prd .pe{width:56px;height:56px;border-radius:16px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:32px;flex-shrink:0}
+.prd b{display:block;font-size:16px;color:var(--navy)}
+.prd span{font-size:13px;color:var(--muted)}
+.prd .ci{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.08em;padding:3px 7px;border-radius:10px;background:rgba(94,140,74,.14);color:var(--green);margin-top:4px}
+.journey{margin-top:14px;position:relative;padding-left:30px}
+.journey::before{content:"";position:absolute;left:12px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--gold),var(--blue))}
+.js{position:relative;padding:8px 0 14px}
+.js::before{content:attr(data-n);position:absolute;left:-30px;top:8px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 0 0 2px var(--gold);font-size:12px;font-weight:800;color:var(--navy);display:flex;align-items:center;justify-content:center}
+.js b{display:block;font-size:15px;color:var(--navy)}
+.js span{font-size:14px;color:var(--muted)}
+.quote{margin-top:10px;padding:16px 18px;border-left:4px solid var(--gold);background:rgba(201,162,39,.1);border-radius:0 14px 14px 0;font-family:'Fraunces',serif;font-style:italic;font-size:17px;color:var(--navy)}
+.quote small{display:block;font-family:'Plus Jakarta Sans',sans-serif;font-style:normal;font-size:11px;color:var(--muted);margin-top:6px}
+.rc{background:#fff;border-radius:18px;padding:16px 18px;box-shadow:0 0 0 1px var(--line);margin-top:12px}
+.rc h3{font-size:16px;color:var(--navy);margin-bottom:8px}
+.ing{list-style:none}
+.ing li{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px dashed var(--line);font-size:14px}
+.ing li:first-child{border-top:0}
+.ing b{color:var(--blue);white-space:nowrap}
+.stp{list-style:none;counter-reset:s}
+.stp li{counter-increment:s;position:relative;padding:8px 0 8px 36px;font-size:14px;border-top:1px solid var(--line)}
+.stp li:first-child{border-top:0}
+.stp li::before{content:counter(s);position:absolute;left:0;top:7px;width:24px;height:24px;border-radius:50%;background:var(--navy);color:var(--gold3);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center}
+.prod-card{display:flex;gap:16px;align-items:center;background:#fff;border-radius:18px;padding:16px;box-shadow:0 0 0 1px var(--line);margin-top:12px}
+.av{width:84px;height:84px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:40px;flex-shrink:0;background-size:cover;background-position:center}
+.tagx{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:10px;background:rgba(46,120,199,.12);color:var(--blue);margin-bottom:4px}
+.vbox{margin-top:12px;aspect-ratio:9/16;max-height:520px;border-radius:22px;background:linear-gradient(150deg,var(--c),var(--c2));position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;padding:20px}
+.vbox video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none}
+.vbox.has video{display:block}
+.vbox .pl{width:66px;height:66px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:14px}
+.vbox small{font-size:12px;opacity:.8;margin-top:4px}
+.ifoot{margin-top:30px;padding:22px 20px 34px;background:var(--navy);color:rgba(255,255,255,.78);font-size:12px}
+.ifoot b{color:#fff}
+.ip.full{max-width:760px;margin:0 auto;box-shadow:0 0 0 1px var(--line)}
+.ip.full .ih{padding:56px 34px 40px}
+.ip.full .ih h1{font-size:60px}
+.ip.full .itabs{top:64px}
+.ip.full .isec{padding:34px 34px 8px}
+
+/* ---------- home (year-round) ---------- */
+.home{max-width:1240px;margin:0 auto;padding:40px 24px 60px}
+.home h2{font-size:clamp(30px,4vw,46px);color:var(--navy);letter-spacing:-.025em;line-height:1.1}
+.hgrid{display:grid;grid-template-columns:1.35fr 1fr;gap:26px;margin-top:26px}
+.mapc{background:#fff;border-radius:28px;padding:18px;box-shadow:0 0 0 1px var(--line),0 24px 50px -34px rgba(20,38,63,.45);position:relative}
+.mapc svg{width:100%;height:auto;display:block}
+.mapc .land{fill:#EAE3D2;stroke:#CDBF9F;stroke-width:1.2}
+.mapc .ghost{fill:rgba(31,58,95,.18)}
+.pin{cursor:pointer}
+.pin circle.p{transition:r .3s}
+.pin:hover circle.p{r:11}
+.pin .pulse{animation:pulse 2s ease-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(3.2);opacity:0}}
+.pin text{font-size:15px;font-weight:800;fill:var(--navy);paint-order:stroke;stroke:#fff;stroke-width:4px}
+.maplg{position:absolute;left:24px;bottom:18px;font-size:12px;color:var(--muted);display:flex;gap:16px}
+.maplg i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.icards{display:flex;flex-direction:column;gap:12px}
+.icard{display:flex;gap:14px;align-items:center;text-align:left;background:#fff;border-radius:20px;padding:14px;box-shadow:0 0 0 1px var(--line);transition:transform .3s var(--ease),box-shadow .3s}
+.icard:hover{transform:translateX(6px);box-shadow:0 0 0 2px var(--gold)}
+.icard .th{width:70px;height:70px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:38px;flex-shrink:0}
+.icard b{display:block;font-size:18px;color:var(--navy)}
+.icard span{font-size:13px;color:var(--muted)}
+.feed{margin-top:30px}
+.feed h3{font-size:22px;color:var(--navy);margin-bottom:12px}
+.frow{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.fv{border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px var(--line);text-align:left}
+.fv .fvt{height:150px;display:flex;align-items:center;justify-content:center;font-size:58px;position:relative}
+.fv .fvt::after{content:"▶";position:absolute;right:12px;bottom:12px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.9);color:var(--navy);font-size:14px;display:flex;align-items:center;justify-content:center}
+.fv .fvb{padding:12px 14px}
+.fv b{display:block;font-size:15px;color:var(--navy)}
+.fv span{font-size:12px;color:var(--muted)}
+
+/* ---------- admin ---------- */
+.adm{max-width:1280px;margin:0 auto;padding:34px 24px 60px}
+.simnote{display:inline-flex;align-items:center;gap:8px;font-size:12px;font-weight:800;letter-spacing:.06em;color:#8A5A00;background:rgba(227,179,65,.22);padding:7px 12px;border-radius:20px}
+.adm h2{font-size:clamp(28px,3.6vw,42px);color:var(--navy);letter-spacing:-.025em;margin-top:12px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:24px}
+.kp{background:#fff;border-radius:22px;padding:20px 22px;box-shadow:0 0 0 1px var(--line)}
+.kp small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2)}
+.kp b{display:block;font-size:34px;color:var(--navy);letter-spacing:-.02em;margin-top:6px}
+.kp span{font-size:13px;color:var(--muted)}
+.kp b span{font-size:inherit;color:inherit}
+.kp.live{background:var(--navy)}.kp.live small{color:var(--gold3)}.kp.live b{color:#fff}.kp.live span{color:rgba(255,255,255,.75)}
+.agrid{display:grid;grid-template-columns:1.25fr 1fr;gap:18px;margin-top:18px}
+.panel{background:#fff;border-radius:24px;padding:22px 24px;box-shadow:0 0 0 1px var(--line)}
+.panel h3{font-size:19px;color:var(--navy);margin-bottom:4px}
+.panel > p{font-size:13px;color:var(--muted);margin-bottom:14px}
+.q{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:14px 0;border-top:1px solid var(--line)}
+.q:first-of-type{border-top:0}
+.q b{font-size:15px;color:var(--navy)}
+.q .meta{font-size:12px;color:var(--muted)}
+.flow{display:flex;gap:4px;margin-top:8px}
+.flow i{flex:1;height:7px;border-radius:6px;background:rgba(31,58,95,.1);transition:background .5s}
+.flow i.d{background:var(--green)}
+.flow i.c{background:var(--gold)}
+.qst{font-size:12px;font-weight:800;color:var(--blue);margin-top:6px}
+.bars .br{display:grid;grid-template-columns:110px 1fr 70px;gap:10px;align-items:center;margin:10px 0;font-size:14px}
+.bars .br b{color:var(--navy)}
+.bars .tr{height:14px;border-radius:10px;background:rgba(31,58,95,.08);overflow:hidden}
+.bars .tr i{display:block;height:100%;border-radius:10px;background:linear-gradient(90deg,var(--gold),var(--blue));width:0;transition:width 1.4s var(--ease)}
+.bars .br span{text-align:right;font-weight:800;color:var(--blue)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:6px}
+.week div{border-radius:12px;background:var(--bg);padding:8px 4px;min-height:84px;text-align:center;font-size:11px;font-weight:700;color:var(--dim)}
+.week span{display:block;margin-top:6px;font-size:11px;line-height:1.25;padding:6px 4px;border-radius:8px;background:rgba(46,120,199,.14);color:var(--blue)}
+.week span.y{background:rgba(201,162,39,.2);color:var(--gold2)}
+
+/* ---------- misc ---------- */
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(30px);opacity:0;z-index:80;background:var(--navy);color:#fff;padding:13px 20px;border-radius:30px;font-weight:700;font-size:14px;transition:.45s var(--ease);box-shadow:0 20px 40px -16px rgba(0,0,0,.6);pointer-events:none;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+#done{position:fixed;inset:0;z-index:90;display:none;align-items:center;justify-content:center;background:rgba(10,20,35,.6)}
+#done.on{display:flex}
+#done .card{background:#fff;border-radius:30px;padding:40px 44px;text-align:center;max-width:440px;animation:pop .7s var(--ease)}
+#done .card .e{font-size:64px}
+#done h3{font-size:28px;color:var(--navy);margin:10px 0 8px}
+#done p{color:var(--muted)}
+.confetti{position:fixed;top:-20px;width:10px;height:16px;z-index:95;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+.directbar{display:none}
+body.direct .persp,body.direct .hud{display:none}
+body.direct .directbar{display:inline-flex;margin-left:auto}
+
+@media(max-width:900px){
+  .pcards,.hgrid,.agrid,.frow{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .persp{display:none}
+  .hud small{display:none}
+  .phone{transform:scale(.92)}
+  .pclose{right:8px;top:-54px}.pfull{right:62px;top:-54px}
+  .info{left:12px;right:12px;max-width:none;top:12px}
+  .hint{display:none}
+  .ip.full .ih h1{font-size:42px}
+  .ip.full .isec{padding:28px 20px 6px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="logo" id="home">YEG<span>FEST</span></div><span class="proto">Prototip</span>
+  <nav class="persp" id="persp">
+    <button data-v="fest">🎪 Festival ziyaretçisi</button>
+    <button data-v="home">🏠 Yıl boyu kullanıcı</button>
+    <button data-v="admin">🏛️ Yönetim</button>
+  </nav>
+  <div class="hud" id="hud" title="Dijital pasaport"><small>Pasaport</small></div>
+  <a class="btn sm directbar" href="/" style="white-space:nowrap">Keşfet →</a>
+</header>
+
+<!-- ================= INTRO ================= -->
+<section class="view" id="v-intro">
+  <div class="blob" style="width:600px;height:600px;background:var(--gold);right:-200px;top:-150px"></div>
+  <div class="blob" style="width:700px;height:700px;background:var(--blue);left:-300px;bottom:-350px;opacity:.18"></div>
+  <div class="intro">
+    <div class="kick">YEGFEST · Dijital tanıtım platformu</div>
+    <h1>Hangi gözle <em>bakmak</em><br>istersiniz?</h1>
+    <p class="lead">Aynı platform, üç farklı kullanıcı. Bir bakış açısı seçin; festival salonunu gezin, evden keşfedin ya da yönetim panelinden takip edin.</p>
+    <div class="pcards">
+      <button class="pc" data-v="fest"><div class="ic">🎪</div><small>Festivalde</small><h3>Festival ziyaretçisi</h3><p>Salonda stantları gezin, standa yaklaşın, QR'ı okutun; ilçenin hikâyesini dinleyin ve pasaportunuza damga toplayın.</p><div class="go">Salona gir →</div></button>
+      <button class="pc" data-v="home"><div class="ic">🏠</div><small>Festivalden sonra</small><h3>Yıl boyu kullanıcı</h3><p>Evden lezzet haritasını keşfedin; ilçelerin ürün, tarif ve üretici hikâyeleri her hafta yenilenir.</p><div class="go">Haritayı aç →</div></button>
+      <button class="pc" data-v="admin"><div class="ic">🏛️</div><small>Bakanlık ve YEG'ler</small><h3>Yönetim paneli</h3><p>İçerik onay akışı, yayın takvimi, QR ve ziyaret istatistikleri tek ekranda.</p><div class="go">Paneli aç →</div></button>
+    </div>
+    <p class="introfoot">Bu sayfa bir prototiptir; resmî bir site değildir. Örnek ilçe içerikleri sunum amaçlıdır, panel verileri temsilîdir.</p>
+  </div>
+</section>
+
+<!-- ================= FESTIVAL ================= -->
+<section class="view" id="v-fest">
+  <div id="scene">
+    <div class="hint" id="hint">Bir standa tıklayın · ← → ile gezinin</div>
+    <div class="info hide" id="info"></div>
+    <div id="world">
+      <div class="f wall"><div class="bunting"></div><div class="bunting b2"></div><div class="big"><b>YEG<span>FEST</span></b><i>155 ilçe · tek çatı</i></div>
+        <div class="lamp" style="left:1500px;top:-60px"></div><div class="lamp" style="left:2300px;top:-80px"></div><div class="lamp" style="left:3100px;top:-60px"></div></div>
+      <div class="f floor"></div>
+      <div id="stands"></div>
+    </div>
+    <div class="fui">
+      <button class="nav-arrow" id="prev">←</button>
+      <button class="btn ghost" id="overview">Salona genel bakış</button>
+      <button class="nav-arrow" id="next">→</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOME ================= -->
+<section class="view" id="v-home">
+  <div class="home">
+    <div class="kick">Yıl boyu · Lezzet haritası</div>
+    <h2>155 ilçe, <em>tek adres</em></h2>
+    <div class="hgrid">
+      <div class="mapc"><svg id="map" viewBox="0 0 900 400"></svg>
+        <div class="maplg"><span><i style="background:var(--gold)"></i>Yayında (prototip)</span><span><i style="background:rgba(31,58,95,.25)"></i>Yakında</span></div></div>
+      <div class="icards" id="icards"></div>
+    </div>
+    <div class="feed"><h3>Bu hafta yayında</h3><div class="frow" id="feed"></div></div>
+  </div>
+</section>
+
+<!-- ================= ADMIN ================= -->
+<section class="view" id="v-admin">
+  <div class="adm">
+    <span class="simnote">⚠️ Simülasyon verisi · gerçek değildir</span>
+    <h2>Yönetim paneli · <em>YEGFEST 2027</em></h2>
+    <div class="kpis">
+      <div class="kp"><small>Yayındaki ilçe sayfası</small><b><span class="cnt" data-to="3">0</span> / 155</b><span>Prototip aşaması</span></div>
+      <div class="kp"><small>QR okutma · festival</small><b class="cnt" data-to="18420">0</b><span>Simülasyon</span></div>
+      <div class="kp"><small>Pasaport tamamlayan</small><b class="cnt" data-to="2140">0</b><span>Simülasyon</span></div>
+      <div class="kp live"><small>Bu oturumda sizin</small><b id="myScans">0</b><span>okuttuğunuz QR · gerçek</span></div>
+    </div>
+    <div class="agrid">
+      <div class="panel"><h3>Video onay akışı</h3><p>Kurgu → Yerel teyit → Koordinasyon → Başkanlık onayı → Yayın</p><div id="queue"></div></div>
+      <div class="panel"><h3>En çok ziyaret edilen ilçeler</h3><p>Son 7 gün · simülasyon</p><div class="bars" id="bars"></div>
+        <h3 style="margin-top:18px">Bu haftanın yayın takvimi</h3>
+        <div class="week" id="week"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= İLÇE FULL ================= -->
+<section class="view" id="v-ilce"><div id="ilceFull"></div></section>
+
+<!-- phone -->
+<div id="phoneWrap"><div class="phone"><div class="screen" id="screen"></div>
+  <button class="pclose" id="pclose" title="Kapat">✕</button><button class="pfull" id="pfull" title="Tam ekran">⤢</button></div></div>
+
+<div id="done"><div class="card"><div class="e">🎉</div><h3>Pasaport tamamlandı!</h3><p>Üç standın damgasını topladınız. Festival hediyenizi bilgi masasından alabilirsiniz.</p><button class="btn gold" style="margin-top:20px" id="doneOk">Harika</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const QR={"buharkent": "<svg width=\"35mm\" height=\"35mm\" version=\"1.1\" viewBox=\"0 0 35 35\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1,1H2V2H1zM2,1H3V2H2zM3,1H4V2H3zM4,1H5V2H4zM5,1H6V2H5zM6,1H7V2H6zM7,1H8V2H7zM9,1H10V2H9zM12,1H13V2H12zM13,1H14V2H13zM14,1H15V2H14zM17,1H18V2H17zM18,1H19V2H18zM20,1H21V2H20zM21,1H22V2H21zM22,1H23V2H22zM23,1H24V2H23zM24,1H25V2H24zM27,1H28V2H27zM28,1H29V2H28zM29,1H30V2H29zM30,1H31V2H30zM31,1H32V2H31zM32,1H33V2H32zM33,1H34V2H33zM1,2H2V3H1zM7,2H8V3H7zM9,2H10V3H9zM11,2H12V3H11zM12,2H13V3H12zM13,2H14V3H13zM14,2H15V3H14zM17,2H18V3H17zM19,2H20V3H19zM24,2H25V3H24zM25,2H26V3H25zM27,2H28V3H27zM33,2H34V3H33zM1,3H2V4H1zM3,3H4V4H3zM4,3H5V4H4zM5,3H6V4H5zM7,3H8V4H7zM11,3H12V4H11zM12,3H13V4H12zM13,3H14V4H13zM16,3H17V4H16zM17,3H18V4H17zM18,3H19V4H18zM21,3H22V4H21zM25,3H26V4H25zM27,3H28V4H27zM29,3H30V4H29zM30,3H31V4H30zM31,3H32V4H31zM33,3H34V4H33zM1,4H2V5H1zM3,4H4V5H3zM4,4H5V5H4zM5,4H6V5H5zM7,4H8V5H7zM9,4H10V5H9zM10,4H11V5H10zM13,4H14V5H13zM15,4H16V5H15zM16,4H17V5H16zM17,4H18V5H17zM20,4H21V5H20zM21,4H22V5H21zM23,4H24V5H23zM25,4H26V5H25zM27,4H28V5H27zM29,4H30V5H29zM30,4H31V5H30zM31,4H32V5H31zM33,4H34V5H33zM1,5H2V6H1zM3,5H4V6H3zM4,5H5V6H4zM5,5H6V6H5zM7,5H8V6H7zM10,5H11V6H10zM11,5H12V6H11zM12,5H13V6H12zM15,5H16V6H15zM18,5H19V6H18zM21,5H22V6H21zM23,5H24V6H23zM25,5H26V6H25zM27,5H28V6H27zM29,5H30V6H29zM30,5H31V6H30zM31,5H32V6H31zM33,5H34V6H33zM1,6H2V7H1zM7,6H8V7H7zM12,6H13V7H12zM14,6H15V7H14zM15,6H16V7H15zM19,6H20V7H19zM20,6H21V7H20zM21,6H22V7H21zM22,6H23V7H22zM23,6H24V7H23zM27,6H28V7H27zM33,6H34V7H33zM1,7H2V8H1zM2,7H3V8H2zM3,7H4V8H3zM4,7H5V8H4zM5,7H6V8H5zM6,7H7V8H6zM7,7H8V8H7zM9,7H10V8H9zM11,7H12V8H11zM13,7H14V8H13zM15,7H16V8H15zM17,7H18V8H17zM19,7H20V8H19zM21,7H22V8H21zM23,7H24V8H23zM25,7H26V8H25zM27,7H28V8H27zM28,7H29V8H28zM29,7H30V8H29zM30,7H31V8H30zM31,7H32V8H31zM32,7H33V8H32zM33,7H34V8H33zM9,8H10V9H9zM11,8H12V9H11zM12,8H13V9H12zM13,8H14V9H13zM18,8H19V9H18zM21,8H22V9H21zM23,8H24V9H23zM24,8H25V9H24zM1,9H2V10H1zM3,9H4V10H3zM4,9H5V10H4zM6,9H7V10H6zM7,9H8V10H7zM8,9H9V10H8zM10,9H11V10H10zM15,9H16V10H15zM17,9H18V10H17zM18,9H19V10H18zM19,9H20V10H19zM20,9H21V10H20zM22,9H23V10H22zM24,9H25V10H24zM27,9H28V10H27zM30,9H31V10H30zM32,9H33V10H32zM33,9H34V10H33zM3,10H4V11H3zM4,10H5V11H4zM10,10H11V11H10zM11,10H12V11H11zM12,10H13V11H12zM13,10H14V11H13zM17,10H18V11H17zM19,10H20V11H19zM20,10H21V11H20zM21,10H22V11H21zM22,10H23V11H22zM23,10H24V11H23zM24,10H25V11H24zM27,10H28V11H27zM28,10H29V11H28zM30,10H31V11H30zM31,10H32V11H31zM32,10H33V11H32zM33,10H34V11H33zM2,11H3V12H2zM4,11H5V12H4zM7,11H8V12H7zM8,11H9V12H8zM9,11H10V12H9zM13,11H14V12H13zM15,11H16V12H15zM18,11H19V12H18zM21,11H22V12H21zM22,11H23V12H22zM24,11H25V12H24zM27,11H28V12H27zM28,11H29V12H28zM29,11H30V12H29zM30,11H31V12H30zM32,11H33V12H32zM33,11H34V12H33zM1,12H2V13H1zM2,12H3V13H2zM3,12H4V13H3zM4,12H5V13H4zM5,12H6V13H5zM6,12H7V13H6zM11,12H12V13H11zM12,12H13V13H12zM14,12H15V13H14zM15,12H16V13H15zM16,12H17V13H16zM17,12H18V13H17zM19,12H20V13H19zM20,12H21V13H20zM21,12H22V13H21zM23,12H24V13H23zM24,12H25V13H24zM25,12H26V13H25zM27,12H28V13H27zM28,12H29V13H28zM30,12H31V13H30zM1,13H2V14H1zM2,13H3V14H2zM3,13H4V14H3zM5,13H6V14H5zM6,13H7V14H6zM7,13H8V14H7zM9,13H10V14H9zM10,13H11V14H10zM12,13H13V14H12zM13,13H14V14H13zM16,13H17V14H16zM19,13H20V14H19zM23,13H24V14H23zM25,13H26V14H25zM26,13H27V14H26zM28,13H29V14H28zM29,13H30V14H29zM30,13H31V14H30zM1,14H2V15H1zM2,14H3V15H2zM3,14H4V15H3zM5,14H6V15H5zM11,14H12V15H11zM12,14H13V15H12zM17,14H18V15H17zM19,14H20V15H19zM25,14H26V15H25zM28,14H29V15H28zM30,14H31V15H30zM32,14H33V15H32zM3,15H4V16H3zM4,15H5V16H4zM7,15H8V16H7zM10,15H11V16H10zM11,15H12V16H11zM13,15H14V16H13zM14,15H15V16H14zM15,15H16V16H15zM16,15H17V16H16zM17,15H18V16H17zM25,15H26V16H25zM27,15H28V16H27zM29,15H30V16H29zM1,16H2V17H1zM3,16H4V17H3zM4,16H5V17H4zM9,16H10V17H9zM10,16H11V17H10zM11,16H12V17H11zM12,16H13V17H12zM15,16H16V17H15zM17,16H18V17H17zM20,16H21V17H20zM21,16H22V17H21zM22,16H23V17H22zM26,16H27V17H26zM27,16H28V17H27zM29,16H30V17H29zM30,16H31V17H30zM31,16H32V17H31zM2,17H3V18H2zM7,17H8V18H7zM8,17H9V18H8zM9,17H10V18H9zM11,17H12V18H11zM12,17H13V18H12zM13,17H14V18H13zM14,17H15V18H14zM16,17H17V18H16zM17,17H18V18H17zM19,17H20V18H19zM20,17H21V18H20zM22,17H23V18H22zM24,17H25V18H24zM26,17H27V18H26zM27,17H28V18H27zM29,17H30V18H29zM31,17H32V18H31zM3,18H4V19H3zM5,18H6V19H5zM8,18H9V19H8zM10,18H11V19H10zM11,18H12V19H11zM12,18H13V19H12zM15,18H16V19H15zM16,18H17V19H16zM18,18H19V19H18zM19,18H20V19H19zM21,18H22V19H21zM22,18H23V19H22zM23,18H24V19H23zM24,18H25V19H24zM25,18H26V19H25zM27,18H28V19H27zM29,18H30V19H29zM30,18H31V19H30zM32,18H33V19H32zM33,18H34V19H33zM4,19H5V20H4zM6,19H7V20H6zM7,19H8V20H7zM15,19H16V20H15zM16,19H17V20H16zM17,19H18V20H17zM18,19H19V20H18zM21,19H22V20H21zM26,19H27V20H26zM28,19H29V20H28zM29,19H30V20H29zM31,19H32V20H31zM32,19H33V20H32zM1,20H2V21H1zM3,20H4V21H3zM4,20H5V21H4zM6,20H7V21H6zM8,20H9V21H8zM10,20H11V21H10zM11,20H12V21H11zM14,20H15V21H14zM17,20H18V21H17zM20,20H21V21H20zM23,20H24V21H23zM25,20H26V21H25zM26,20H27V21H26zM27,20H28V21H27zM29,20H30V21H29zM2,21H3V22H2zM5,21H6V22H5zM7,21H8V22H7zM8,21H9V22H8zM11,21H12V22H11zM13,21H14V22H13zM15,21H16V22H15zM19,21H20V22H19zM22,21H23V22H22zM25,21H26V22H25zM26,21H27V22H26zM30,21H31V22H30zM31,21H32V22H31zM33,21H34V22H33zM1,22H2V23H1zM3,22H4V23H3zM6,22H7V23H6zM10,22H11V23H10zM14,22H15V23H14zM16,22H17V23H16zM19,22H20V23H19zM24,22H25V23H24zM27,22H28V23H27zM31,22H32V23H31zM33,22H34V23H33zM4,23H5V24H4zM5,23H6V24H5zM7,23H8V24H7zM9,23H10V24H9zM11,23H12V24H11zM12,23H13V24H12zM13,23H14V24H13zM14,23H15V24H14zM15,23H16V24H15zM17,23H18V24H17zM18,23H19V24H18zM21,23H22V24H21zM23,23H24V24H23zM24,23H25V24H24zM28,23H29V24H28zM30,23H31V24H30zM32,23H33V24H32zM33,23H34V24H33zM2,24H3V25H2zM3,24H4V25H3zM4,24H5V25H4zM5,24H6V25H5zM6,24H7V25H6zM8,24H9V25H8zM15,24H16V25H15zM17,24H18V25H17zM20,24H21V25H20zM21,24H22V25H21zM24,24H25V25H24zM32,24H33V25H32zM33,24H34V25H33zM1,25H2V26H1zM3,25H4V26H3zM4,25H5V26H4zM7,25H8V26H7zM8,25H9V26H8zM9,25H10V26H9zM11,25H12V26H11zM12,25H13V26H12zM13,25H14V26H13zM14,25H15V26H14zM15,25H16V26H15zM16,25H17V26H16zM18,25H19V26H18zM19,25H20V26H19zM23,25H24V26H23zM25,25H26V26H25zM26,25H27V26H26zM27,25H28V26H27zM28,25H29V26H28zM29,25H30V26H29zM9,26H10V27H9zM12,26H13V27H12zM13,26H14V27H13zM14,26H15V27H14zM15,26H16V27H15zM16,26H17V27H16zM17,26H18V27H17zM18,26H19V27H18zM20,26H21V27H20zM23,26H24V27H23zM24,26H25V27H24zM25,26H26V27H25zM29,26H30V27H29zM30,26H31V27H30zM1,27H2V28H1zM2,27H3V28H2zM3,27H4V28H3zM4,27H5V28H4zM5,27H6V28H5zM6,27H7V28H6zM7,27H8V28H7zM9,27H10V28H9zM10,27H11V28H10zM17,27H18V28H17zM20,27H21V28H20zM24,27H25V28H24zM25,27H26V28H25zM27,27H28V28H27zM29,27H30V28H29zM32,27H33V28H32zM1,28H2V29H1zM7,28H8V29H7zM9,28H10V29H9zM10,28H11V29H10zM12,28H13V29H12zM13,28H14V29H13zM15,28H16V29H15zM17,28H18V29H17zM20,28H21V29H20zM22,28H23V29H22zM23,28H24V29H23zM24,28H25V29H24zM25,28H26V29H25zM29,28H30V29H29zM30,28H31V29H30zM31,28H32V29H31zM1,29H2V30H1zM3,29H4V30H3zM4,29H5V30H4zM5,29H6V30H5zM7,29H8V30H7zM11,29H12V30H11zM12,29H13V30H12zM15,29H16V30H15zM18,29H19V30H18zM22,29H23V30H22zM23,29H24V30H23zM24,29H25V30H24zM25,29H26V30H25zM26,29H27V30H26zM27,29H28V30H27zM28,29H29V30H28zM29,29H30V30H29zM31,29H32V30H31zM32,29H33V30H32zM1,30H2V31H1zM3,30H4V31H3zM4,30H5V31H4zM5,30H6V31H5zM7,30H8V31H7zM9,30H10V31H9zM10,30H11V31H10zM13,30H14V31H13zM18,30H19V31H18zM19,30H20V31H19zM21,30H22V31H21zM23,30H24V31H23zM24,30H25V31H24zM28,30H29V31H28zM30,30H31V31H30zM31,30H32V31H31zM33,30H34V31H33zM1,31H2V32H1zM3,31H4V32H3zM4,31H5V32H4zM5,31H6V32H5zM7,31H8V32H7zM9,31H10V32H9zM13,31H14V32H13zM14,31H15V32H14zM18,31H19V32H18zM22,31H23V32H22zM24,31H25V32H24zM25,31H26V32H25zM27,31H28V32H27zM28,31H29V32H28zM30,31H31V32H30zM1,32H2V33H1zM7,32H8V33H7zM10,32H11V33H10zM11,32H12V33H11zM14,32H15V33H14zM15,32H16V33H15zM16,32H17V33H16zM17,32H18V33H17zM18,32H19V33H18zM20,32H21V33H20zM24,32H25V33H24zM25,32H26V33H25zM26,32H27V33H26zM28,32H29V33H28zM29,32H30V33H29zM33,32H34V33H33zM1,33H2V34H1zM2,33H3V34H2zM3,33H4V34H3zM4,33H5V34H4zM5,33H6V34H5zM6,33H7V34H6zM7,33H8V34H7zM9,33H10V34H9zM11,33H12V34H11zM12,33H13V34H12zM13,33H14V34H13zM16,33H17V34H16zM18,33H19V34H18zM19,33H20V34H19zM21,33H22V34H21zM22,33H23V34H22zM24,33H25V34H24zM27,33H28V34H27zM29,33H30V34H29zM31,33H32V34H31z\" id=\"qr-path\" fill=\"#000000\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"none\"/></svg>", "safranbolu": "<svg width=\"35mm\" height=\"35mm\" version=\"1.1\" viewBox=\"0 0 35 35\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1,1H2V2H1zM2,1H3V2H2zM3,1H4V2H3zM4,1H5V2H4zM5,1H6V2H5zM6,1H7V2H6zM7,1H8V2H7zM9,1H10V2H9zM11,1H12V2H11zM13,1H14V2H13zM17,1H18V2H17zM20,1H21V2H20zM21,1H22V2H21zM22,1H23V2H22zM23,1H24V2H23zM24,1H25V2H24zM27,1H28V2H27zM28,1H29V2H28zM29,1H30V2H29zM30,1H31V2H30zM31,1H32V2H31zM32,1H33V2H32zM33,1H34V2H33zM1,2H2V3H1zM7,2H8V3H7zM9,2H10V3H9zM11,2H12V3H11zM12,2H13V3H12zM13,2H14V3H13zM15,2H16V3H15zM17,2H18V3H17zM18,2H19V3H18zM22,2H23V3H22zM24,2H25V3H24zM25,2H26V3H25zM27,2H28V3H27zM33,2H34V3H33zM1,3H2V4H1zM3,3H4V4H3zM4,3H5V4H4zM5,3H6V4H5zM7,3H8V4H7zM10,3H11V4H10zM11,3H12V4H11zM12,3H13V4H12zM13,3H14V4H13zM14,3H15V4H14zM15,3H16V4H15zM16,3H17V4H16zM17,3H18V4H17zM19,3H20V4H19zM21,3H22V4H21zM23,3H24V4H23zM25,3H26V4H25zM27,3H28V4H27zM29,3H30V4H29zM30,3H31V4H30zM31,3H32V4H31zM33,3H34V4H33zM1,4H2V5H1zM3,4H4V5H3zM4,4H5V5H4zM5,4H6V5H5zM7,4H8V5H7zM9,4H10V5H9zM13,4H14V5H13zM16,4H17V5H16zM19,4H20V5H19zM20,4H21V5H20zM23,4H24V5H23zM27,4H28V5H27zM29,4H30V5H29zM30,4H31V5H30zM31,4H32V5H31zM33,4H34V5H33zM1,5H2V6H1zM3,5H4V6H3zM4,5H5V6H4zM5,5H6V6H5zM7,5H8V6H7zM17,5H18V6H17zM18,5H19V6H18zM19,5H20V6H19zM25,5H26V6H25zM27,5H28V6H27zM29,5H30V6H29zM30,5H31V6H30zM31,5H32V6H31zM33,5H34V6H33zM1,6H2V7H1zM7,6H8V7H7zM10,6H11V7H10zM11,6H12V7H11zM14,6H15V7H14zM15,6H16V7H15zM16,6H17V7H16zM17,6H18V7H17zM19,6H20V7H19zM22,6H23V7H22zM23,6H24V7H23zM27,6H28V7H27zM33,6H34V7H33zM1,7H2V8H1zM2,7H3V8H2zM3,7H4V8H3zM4,7H5V8H4zM5,7H6V8H5zM6,7H7V8H6zM7,7H8V8H7zM9,7H10V8H9zM11,7H12V8H11zM13,7H14V8H13zM15,7H16V8H15zM17,7H18V8H17zM19,7H20V8H19zM21,7H22V8H21zM23,7H24V8H23zM25,7H26V8H25zM27,7H28V8H27zM28,7H29V8H28zM29,7H30V8H29zM30,7H31V8H30zM31,7H32V8H31zM32,7H33V8H32zM33,7H34V8H33zM9,8H10V9H9zM11,8H12V9H11zM12,8H13V9H12zM16,8H17V9H16zM17,8H18V9H17zM18,8H19V9H18zM20,8H21V9H20zM23,8H24V9H23zM25,8H26V9H25zM1,9H2V10H1zM3,9H4V10H3zM4,9H5V10H4zM6,9H7V10H6zM7,9H8V10H7zM8,9H9V10H8zM11,9H12V10H11zM12,9H13V10H12zM15,9H16V10H15zM16,9H17V10H16zM17,9H18V10H17zM18,9H19V10H18zM19,9H20V10H19zM22,9H23V10H22zM27,9H28V10H27zM30,9H31V10H30zM32,9H33V10H32zM33,9H34V10H33zM1,10H2V11H1zM4,10H5V11H4zM5,10H6V11H5zM6,10H7V11H6zM9,10H10V11H9zM11,10H12V11H11zM13,10H14V11H13zM14,10H15V11H14zM17,10H18V11H17zM18,10H19V11H18zM19,10H20V11H19zM20,10H21V11H20zM21,10H22V11H21zM22,10H23V11H22zM23,10H24V11H23zM24,10H25V11H24zM27,10H28V11H27zM28,10H29V11H28zM30,10H31V11H30zM31,10H32V11H31zM32,10H33V11H32zM33,10H34V11H33zM2,11H3V12H2zM3,11H4V12H3zM4,11H5V12H4zM5,11H6V12H5zM6,11H7V12H6zM7,11H8V12H7zM10,11H11V12H10zM12,11H13V12H12zM13,11H14V12H13zM14,11H15V12H14zM19,11H20V12H19zM21,11H22V12H21zM24,11H25V12H24zM27,11H28V12H27zM28,11H29V12H28zM29,11H30V12H29zM30,11H31V12H30zM32,11H33V12H32zM33,11H34V12H33zM2,12H3V13H2zM3,12H4V13H3zM5,12H6V13H5zM6,12H7V13H6zM9,12H10V13H9zM10,12H11V13H10zM12,12H13V13H12zM13,12H14V13H13zM16,12H17V13H16zM17,12H18V13H17zM18,12H19V13H18zM20,12H21V13H20zM21,12H22V13H21zM24,12H25V13H24zM25,12H26V13H25zM27,12H28V13H27zM28,12H29V13H28zM30,12H31V13H30zM3,13H4V14H3zM7,13H8V14H7zM8,13H9V14H8zM9,13H10V14H9zM10,13H11V14H10zM11,13H12V14H11zM12,13H13V14H12zM13,13H14V14H13zM15,13H16V14H15zM16,13H17V14H16zM17,13H18V14H17zM23,13H24V14H23zM25,13H26V14H25zM26,13H27V14H26zM28,13H29V14H28zM29,13H30V14H29zM30,13H31V14H30zM1,14H2V15H1zM8,14H9V15H8zM10,14H11V15H10zM12,14H13V15H12zM14,14H15V15H14zM15,14H16V15H15zM21,14H22V15H21zM25,14H26V15H25zM28,14H29V15H28zM30,14H31V15H30zM32,14H33V15H32zM1,15H2V16H1zM3,15H4V16H3zM4,15H5V16H4zM5,15H6V16H5zM7,15H8V16H7zM10,15H11V16H10zM13,15H14V16H13zM20,15H21V16H20zM21,15H22V16H21zM25,15H26V16H25zM27,15H28V16H27zM29,15H30V16H29zM2,16H3V17H2zM3,16H4V17H3zM5,16H6V17H5zM6,16H7V17H6zM8,16H9V17H8zM9,16H10V17H9zM10,16H11V17H10zM11,16H12V17H11zM12,16H13V17H12zM15,16H16V17H15zM16,16H17V17H16zM21,16H22V17H21zM22,16H23V17H22zM25,16H26V17H25zM26,16H27V17H26zM27,16H28V17H27zM29,16H30V17H29zM30,16H31V17H30zM31,16H32V17H31zM1,17H2V18H1zM4,17H5V18H4zM5,17H6V18H5zM6,17H7V18H6zM7,17H8V18H7zM8,17H9V18H8zM9,17H10V18H9zM10,17H11V18H10zM11,17H12V18H11zM13,17H14V18H13zM14,17H15V18H14zM15,17H16V18H15zM17,17H18V18H17zM19,17H20V18H19zM22,17H23V18H22zM24,17H25V18H24zM26,17H27V18H26zM27,17H28V18H27zM29,17H30V18H29zM31,17H32V18H31zM1,18H2V19H1zM3,18H4V19H3zM4,18H5V19H4zM6,18H7V19H6zM11,18H12V19H11zM16,18H17V19H16zM19,18H20V19H19zM21,18H22V19H21zM22,18H23V19H22zM23,18H24V19H23zM24,18H25V19H24zM25,18H26V19H25zM27,18H28V19H27zM29,18H30V19H29zM30,18H31V19H30zM32,18H33V19H32zM33,18H34V19H33zM3,19H4V20H3zM7,19H8V20H7zM8,19H9V20H8zM9,19H10V20H9zM10,19H11V20H10zM12,19H13V20H12zM13,19H14V20H13zM14,19H15V20H14zM16,19H17V20H16zM17,19H18V20H17zM19,19H20V20H19zM21,19H22V20H21zM23,19H24V20H23zM26,19H27V20H26zM28,19H29V20H28zM29,19H30V20H29zM31,19H32V20H31zM32,19H33V20H32zM6,20H7V21H6zM9,20H10V21H9zM12,20H13V21H12zM14,20H15V21H14zM17,20H18V21H17zM18,20H19V21H18zM19,20H20V21H19zM20,20H21V21H20zM25,20H26V21H25zM26,20H27V21H26zM27,20H28V21H27zM29,20H30V21H29zM1,21H2V22H1zM3,21H4V22H3zM5,21H6V22H5zM7,21H8V22H7zM8,21H9V22H8zM9,21H10V22H9zM13,21H14V22H13zM14,21H15V22H14zM15,21H16V22H15zM17,21H18V22H17zM21,21H22V22H21zM22,21H23V22H22zM26,21H27V22H26zM30,21H31V22H30zM31,21H32V22H31zM33,21H34V22H33zM1,22H2V23H1zM2,22H3V23H2zM3,22H4V23H3zM4,22H5V23H4zM5,22H6V23H5zM6,22H7V23H6zM9,22H10V23H9zM10,22H11V23H10zM14,22H15V23H14zM15,22H16V23H15zM16,22H17V23H16zM17,22H18V23H17zM20,22H21V23H20zM21,22H22V23H21zM24,22H25V23H24zM27,22H28V23H27zM31,22H32V23H31zM33,22H34V23H33zM4,23H5V24H4zM5,23H6V24H5zM6,23H7V24H6zM7,23H8V24H7zM8,23H9V24H8zM12,23H13V24H12zM13,23H14V24H13zM14,23H15V24H14zM15,23H16V24H15zM16,23H17V24H16zM18,23H19V24H18zM21,23H22V24H21zM23,23H24V24H23zM24,23H25V24H24zM25,23H26V24H25zM28,23H29V24H28zM30,23H31V24H30zM32,23H33V24H32zM33,23H34V24H33zM2,24H3V25H2zM6,24H7V25H6zM8,24H9V25H8zM9,24H10V25H9zM13,24H14V25H13zM14,24H15V25H14zM15,24H16V25H15zM16,24H17V25H16zM20,24H21V25H20zM21,24H22V25H21zM24,24H25V25H24zM33,24H34V25H33zM1,25H2V26H1zM3,25H4V26H3zM5,25H6V26H5zM7,25H8V26H7zM10,25H11V26H10zM11,25H12V26H11zM14,25H15V26H14zM15,25H16V26H15zM18,25H19V26H18zM19,25H20V26H19zM20,25H21V26H20zM23,25H24V26H23zM25,25H26V26H25zM26,25H27V26H26zM27,25H28V26H27zM28,25H29V26H28zM29,25H30V26H29zM9,26H10V27H9zM10,26H11V27H10zM11,26H12V27H11zM12,26H13V27H12zM14,26H15V27H14zM16,26H17V27H16zM17,26H18V27H17zM20,26H21V27H20zM23,26H24V27H23zM24,26H25V27H24zM25,26H26V27H25zM29,26H30V27H29zM30,26H31V27H30zM1,27H2V28H1zM2,27H3V28H2zM3,27H4V28H3zM4,27H5V28H4zM5,27H6V28H5zM6,27H7V28H6zM7,27H8V28H7zM9,27H10V28H9zM10,27H11V28H10zM12,27H13V28H12zM13,27H14V28H13zM14,27H15V28H14zM17,27H18V28H17zM18,27H19V28H18zM19,27H20V28H19zM20,27H21V28H20zM22,27H23V28H22zM23,27H24V28H23zM24,27H25V28H24zM25,27H26V28H25zM27,27H28V28H27zM29,27H30V28H29zM32,27H33V28H32zM1,28H2V29H1zM7,28H8V29H7zM9,28H10V29H9zM10,28H11V29H10zM11,28H12V29H11zM12,28H13V29H12zM13,28H14V29H13zM14,28H15V29H14zM17,28H18V29H17zM18,28H19V29H18zM19,28H20V29H19zM20,28H21V29H20zM22,28H23V29H22zM24,28H25V29H24zM25,28H26V29H25zM29,28H30V29H29zM30,28H31V29H30zM31,28H32V29H31zM1,29H2V30H1zM3,29H4V30H3zM4,29H5V30H4zM5,29H6V30H5zM7,29H8V30H7zM17,29H18V30H17zM18,29H19V30H18zM19,29H20V30H19zM21,29H22V30H21zM22,29H23V30H22zM23,29H24V30H23zM24,29H25V30H24zM25,29H26V30H25zM26,29H27V30H26zM27,29H28V30H27zM28,29H29V30H28zM29,29H30V30H29zM31,29H32V30H31zM32,29H33V30H32zM1,30H2V31H1zM3,30H4V31H3zM4,30H5V31H4zM5,30H6V31H5zM7,30H8V31H7zM9,30H10V31H9zM11,30H12V31H11zM12,30H13V31H12zM13,30H14V31H13zM14,30H15V31H14zM17,30H18V31H17zM18,30H19V31H18zM21,30H22V31H21zM23,30H24V31H23zM24,30H25V31H24zM28,30H29V31H28zM30,30H31V31H30zM31,30H32V31H31zM33,30H34V31H33zM1,31H2V32H1zM3,31H4V32H3zM4,31H5V32H4zM5,31H6V32H5zM7,31H8V32H7zM9,31H10V32H9zM10,31H11V32H10zM11,31H12V32H11zM14,31H15V32H14zM15,31H16V32H15zM16,31H17V32H16zM17,31H18V32H17zM18,31H19V32H18zM21,31H22V32H21zM22,31H23V32H22zM24,31H25V32H24zM25,31H26V32H25zM27,31H28V32H27zM28,31H29V32H28zM30,31H31V32H30zM1,32H2V33H1zM7,32H8V33H7zM12,32H13V33H12zM13,32H14V33H13zM14,32H15V33H14zM18,32H19V33H18zM20,32H21V33H20zM25,32H26V33H25zM26,32H27V33H26zM28,32H29V33H28zM29,32H30V33H29zM33,32H34V33H33zM1,33H2V34H1zM2,33H3V34H2zM3,33H4V34H3zM4,33H5V34H4zM5,33H6V34H5zM6,33H7V34H6zM7,33H8V34H7zM9,33H10V34H9zM11,33H12V34H11zM13,33H14V34H13zM14,33H15V34H14zM15,33H16V34H15zM18,33H19V34H18zM19,33H20V34H19zM21,33H22V34H21zM22,33H23V34H22zM24,33H25V34H24zM27,33H28V34H27zM29,33H30V34H29zM31,33H32V34H31z\" id=\"qr-path\" fill=\"#000000\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"none\"/></svg>", "finike": "<svg width=\"35mm\" height=\"35mm\" version=\"1.1\" viewBox=\"0 0 35 35\" xmlns=\"http://www.w3.org/2000/svg\"><path d=\"M1,1H2V2H1zM2,1H3V2H2zM3,1H4V2H3zM4,1H5V2H4zM5,1H6V2H5zM6,1H7V2H6zM7,1H8V2H7zM13,1H14V2H13zM15,1H16V2H15zM16,1H17V2H16zM20,1H21V2H20zM22,1H23V2H22zM24,1H25V2H24zM27,1H28V2H27zM28,1H29V2H28zM29,1H30V2H29zM30,1H31V2H30zM31,1H32V2H31zM32,1H33V2H32zM33,1H34V2H33zM1,2H2V3H1zM7,2H8V3H7zM10,2H11V3H10zM13,2H14V3H13zM16,2H17V3H16zM18,2H19V3H18zM21,2H22V3H21zM22,2H23V3H22zM23,2H24V3H23zM24,2H25V3H24zM25,2H26V3H25zM27,2H28V3H27zM33,2H34V3H33zM1,3H2V4H1zM3,3H4V4H3zM4,3H5V4H4zM5,3H6V4H5zM7,3H8V4H7zM10,3H11V4H10zM11,3H12V4H11zM12,3H13V4H12zM13,3H14V4H13zM15,3H16V4H15zM16,3H17V4H16zM17,3H18V4H17zM18,3H19V4H18zM20,3H21V4H20zM21,3H22V4H21zM24,3H25V4H24zM27,3H28V4H27zM29,3H30V4H29zM30,3H31V4H30zM31,3H32V4H31zM33,3H34V4H33zM1,4H2V5H1zM3,4H4V5H3zM4,4H5V5H4zM5,4H6V5H5zM7,4H8V5H7zM10,4H11V5H10zM14,4H15V5H14zM16,4H17V5H16zM18,4H19V5H18zM23,4H24V5H23zM24,4H25V5H24zM27,4H28V5H27zM29,4H30V5H29zM30,4H31V5H30zM31,4H32V5H31zM33,4H34V5H33zM1,5H2V6H1zM3,5H4V6H3zM4,5H5V6H4zM5,5H6V6H5zM7,5H8V6H7zM10,5H11V6H10zM12,5H13V6H12zM13,5H14V6H13zM14,5H15V6H14zM17,5H18V6H17zM20,5H21V6H20zM24,5H25V6H24zM27,5H28V6H27zM29,5H30V6H29zM30,5H31V6H30zM31,5H32V6H31zM33,5H34V6H33zM1,6H2V7H1zM7,6H8V7H7zM9,6H10V7H9zM14,6H15V7H14zM19,6H20V7H19zM21,6H22V7H21zM27,6H28V7H27zM33,6H34V7H33zM1,7H2V8H1zM2,7H3V8H2zM3,7H4V8H3zM4,7H5V8H4zM5,7H6V8H5zM6,7H7V8H6zM7,7H8V8H7zM9,7H10V8H9zM11,7H12V8H11zM13,7H14V8H13zM15,7H16V8H15zM17,7H18V8H17zM19,7H20V8H19zM21,7H22V8H21zM23,7H24V8H23zM25,7H26V8H25zM27,7H28V8H27zM28,7H29V8H28zM29,7H30V8H29zM30,7H31V8H30zM31,7H32V8H31zM32,7H33V8H32zM33,7H34V8H33zM10,8H11V9H10zM12,8H13V9H12zM13,8H14V9H13zM15,8H16V9H15zM18,8H19V9H18zM20,8H21V9H20zM21,8H22V9H21zM22,8H23V9H22zM25,8H26V9H25zM1,9H2V10H1zM4,9H5V10H4zM6,9H7V10H6zM7,9H8V10H7zM9,9H10V10H9zM11,9H12V10H11zM13,9H14V10H13zM14,9H15V10H14zM15,9H16V10H15zM16,9H17V10H16zM17,9H18V10H17zM20,9H21V10H20zM22,9H23V10H22zM25,9H26V10H25zM26,9H27V10H26zM28,9H29V10H28zM2,10H3V11H2zM4,10H5V11H4zM6,10H7V11H6zM8,10H9V11H8zM10,10H11V11H10zM11,10H12V11H11zM17,10H18V11H17zM21,10H22V11H21zM23,10H24V11H23zM25,10H26V11H25zM26,10H27V11H26zM27,10H28V11H27zM28,10H29V11H28zM33,10H34V11H33zM5,11H6V12H5zM6,11H7V12H6zM7,11H8V12H7zM9,11H10V12H9zM12,11H13V12H12zM18,11H19V12H18zM20,11H21V12H20zM21,11H22V12H21zM22,11H23V12H22zM25,11H26V12H25zM26,11H27V12H26zM27,11H28V12H27zM28,11H29V12H28zM29,11H30V12H29zM31,11H32V12H31zM33,11H34V12H33zM3,12H4V13H3zM5,12H6V13H5zM6,12H7V13H6zM8,12H9V13H8zM9,12H10V13H9zM13,12H14V13H13zM15,12H16V13H15zM18,12H19V13H18zM20,12H21V13H20zM22,12H23V13H22zM23,12H24V13H23zM24,12H25V13H24zM25,12H26V13H25zM29,12H30V13H29zM30,12H31V13H30zM33,12H34V13H33zM2,13H3V14H2zM4,13H5V14H4zM7,13H8V14H7zM9,13H10V14H9zM22,13H23V14H22zM25,13H26V14H25zM26,13H27V14H26zM27,13H28V14H27zM30,13H31V14H30zM33,13H34V14H33zM2,14H3V15H2zM3,14H4V15H3zM5,14H6V15H5zM9,14H10V15H9zM10,14H11V15H10zM13,14H14V15H13zM16,14H17V15H16zM17,14H18V15H17zM22,14H23V15H22zM23,14H24V15H23zM25,14H26V15H25zM27,14H28V15H27zM29,14H30V15H29zM30,14H31V15H30zM32,14H33V15H32zM33,14H34V15H33zM1,15H2V16H1zM2,15H3V16H2zM5,15H6V16H5zM7,15H8V16H7zM11,15H12V16H11zM13,15H14V16H13zM18,15H19V16H18zM19,15H20V16H19zM21,15H22V16H21zM24,15H25V16H24zM26,15H27V16H26zM27,15H28V16H27zM29,15H30V16H29zM30,15H31V16H30zM31,15H32V16H31zM32,15H33V16H32zM1,16H2V17H1zM2,16H3V17H2zM4,16H5V17H4zM5,16H6V17H5zM8,16H9V17H8zM13,16H14V17H13zM15,16H16V17H15zM16,16H17V17H16zM18,16H19V17H18zM19,16H20V17H19zM20,16H21V17H20zM22,16H23V17H22zM24,16H25V17H24zM27,16H28V17H27zM29,16H30V17H29zM32,16H33V17H32zM4,17H5V18H4zM5,17H6V18H5zM7,17H8V18H7zM8,17H9V18H8zM11,17H12V18H11zM12,17H13V18H12zM13,17H14V18H13zM17,17H18V18H17zM18,17H19V18H18zM20,17H21V18H20zM22,17H23V18H22zM24,17H25V18H24zM25,17H26V18H25zM27,17H28V18H27zM29,17H30V18H29zM30,17H31V18H30zM32,17H33V18H32zM3,18H4V19H3zM8,18H9V19H8zM12,18H13V19H12zM14,18H15V19H14zM17,18H18V19H17zM19,18H20V19H19zM22,18H23V19H22zM24,18H25V19H24zM25,18H26V19H25zM28,18H29V19H28zM30,18H31V19H30zM32,18H33V19H32zM5,19H6V20H5zM6,19H7V20H6zM7,19H8V20H7zM8,19H9V20H8zM9,19H10V20H9zM11,19H12V20H11zM12,19H13V20H12zM19,19H20V20H19zM26,19H27V20H26zM27,19H28V20H27zM31,19H32V20H31zM32,19H33V20H32zM33,19H34V20H33zM1,20H2V21H1zM2,20H3V21H2zM3,20H4V21H3zM5,20H6V21H5zM6,20H7V21H6zM8,20H9V21H8zM9,20H10V21H9zM10,20H11V21H10zM11,20H12V21H11zM13,20H14V21H13zM15,20H16V21H15zM16,20H17V21H16zM18,20H19V21H18zM19,20H20V21H19zM20,20H21V21H20zM21,20H22V21H21zM22,20H23V21H22zM25,20H26V21H25zM26,20H27V21H26zM28,20H29V21H28zM33,20H34V21H33zM3,21H4V22H3zM4,21H5V22H4zM5,21H6V22H5zM6,21H7V22H6zM7,21H8V22H7zM10,21H11V22H10zM12,21H13V22H12zM13,21H14V22H13zM15,21H16V22H15zM17,21H18V22H17zM18,21H19V22H18zM19,21H20V22H19zM20,21H21V22H20zM23,21H24V22H23zM24,21H25V22H24zM25,21H26V22H25zM32,21H33V22H32zM33,21H34V22H33zM3,22H4V23H3zM4,22H5V23H4zM12,22H13V23H12zM13,22H14V23H13zM15,22H16V23H15zM16,22H17V23H16zM17,22H18V23H17zM18,22H19V23H18zM19,22H20V23H19zM20,22H21V23H20zM21,22H22V23H21zM25,22H26V23H25zM26,22H27V23H26zM27,22H28V23H27zM30,22H31V23H30zM32,22H33V23H32zM33,22H34V23H33zM1,23H2V24H1zM2,23H3V24H2zM3,23H4V24H3zM4,23H5V24H4zM5,23H6V24H5zM6,23H7V24H6zM7,23H8V24H7zM11,23H12V24H11zM13,23H14V24H13zM14,23H15V24H14zM15,23H16V24H15zM16,23H17V24H16zM19,23H20V24H19zM21,23H22V24H21zM23,23H24V24H23zM25,23H26V24H25zM26,23H27V24H26zM28,23H29V24H28zM31,23H32V24H31zM33,23H34V24H33zM2,24H3V25H2zM3,24H4V25H3zM4,24H5V25H4zM5,24H6V25H5zM10,24H11V25H10zM11,24H12V25H11zM13,24H14V25H13zM14,24H15V25H14zM17,24H18V25H17zM22,24H23V25H22zM23,24H24V25H23zM24,24H25V25H24zM25,24H26V25H25zM27,24H28V25H27zM28,24H29V25H28zM29,24H30V25H29zM1,25H2V26H1zM4,25H5V26H4zM6,25H7V26H6zM7,25H8V26H7zM9,25H10V26H9zM11,25H12V26H11zM12,25H13V26H12zM16,25H17V26H16zM17,25H18V26H17zM18,25H19V26H18zM19,25H20V26H19zM20,25H21V26H20zM21,25H22V26H21zM22,25H23V26H22zM25,25H26V26H25zM26,25H27V26H26zM27,25H28V26H27zM28,25H29V26H28zM29,25H30V26H29zM32,25H33V26H32zM9,26H10V27H9zM10,26H11V27H10zM11,26H12V27H11zM20,26H21V27H20zM21,26H22V27H21zM24,26H25V27H24zM25,26H26V27H25zM29,26H30V27H29zM30,26H31V27H30zM33,26H34V27H33zM1,27H2V28H1zM2,27H3V28H2zM3,27H4V28H3zM4,27H5V28H4zM5,27H6V28H5zM6,27H7V28H6zM7,27H8V28H7zM10,27H11V28H10zM11,27H12V28H11zM14,27H15V28H14zM15,27H16V28H15zM17,27H18V28H17zM22,27H23V28H22zM25,27H26V28H25zM27,27H28V28H27zM29,27H30V28H29zM30,27H31V28H30zM31,27H32V28H31zM1,28H2V29H1zM7,28H8V29H7zM9,28H10V29H9zM11,28H12V29H11zM12,28H13V29H12zM13,28H14V29H13zM17,28H18V29H17zM25,28H26V29H25zM29,28H30V29H29zM32,28H33V29H32zM1,29H2V30H1zM3,29H4V30H3zM4,29H5V30H4zM5,29H6V30H5zM7,29H8V30H7zM10,29H11V30H10zM13,29H14V30H13zM15,29H16V30H15zM17,29H18V30H17zM20,29H21V30H20zM23,29H24V30H23zM25,29H26V30H25zM26,29H27V30H26zM27,29H28V30H27zM28,29H29V30H28zM29,29H30V30H29zM30,29H31V30H30zM1,30H2V31H1zM3,30H4V31H3zM4,30H5V31H4zM5,30H6V31H5zM7,30H8V31H7zM9,30H10V31H9zM11,30H12V31H11zM12,30H13V31H12zM13,30H14V31H13zM14,30H15V31H14zM16,30H17V31H16zM18,30H19V31H18zM20,30H21V31H20zM21,30H22V31H21zM22,30H23V31H22zM24,30H25V31H24zM27,30H28V31H27zM29,30H30V31H29zM30,30H31V31H30zM31,30H32V31H31zM32,30H33V31H32zM1,31H2V32H1zM3,31H4V32H3zM4,31H5V32H4zM5,31H6V32H5zM7,31H8V32H7zM10,31H11V32H10zM13,31H14V32H13zM14,31H15V32H14zM18,31H19V32H18zM23,31H24V32H23zM24,31H25V32H24zM25,31H26V32H25zM29,31H30V32H29zM30,31H31V32H30zM33,31H34V32H33zM1,32H2V33H1zM7,32H8V33H7zM10,32H11V33H10zM11,32H12V33H11zM12,32H13V33H12zM13,32H14V33H13zM14,32H15V33H14zM15,32H16V33H15zM16,32H17V33H16zM17,32H18V33H17zM18,32H19V33H18zM22,32H23V33H22zM23,32H24V33H23zM24,32H25V33H24zM25,32H26V33H25zM26,32H27V33H26zM27,32H28V33H27zM1,33H2V34H1zM2,33H3V34H2zM3,33H4V34H3zM4,33H5V34H4zM5,33H6V34H5zM6,33H7V34H6zM7,33H8V34H7zM9,33H10V34H9zM10,33H11V34H10zM11,33H12V34H11zM12,33H13V34H12zM15,33H16V34H15zM21,33H22V34H21zM22,33H23V34H22zM25,33H26V34H25zM26,33H27V34H26zM27,33H28V34H27zM29,33H30V34H29zM30,33H31V34H30zM32,33H33V34H32z\" id=\"qr-path\" fill=\"#000000\" fill-opacity=\"1\" fill-rule=\"nonzero\" stroke=\"none\"/></svg>"};
+const FIG='<svg viewBox="0 0 64 64" width="1em" height="1em" style="vertical-align:-.12em"><path d="M32 14c10 0 20 12 19 26-1 12-9 18-19 18S14 52 13 40C12 26 22 14 32 14z" fill="#6E3B5E"/><path d="M32 14c-2-4 0-8 4-9" stroke="#5B3A2A" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M34 10c6-6 14-4 16 1-6 3-12 2-16-1z" fill="#5E8C4A"/><ellipse cx="25" cy="34" rx="4" ry="8" fill="#fff" opacity=".18"/></svg>';
+const D={
+ buharkent:{name:"Buharkent",il:"Aydın",bolge:"Ege",c:"#7A4A6A",c2:"#3D2236",emoji:FIG,art:"🌳",prodE:[FIG,"🧺","🍮"],
+  tl:"Güneşte kuruyan miras",
+  chips:["Kuru incir","Doğal kurutma","İncir uyutması"],
+  intro:"Aydın'ın en doğusundaki ilçe; Büyük Menderes vadisinde, Denizli sınırında yer alır. Verimli ovası ve yamaçlardaki bahçeleriyle bilinir.",
+  facts:[["İl","Aydın"],["Bölge","Ege · Büyük Menderes"],["Öne çıkan ürün","Kuru incir"],["Hasat","Temmuz sonu – Ağustos"]],
+  prods:[[FIG,"Kuru incir","Aydın inciri (sarılop); dalda olgunlaşır, güneşte kurur","Coğrafi işaretli · 2005"],["🧺","Taze incir","Yaz sonunda dalından toplanır",""],["🍮","İncir uyutması","İncir ve sütle yapılan yöresel tatlı",""]],
+  steps:[["Olgunlaşma","İncir dalda olgunlaşır, şekerini güneşten alır."],["Hasat","Kurutmalık incir ağaçtan kendiliğinden düşer, elle toplanır."],["Kurutma","Sergilerde güneşte doğal yolla kurutulur."],["Ayıklama","Boy ve kaliteye göre elle sınıflandırılır."],["Paketleme","Paketlenip yurt içi ve yurt dışı sofralara ulaşır."]],
+  quote:"Üç kuşaktır bu bahçedeyiz. İncir dalda olgunlaşır, kendiliğinden düşer; biz sadece güneşe emanet ederiz.",
+  recipe:{name:"İncir uyutması",serv:"4 kişilik",ing:[["Süt","1 litre"],["Kuru incir","10–12 adet"],["Ceviz içi","1 avuç"],["Tarçın (isteğe bağlı)","1 tutam"]],
+   st:["İncirlerin saplarını alıp ılık suda yumuşatın.","Sütü kaynatın, elinizi yakmayacak kadar ılıyana dek soğutun.","İncirleri ılık sütün bir kısmıyla pürüzsüz olana dek çekin, kalan sütle karıştırın.","Kâselere paylaştırın, üzerini örtüp oda sıcaklığında birkaç saat “uyutun”.","Kıvam alınca soğutun, cevizle servis edin."]},
+  producer:["👵","Üç kuşaktır incir üreten bir aile","Pilot çekimle gerçek üreticinin portresi, adı ve kendi anlatımıyla güncellenecek."],
+  story:"Buharkent, Aydın'ın en doğusunda, Büyük Menderes vadisinde. Burada incir acele etmez. Dalda olgunlaşır, kendiliğinden düşer ve günlerce güneşte kurur. Sonra eller tek tek ayıklar, paketler. Kışın sofralara gelen incir uyutması da yine bu bahçelerden. Bu, yüz elli beş hikâyeden biri."},
+ safranbolu:{name:"Safranbolu",il:"Karabük",bolge:"Batı Karadeniz",c:"#7B4FA0",c2:"#3A1F55",emoji:"🌸",art:"🏘️",prodE:["🌸","🍬","🍮"],
+  tl:"Kırmızı altının izinde",
+  chips:["Safran","Gonca hasadı","Zerde"],
+  intro:"Karabük'ün tarihî ilçesi. Osmanlı dönemi konaklarıyla UNESCO Dünya Mirası Listesi'nde yer alır; bin yıllık safran üretim geçmişiyle bilinir.",
+  facts:[["İl","Karabük"],["Bölge","Batı Karadeniz"],["Öne çıkan ürün","Safran"],["Hasat","Ekim ortası – Kasım ortası"]],
+  prods:[["🌸","Safranbolu safranı","Crocus sativus çiçeğinin elle ayrılan kırmızı tepecikleri","Coğrafi işaretli · 2011 · AB tescilli"],["🍬","Safranbolu lokumu","İlçenin geleneksel lokumu",""],["🍮","Zerde","Safranla renklenen pirinç tatlısı",""]],
+  steps:[["Çiçeklenme","Ekim'in ikinci yarısında mor safran çiçekleri açar."],["Gonca hasadı","Çiçekler sabah erken saatlerde, gonca hâlindeyken elle toplanır."],["Ayırma","Kırmızı dişi organlar (tepecikler) tek tek elle ayrılır."],["Kurutma","Işık alan ama güneş görmeyen odada, bez üzerinde kurutulur."],["Saklama","Işıktan ve nemden korunarak paketlenir."]],
+  quote:"Safranı sabah ayazında, çiçek açılmadan toplarız. Bir avuç kırmızı tel için bütün bir tarlayı dolaşırız.",
+  recipe:{name:"Zerde",serv:"6 kişilik",ing:[["Pirinç","½ su bardağı"],["Su","6 su bardağı"],["Toz şeker","1,5 su bardağı"],["Nişasta","2 yemek kaşığı"],["Safran (ılık suda bekletilmiş)","1 tutam"],["Gül suyu","1 yemek kaşığı"],["Antep fıstığı, nar","süslemek için"]],
+   st:["Pirinci yıkayıp suyla yumuşayana kadar pişirin.","Şekeri ekleyip eriyene dek karıştırın.","Nişastayı az suyla açıp tencereye ekleyin, kıvam alana dek pişirin.","Safran suyunu ve gül suyunu ekleyip birkaç dakika daha karıştırın.","Kâselere paylaştırın, soğuyunca fıstık ve narla süsleyin."]},
+  producer:["👩‍🌾","Safran toplayan kadın üreticiler","Pilot çekimde gerçek üreticilerle güncellenecek örnek profil."],
+  story:"Safranbolu, Osmanlı konaklarıyla Dünya Mirası listesinde. Ekim ortasında tarlalar mor çiçeklerle dolar. Çiçekler sabah erkenden, açılmadan toplanır. Kırmızı teller tek tek elle ayrılır ve gölgede kurutulur. Bu emek, zerdenin rengine dönüşür. Bu, yüz elli beş hikâyeden biri."},
+ finike:{name:"Finike",il:"Antalya",bolge:"Akdeniz",c:"#E07B1F",c2:"#8A3B0E",emoji:"🍊",art:"🍊",prodE:["🍊","🫙","🌿"],
+  tl:"Kışın ortasında güneş rengi",
+  chips:["Portakal","Kış hasadı","Kabuk reçeli"],
+  intro:"Antalya'nın batısında, Akdeniz kıyısında bir ilçe. Kuzeyinde Akdağ yükselir; Akçay ve Alakır'ın taşıdığı alüvyonlu topraklar özel bir mikroklima oluşturur. Antik Likya kenti Limyra ilçe sınırlarındadır.",
+  facts:[["İl","Antalya"],["Bölge","Akdeniz · Likya"],["Öne çıkan ürün","Portakal"],["Hasat","Aralık – Şubat"]],
+  prods:[["🍊","Finike portakalı","Washington Navel tipi, çekirdeksiz, dengeli asit-şeker oranı","Coğrafi işaretli · 2008"],["🧃","Taze portakal suyu","Kış aylarında taze sıkım",""],["🫙","Portakal kabuğu reçeli","Akdeniz sofralarının klasiği",""]],
+  steps:[["Renk dönümü","Yeşil meyveler Kasım'dan itibaren turuncuya döner."],["Hasat","En uygun hasat Aralık, Ocak ve Şubat aylarıdır."],["Toplama","Meyveler bahçelerde dikkatle toplanır."],["Ayıklama","Boy ve kaliteye göre sınıflandırılır."],["Sevkiyat","İç ve dış pazarlara gönderilir."]],
+  quote:"Kış geldiğinde bahçe turuncuya boyanır. Akdağ'ın soğuğu, denizin ılığı; portakalın tadı ikisinin arasında saklı.",
+  recipe:{name:"Portakal kabuğu reçeli",serv:"1 kavanoz",ing:[["Portakal kabuğu","4 portakaldan"],["Toz şeker","2 su bardağı"],["Su","1,5 su bardağı"],["Limon suyu","½ limon"]],
+   st:["Kabukları ince şeritler hâlinde soyun, rulo yapıp iğneyle ipe dizin.","Acısı çıkana dek suyunu değiştirerek 3–4 kez haşlayın.","Şeker ve sudan şurup hazırlayın.","Kabukları şuruba ekleyip kıvam alana dek pişirin.","Limon suyunu ekleyin, ılıyınca kavanoza alın."]},
+  producer:["👨‍🌾","Portakal bahçesi sahibi bir aile","Pilot çekimde gerçek üreticiyle güncellenecek örnek profil."],
+  story:"Finike, Akdeniz kıyısında, Akdağ'ın eteklerinde. Kasım'da yeşil meyveler turuncuya döner, Aralık'tan Şubat'a kadar hasat edilir. Çekirdeksiz, sulu Finike portakalı, kışın ortasında sofraya güneş taşır. Bu, yüz elli beş hikâyeden biri."}
+};
+const ORDER=['buharkent','safranbolu','finike'];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let stamps=new Set(),myScans=0;
+try{JSON.parse(localStorage.getItem('yf-st')||'[]').forEach(x=>stamps.add(x));myScans=+localStorage.getItem('yf-sc')||0}catch(e){}
+function save(){try{localStorage.setItem('yf-st',JSON.stringify([...stamps]));localStorage.setItem('yf-sc',myScans)}catch(e){}}
+function toast(t){const x=$('#toast');x.textContent=t;x.classList.add('on');clearTimeout(x._t);x._t=setTimeout(()=>x.classList.remove('on'),2600)}
+
+/* ---------- HUD ---------- */
+function drawHud(anim){const h=$('#hud');h.querySelectorAll('i').forEach(i=>i.remove());
+  ORDER.forEach(k=>{const i=document.createElement('i');i.title=D[k].name;if(stamps.has(k)){i.className='f';i.innerHTML=D[k].emoji;if(anim!==k)i.style.animation='none'}else i.textContent='·';h.appendChild(i)});
+  $('#myScans').textContent=myScans}
+drawHud();
+
+/* ---------- views ---------- */
+function show(v){$$('.view').forEach(x=>x.classList.toggle('on',x.id==='v-'+v));$$('#persp button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
+  scrollTo(0,0);if(v==='admin')initAdmin();if(v==='fest')setTimeout(()=>cam(),50);if(location.hash!=='#'+v&&v!=='ilce')history.replaceState(null,'','#'+v)}
+$$('[data-v]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v)));
+$('#home').onclick=()=>{if(document.body.classList.contains('direct'))location.href='/';else show('intro')};
+
+/* ---------- ilçe renderer ---------- */
+function renderIlce(k,mode){const d=D[k];const qr=QR[k];
+  const el=document.createElement('div');el.className='ip'+(mode==='full'?' full':'');el.style.setProperty('--c',d.c);el.style.setProperty('--c2',d.c2);
+  el.innerHTML=`
+  <div class="ih" data-bg="/img/${k}-kapak.jpg"><div class="art">${d.art}</div>
+    <div class="loc">${d.name} · ${d.il} · ${d.bolge}</div><h1>${d.name}</h1><div class="tl">${d.tl}</div>
+    <div class="chips">${d.chips.map(c=>`<span>${c}</span>`).join('')}</div>
+    <div class="acts"><button class="btn sm lst">🔊 Hikâyeyi dinle</button></div></div>
+  <nav class="itabs">${['Tanıtım','Ürünler','Hikâye','Sofra','Üretici','Video'].map((t,i)=>`<a data-t="${i}" class="${i?'':'on'}">${t}</a>`).join('')}</nav>
+  <section class="isec" data-s="0"><div class="k">İlçe tanıtımı</div><h2>${d.name}'e hoş geldiniz</h2><p>${d.intro}</p>
+    <div class="facts">${d.facts.map(f=>`<div><small>${f[0]}</small><b>${f[1]}</b></div>`).join('')}</div></section>
+  <section class="isec" data-s="1"><div class="k">Ürünler</div><h2>Bu topraktan <em>sofraya</em></h2>
+    <div class="prods">${d.prods.map(p=>`<div class="prd"><div class="pe">${p[0]}</div><div><b>${p[1]}</b><span>${p[2]}</span>${p[3]?`<div class="ci">✓ ${p[3]}</div>`:''}</div></div>`).join('')}</div></section>
+  <section class="isec" data-s="2"><div class="k">Ürünün hikâyesi</div><h2>Topraktan sofraya <em>beş adım</em></h2>
+    <div class="journey">${d.steps.map((s,i)=>`<div class="js" data-n="${i+1}"><b>${s[0]}</b><span>${s[1]}</span></div>`).join('')}</div>
+    <div class="quote">“${d.quote}”<small>Örnek içerik · gerçek üretici sözleriyle güncellenecek</small></div></section>
+  <section class="isec" data-s="3"><div class="k">Yöresel sofra</div><h2>${d.recipe.name}</h2>
+    <div class="rc"><h3>Malzemeler · ${d.recipe.serv}</h3><ul class="ing">${d.recipe.ing.map(i=>`<li>${i[0]}<b>${i[1]}</b></li>`).join('')}</ul></div>
+    <div class="rc"><h3>Hazırlanışı</h3><ol class="stp">${d.recipe.st.map(s=>`<li>${s}</li>`).join('')}</ol></div></section>
+  <section class="isec" data-s="4"><div class="k">Üretici</div><h2>Ürünün arkasındaki <em>insan</em></h2>
+    <div class="prod-card"><div class="av" data-bg="/img/${k}-uretici.jpg">${d.producer[0]}</div><div><span class="tagx">Örnek profil</span><b style="display:block;color:var(--navy)">${d.producer[1]}</b><span style="font-size:13px;color:var(--muted)">${d.producer[2]} Her profil açık rıza formuyla yayımlanır.</span></div></div></section>
+  <section class="isec" data-s="5"><div class="k">Video</div><h2>Bir İlçe, <em>Bir Hikâye</em></h2>
+    <div class="vbox"><video controls playsinline preload="metadata" src="/img/${k}-video.mp4"></video><div class="pl">▶</div><b>60 saniyelik ilçe videosu</b><small>Pilot çekimle bu alana yerleşecek</small></div></section>
+  <div class="ifoot"><b>Prototip.</b> YEGFEST dijital tanıtım platformu önerisi için hazırlanmış örnek sayfadır; resmî bir site değildir. Örnek içerikler doğrulanarak güncellenecektir.<br>Hazırlayan: Harun Eymen Vural</div>`;
+  /* optional media */
+  el.querySelectorAll('[data-bg]').forEach(x=>{const im=new Image();im.onload=()=>{x.style.backgroundImage=`url("${im.src}")`;if(x.classList.contains('ih'))x.classList.add('img');else x.textContent=''};im.src=x.dataset.bg});
+  const v=el.querySelector('video');v.addEventListener('loadedmetadata',()=>v.parentElement.classList.add('has'));
+  /* tabs */
+  const tabs=[...el.querySelectorAll('.itabs a')],secs=[...el.querySelectorAll('.isec')];
+  tabs.forEach(t=>t.onclick=()=>{const s=secs[+t.dataset.t];const sc=el.closest('.pscroll');const off=mode==='full'?130:60;
+    if(sc)sc.scrollTo({top:s.offsetTop-off+10,behavior:'smooth'});else scrollTo({top:s.getBoundingClientRect().top+scrollY-off,behavior:'smooth'})});
+  const onScroll=()=>{let i=0;secs.forEach((s,j)=>{if(s.getBoundingClientRect().top<(mode==='full'?200:180))i=j});tabs.forEach((t,j)=>t.classList.toggle('on',j===i))};
+  setTimeout(()=>{const sc=el.closest('.pscroll')||window;sc.addEventListener('scroll',onScroll,{passive:true})},0);
+  /* listen */
+  const lb=el.querySelector('.lst');lb.onclick=()=>speak(d.story,lb);
+  return el}
+
+/* ---------- speech ---------- */
+let speaking=null;
+function speak(text,btn){if(!('speechSynthesis' in window)){toast('Bu tarayıcı sesli okumayı desteklemiyor');return}
+  if(speaking){speechSynthesis.cancel();speaking.classList.remove('on');speaking.textContent='🔊 Hikâyeyi dinle';if(speaking===btn){speaking=null;return}}
+  const u=new SpeechSynthesisUtterance(text);u.lang='tr-TR';u.rate=.95;const vs=speechSynthesis.getVoices().filter(v=>/^tr/i.test(v.lang));
+  if(vs.length)u.voice=vs.find(v=>/natural|online|google/i.test(v.name))||vs[0];else toast('Türkçe ses bulunamazsa tarayıcı varsayılan sesi kullanır');
+  u.onend=()=>{btn.classList.remove('on');btn.textContent='🔊 Hikâyeyi dinle';speaking=null};
+  btn.classList.add('on');btn.textContent='⏹ Durdur';speaking=btn;speechSynthesis.speak(u)}
+if('speechSynthesis' in window)speechSynthesis.getVoices();
+function stopSpeak(){if(speaking){speechSynthesis.cancel();speaking.classList.remove('on');speaking.textContent='🔊 Hikâyeyi dinle';speaking=null}}
+
+/* ---------- festival 3D ---------- */
+const SX=[-950,0,950];let cur=-1,near=false;
+function buildStands(){const w=$('#stands');ORDER.forEach((k,i)=>{const d=D[k];const s=document.createElement('div');s.className='stand';s.dataset.i=i;
+  s.style.transform=`translate3d(${SX[i]}px,0,0)`;
+  const g=`linear-gradient(150deg,${d.c},${d.c2})`;
+  s.innerHTML=`<div class="f s-shadow"></div>
+   <div class="f s-back" style="background:${g}"><div class="art">${d.art}</div><div class="rg">${d.il} · ${d.bolge}</div><div class="tl">${d.tl}</div></div>
+   <div class="f s-side s-sideL" style="background:${g}"></div><div class="f s-side s-sideR" style="background:${g}"></div>
+   <div class="f s-post s-postL"></div><div class="f s-post s-postR"></div>
+   <div class="f s-head" style="background:${d.c}">${d.emoji} ${d.name.toUpperCase()} <small>YEG</small></div>
+   <div class="f s-ctop"></div>
+   <div class="f s-cfront"><b>${d.chips[0].toUpperCase()}</b></div>
+   ${d.prodE.map((e,j)=>`<div class="f s-prod" style="transform:translate3d(${-230+j*95}px,-232px,64px)">${e}</div>`).join('')}
+   <div class="f s-qr" data-qr="${i}">${qr(k)}<span>OKUT · DİNLE</span></div>`;
+  s.addEventListener('click',e=>{e.stopPropagation();if(e.target.closest('.s-qr')&&cur===i&&near){openPhone(k);return}
+    if(cur===i&&!near){near=true;cam()}else if(cur===i&&near){openPhone(k)}else{cur=i;near=false;cam()}});
+  w.appendChild(s)})}
+function qr(k){return QR[k].replace(/width="[^"]*"/,'').replace(/height="[^"]*"/,'')}
+function cam(){const w=$('#world');let x=0,z=-1250,y=0;
+  if(cur>=0){x=SX[cur];z=near?420:-80;y=near?-40:0}
+  w.style.transform=`translate3d(${-x}px,${y}px,${z}px)`;
+  $$('.stand').forEach((s,i)=>s.classList.toggle('near',near&&i===cur));
+  const inf=$('#info');
+  if(cur<0){inf.classList.add('hide');$('#hint').textContent='Bir standa tıklayın · ← → ile gezinin';return}
+  const d=D[ORDER[cur]];inf.classList.remove('hide');
+  inf.innerHTML=`<small>Stant ${cur+1} / 3 · ${d.bolge}</small><h3>${d.emoji} ${d.name}</h3><p>${d.tl}. ${near?'Standın önündesiniz; QR kodu okutun.':'Standa yaklaşarak ürünleri ve QR kodu görün.'}</p>
+   <div class="row">${near?`<button class="btn gold sm" id="scanBtn">📱 QR'ı okut</button>`:`<button class="btn sm" id="nearBtn">Standa yaklaş</button>`}${stamps.has(ORDER[cur])?'<span class="btn ghost sm" style="cursor:default">✓ Damga alındı</span>':''}</div>`;
+  $('#hint').textContent=near?'QR koduna tıklayın':'Standa yaklaşmak için tekrar tıklayın';
+  const nb=$('#nearBtn');if(nb)nb.onclick=e=>{e.stopPropagation();near=true;cam()};const sb=$('#scanBtn');if(sb)sb.onclick=e=>{e.stopPropagation();openPhone(ORDER[cur])}}
+$('#prev').onclick=()=>{cur=cur<=0?2:cur-1;near=false;cam()};
+$('#next').onclick=()=>{cur=cur>=2?0:cur+1;near=false;cam()};
+$('#overview').onclick=()=>{cur=-1;near=false;cam()};
+$('#scene').addEventListener('click',e=>{if(e.target.closest('.stand,.info,.fui'))return;if(near){near=false;cam()}});
+addEventListener('keydown',e=>{if(!$('#v-fest').classList.contains('on')||$('#phoneWrap').classList.contains('on'))return;
+  if(e.key==='ArrowRight')$('#next').click();else if(e.key==='ArrowLeft')$('#prev').click();else if(e.key==='Escape')$('#overview').click();
+  else if(e.key==='Enter'&&cur>=0){if(!near){near=true;cam()}else openPhone(ORDER[cur])}});
+buildStands();
+
+/* ---------- phone ---------- */
+let phoneK=null;
+function openPhone(k){phoneK=k;const sc=$('#screen');sc.innerHTML='';
+  const sw=document.createElement('div');sw.className='pscroll';sw.appendChild(renderIlce(k,'phone'));sc.appendChild(sw);
+  const scan=document.createElement('div');scan.className='scan';scan.innerHTML=`<div class="vf">${qr(k)}<div class="line"></div></div><p>QR kod okunuyor…</p><div class="okb">✓ ${D[k].name} · pasaporta damga eklendi</div>`;sc.appendChild(scan);
+  $('#phoneWrap').classList.add('on');
+  setTimeout(()=>{scan.classList.add('ok');scan.querySelector('p').textContent='Okundu';myScans++;const first=!stamps.has(k);stamps.add(k);save();drawHud(first?k:null);
+    setTimeout(()=>{scan.style.opacity=0;setTimeout(()=>scan.remove(),500);if(first&&stamps.size===3)setTimeout(celebrate,900)},1100)},1700)}
+function closePhone(){stopSpeak();$('#phoneWrap').classList.remove('on');if($('#v-fest').classList.contains('on'))cam()}
+$('#pclose').onclick=closePhone;
+$('#phoneWrap').addEventListener('click',e=>{if(e.target.id==='phoneWrap')closePhone()});
+$('#pfull').onclick=()=>{const k=phoneK;closePhone();openFull(k)};
+addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#phoneWrap').classList.contains('on'))closePhone()});
+function celebrate(){$('#done').classList.add('on');const cs=['#C9A227','#2E78C7','#E07B1F','#7B4FA0','#5E8C4A'];
+  for(let i=0;i<90;i++){const c=document.createElement('i');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=cs[i%5];c.style.animationDuration=(2+Math.random()*2.5)+'s';c.style.animationDelay=Math.random()*.6+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),5500)}}
+$('#doneOk').onclick=()=>$('#done').classList.remove('on');
+
+/* ---------- full ilçe ---------- */
+function openFull(k){const f=$('#ilceFull');f.innerHTML='';f.appendChild(renderIlce(k,'full'));show('ilce');
+  if(!document.body.classList.contains('direct'))history.replaceState(null,'','#ilce-'+k)}
+
+/* ---------- home: map ---------- */
+const TR_A=[[29.05,41.05],[29.6,41.17],[30.5,41.15],[31.4,41.3],[32.4,41.75],[33.4,41.98],[34.9,42.08],[35.5,41.65],[36.3,41.35],[37.0,41.15],[37.9,40.97],[38.4,40.95],[39.7,41.0],[40.5,41.05],[41.5,41.5],[42.5,41.5],[43.4,41.15],[43.7,40.6],[43.6,40.1],[44.2,40.0],[44.8,39.7],[44.4,39.4],[44.1,39.0],[44.3,38.4],[44.3,37.9],[44.8,37.3],[44.1,37.1],[42.4,37.15],[41.2,37.1],[40.0,36.85],[39.0,36.7],[38.0,36.8],[37.0,36.65],[36.65,36.85],[36.6,36.4],[36.2,35.85],[35.95,35.92],[35.9,36.3],[36.2,36.7],[35.6,36.75],[35.0,36.65],[34.6,36.8],[34.0,36.3],[33.3,36.1],[32.8,36.0],[32.3,36.3],[31.9,36.55],[31.2,36.8],[30.7,36.88],[30.55,36.4],[30.2,36.3],[29.6,36.2],[29.1,36.6],[28.5,36.8],[28.1,36.65],[27.6,36.75],[27.4,37.0],[27.25,37.45],[26.95,37.85],[26.4,38.2],[26.8,38.45],[26.75,38.95],[26.65,39.3],[26.15,39.47],[26.15,39.95],[26.4,40.15],[27.0,40.38],[27.9,40.35],[28.7,40.4],[29.1,40.45],[29.9,40.72],[29.3,40.8]];
+const TR_T=[[26.05,40.72],[26.35,41.7],[27.3,42.05],[28.0,41.98],[29.05,41.22],[28.98,41.0],[27.5,40.97],[27.1,40.6],[26.67,40.4],[26.2,40.05],[26.5,40.6]];
+const PX=([lo,la])=>[(lo-25.7)*0.777*60,(42.25-la)*60];
+const PINS={buharkent:[28.75,37.97],safranbolu:[32.69,41.25],finike:[30.15,36.3]};
+function inPoly(p,poly){let c=false;for(let i=0,j=poly.length-1;i<poly.length;j=i++){const[xi,yi]=poly[i],[xj,yj]=poly[j];if(((yi>p[1])!==(yj>p[1]))&&(p[0]<(xj-xi)*(p[1]-yi)/(yj-yi)+xi))c=!c}return c}
+function buildMap(){const m=$('#map');const path=pts=>'M'+pts.map(p=>PX(p).map(n=>n.toFixed(1)).join(',')).join('L')+'Z';
+  let h=`<path class="land" d="${path(TR_A)}"/><path class="land" d="${path(TR_T)}"/>`;
+  let s=11,n=0;const r=()=>(s=(s*9301+49297)%233280)/233280;
+  while(n<152){const p=[26+r()*19,36+r()*6];if(inPoly(p,TR_A)||inPoly(p,TR_T)){const[x,y]=PX(p);h+=`<circle class="ghost" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3"/>`;n++}}
+  ORDER.forEach(k=>{const[x,y]=PX(PINS[k]);const d=D[k];h+=`<g class="pin" data-k="${k}"><circle class="pulse" cx="${x}" cy="${y}" r="8" fill="${d.c}"/><circle class="p" cx="${x}" cy="${y}" r="8" fill="${d.c}" stroke="#fff" stroke-width="3"/><text x="${x+14}" y="${y+5}">${d.name}</text></g>`});
+  m.innerHTML=h;m.querySelectorAll('.pin').forEach(g=>g.addEventListener('click',()=>openFull(g.dataset.k)));
+  $('#icards').innerHTML=ORDER.map(k=>{const d=D[k];return `<button class="icard" data-k="${k}"><div class="th" style="background:linear-gradient(150deg,${d.c},${d.c2})">${d.emoji}</div><div><b>${d.name} · ${d.il}</b><span>${d.tl} · ${d.chips.join(', ')}</span></div></button>`}).join('')+
+   `<div class="icard" style="opacity:.6;cursor:default"><div class="th" style="background:rgba(31,58,95,.1)">＋</div><div><b>152 ilçe daha</b><span>Her hafta yeni ilçeler yayına giriyor</span></div></div>`;
+  $$('#icards [data-k]').forEach(b=>b.onclick=()=>openFull(b.dataset.k));
+  const feed=[['buharkent','Bir İlçe, Bir Hikâye','60 sn · Salı'],['safranbolu','Yöresel Sofra: Zerde','2 dk · Çarşamba'],['finike','Ürünün Yolculuğu: Portakal','4 dk · Ayın belgeseli']];
+  $('#feed').innerHTML=feed.map(f=>{const d=D[f[0]];return `<button class="fv" data-k="${f[0]}"><div class="fvt" style="background:linear-gradient(150deg,${d.c},${d.c2})">${d.emoji}</div><div class="fvb"><b>${d.name} · ${f[1]}</b><span>${f[2]}</span></div></button>`}).join('');
+  $$('#feed [data-k]').forEach(b=>b.onclick=()=>openFull(b.dataset.k))}
+buildMap();
+
+/* ---------- admin ---------- */
+const STEPS=['Kurgu','Yerel teyit','Koordinasyon','Başkanlık onayı','Yayında'];
+const Q=[['buharkent','Bir İlçe, Bir Hikâye · 60 sn',3],['safranbolu','Yöresel Sofra: Zerde · 2 dk',2],['finike','Ürünün Yolculuğu: Portakal · 4 dk',1]];
+function drawQueue(){$('#queue').innerHTML=Q.map((q,i)=>{const d=D[q[0]];const st=q[2];return `<div class="q"><div><b>${d.emoji} ${d.name}</b><div class="meta">${q[1]}</div>
+  <div class="flow">${STEPS.map((s,j)=>`<i class="${j<st?'d':j===st?'c':''}"></i>`).join('')}</div><div class="qst">${st>=4?'✓ Yayında':'Şu an: '+STEPS[st]}</div></div>
+  ${st>=4?'<span class="btn ghost sm" style="cursor:default">Yayında</span>':`<button class="btn sm ${st===3?'gold':''}" data-q="${i}">${st===3?'Onayla ✓':'İlerlet →'}</button>`}</div>`}).join('');
+  $$('#queue [data-q]').forEach(b=>b.onclick=()=>{const q=Q[+b.dataset.q];q[2]++;drawQueue();if(q[2]>=4)toast(D[q[0]].name+' videosu yayına alındı')})}
+let admInit=false;
+function initAdmin(){drawHud();
+  $$('.cnt').forEach(c=>{const to=+c.dataset.to,t0=performance.now();(function f(t){const p=Math.min((t-t0)/1400,1);c.textContent=Math.round(to*(1-Math.pow(1-p,3))).toLocaleString('tr-TR');if(p<1)requestAnimationFrame(f)})(t0)});
+  if(admInit)return;admInit=true;drawQueue();
+  const B=[['Safranbolu',4820],['Buharkent',4310],['Finike',3970]];const mx=5000;
+  $('#bars').innerHTML=B.map(b=>`<div class="br"><b>${b[0]}</b><div class="tr"><i data-w="${b[1]/mx*100}"></i></div><span>${b[1].toLocaleString('tr-TR')}</span></div>`).join('');
+  setTimeout(()=>$$('#bars i').forEach(i=>i.style.width=i.dataset.w+'%'),100);
+  const W=[['Pzt',''],['Sal','Buharkent'],['Çar','Zerde','y'],['Per','İlçe 4'],['Cum',''],['Cmt','İlçe 5'],['Paz','İlçe 6']];
+  $('#week').innerHTML=W.map(w=>`<div>${w[0]}${w[1]?`<span class="${w[2]||''}">${w[1]}</span>`:''}</div>`).join('')}
+
+/* ---------- route ---------- */
+(function(){const m=location.pathname.match(/^\/ilce\/([a-z]+)/);
+  if(m&&D[m[1]]){document.body.classList.add('direct');openFull(m[1]);return}
+  const h=location.hash.slice(1);if(h.startsWith('ilce-')&&D[h.slice(5)]){openFull(h.slice(5));return}
+  show(['fest','home','admin'].includes(h)?h:'intro')})();
+</script>
+</body>
+</html>
