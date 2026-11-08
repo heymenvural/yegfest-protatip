@@ -43,3 +43,6 @@ npx serve .        # /ilce/ derin bağlantıları için Vercel'de rewrite tanım
 ```
 
 Veri kaynakları: ülke sınırları world-atlas (Natural Earth, kamu malı); il/ilçe listesi turkey-neighbourhoods (MIT).
+
+## Kırsal İnovasyon Hackathonu (prototip)
+`/hackathon` altında: anasayfa (3D tarla sahnesi), 5 tema, 4 adımlı başvuru ve başvuru sorgulama, fikir galerisi ve halk oylaması, jüri puanlama paneli (5 kriter, ilk 10, mentor eşleştirme) ve YEGFEST finali (kürsü, sahne programı, seyirci oylaması). Veriler tarayıcıda (localStorage) tutulur; örnek takımlar temsilîdir.
