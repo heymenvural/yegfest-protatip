@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>YEGFEST — Öneriden Uygulamaya</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="YEGFEST · Öneriden Uygulamaya">
+<meta property="og:description" content="YEGFEST uygulama planı: stratejik yaklaşım, bütçe ve sponsorluk, tanıtım, projeler ve takvim.">
+<meta property="og:image" content="https://yegfest-prototip.vercel.app/sunum/kapak.jpg">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#1F3A5F">
+<style>
+html,body{width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+body{position:fixed;inset:0}
+#navbtn{position:fixed;right:18px;bottom:76px;z-index:50;display:flex;gap:8px}
+#navbtn button{width:44px;height:44px;border-radius:50%;border:1px solid rgba(31,58,95,.18);background:rgba(255,255,255,.85);backdrop-filter:blur(6px);color:#1F3A5F;font:600 20px/1 system-ui;cursor:pointer;box-shadow:0 4px 14px rgba(20,38,63,.12)}
+#navbtn button:hover{background:#1F3A5F;color:#fff}
+#hint{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:50;background:rgba(20,38,63,.92);color:#fff;font:500 14px/1.4 "Plus Jakarta Sans",system-ui;padding:10px 18px;border-radius:999px;transition:opacity .6s;pointer-events:none;white-space:nowrap}
+#hint.off{opacity:0}
+#rot{display:none;position:fixed;inset:0;z-index:100;background:#1F3A5F;color:#fff;align-items:center;justify-content:center;flex-direction:column;text-align:center;font:500 17px/1.5 "Plus Jakarta Sans",system-ui;padding:32px}
+#rot b{font-size:44px;display:block;margin-bottom:14px;animation:rt 2s ease-in-out infinite}
+#rot small{display:block;margin-top:18px;opacity:.7;font-size:14px}
+#rot button{margin-top:22px;background:none;border:1px solid rgba(255,255,255,.5);color:#fff;border-radius:999px;padding:9px 18px;font:inherit;font-size:14px}
+@keyframes rt{0%,30%{transform:rotate(0)}60%,100%{transform:rotate(90deg)}}
+@media (orientation:portrait) and (max-width:820px){body:not(.rotok) #rot{display:flex}#hint{white-space:normal;width:86%;text-align:center}}
+@media (max-width:820px),(max-height:500px){#navbtn{bottom:auto;top:12px;right:12px}#navbtn button{width:38px;height:38px;font-size:18px}#hint{bottom:20px}}
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fraunces:ital,opsz,wght@1,9..144,500;1,9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F1E8;--white:#FFFFFF;--navy:#1F3A5F;--ink:#14263F;--gold:#C9A227;--gold2:#B8900F;--gold3:#E3B341;
+  --blue:#2E78C7;--sky:#8EC3F0;--green:#5E8C4A;--muted:rgba(20,38,63,.64);--dim:rgba(20,38,63,.42);--line:rgba(31,58,95,.14);
+  --ease:cubic-bezier(.2,.8,.2,1);--soft:cubic-bezier(.45,.05,.25,1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);overflow:hidden;color:var(--ink);user-select:none;
+  font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;width:100%;height:100%}
+.glow{position:fixed;border-radius:50%;filter:blur(150px);pointer-events:none}
+.glow.g1{width:700px;height:700px;background:var(--gold);right:-200px;top:-250px;opacity:.22;animation:drift 18s ease-in-out infinite alternate}
+.glow.g2{width:800px;height:800px;background:var(--blue);left:-300px;bottom:-350px;opacity:.15;animation:drift 22s ease-in-out infinite alternate-reverse}
+.glow.g3{width:500px;height:500px;background:var(--sky);left:40%;top:40%;opacity:.2;animation:drift 26s ease-in-out infinite alternate}
+@keyframes drift{to{transform:translate(120px,80px) scale(1.15)}}
+#stage{position:absolute;left:50%;top:50%;width:1920px;height:1080px;transform-origin:center}
+.slide{position:absolute;inset:0;padding:96px 130px 90px;opacity:0;visibility:hidden;transform:scale(.95) translateX(40px);filter:blur(14px);
+  transition:opacity .9s var(--ease),transform 1.1s var(--ease),filter .9s var(--ease),visibility 0s linear 1.1s}
+.slide.past{transform:scale(1.06) translateX(-40px)}
+.slide:not(#s-cover):not(#s-video-sec):not(#s-gal){display:flex;flex-direction:column;justify-content:center;padding-top:70px;padding-bottom:80px}
+.slide.active{opacity:1;visibility:visible;transform:none;filter:none;transition-delay:0s}
+.in{opacity:0}
+.slide.play .in{animation:rise 1s var(--ease) both;animation-delay:var(--d,0s)}
+.slide.play .in.pop{animation-name:pop}
+.slide.play .in.left{animation-name:fromLeft}
+.slide.play .in.right{animation-name:fromRight}
+@keyframes rise{from{opacity:0;transform:translateY(44px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.55)}60%{opacity:1;transform:scale(1.05)}100%{opacity:1;transform:none}}
+@keyframes fromLeft{from{opacity:0;transform:translateX(-80px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+@keyframes fromRight{from{opacity:0;transform:translateX(80px);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}
+.kicker{font-size:20px;letter-spacing:.24em;text-transform:uppercase;font-weight:700;color:var(--gold2);display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.kicker::before{content:"";width:46px;height:3px;background:var(--gold);border-radius:3px}
+h1{font-size:132px;line-height:.98;font-weight:800;letter-spacing:-.035em;color:var(--navy)}
+h2{font-size:64px;line-height:1.05;font-weight:800;letter-spacing:-.025em;color:var(--navy)}
+h3{font-size:30px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+h4{font-size:24px;font-weight:700;color:var(--navy)}
+em{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;color:var(--gold2);letter-spacing:-.01em}
+.lead{font-size:28px;line-height:1.5;color:var(--muted);max-width:1300px}
+p{font-size:21px;line-height:1.5;color:var(--muted)}
+.tag{display:inline-block;font-size:15px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:7px 14px;border-radius:30px;background:rgba(201,162,39,.16);color:var(--gold2)}
+.tag.blue{background:rgba(46,120,199,.12);color:var(--blue)}
+.tag.green{background:rgba(94,140,74,.14);color:var(--green)}
+.ph{position:relative;border-radius:22px;overflow:hidden;background:linear-gradient(135deg,#E8E2D2,#D9E4EE);
+  background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;text-align:center}
+.ph::after{content:attr(data-img);position:absolute;inset:auto 0 0 0;padding:10px 14px;font-size:14px;font-weight:700;letter-spacing:.04em;color:var(--navy);
+  background:rgba(255,255,255,.72);backdrop-filter:blur(4px)}
+.ph .hint{font-size:16px;line-height:1.4;color:var(--muted);padding:20px 26px 46px;max-width:90%}
+.ph .hint::before{content:"📷";display:block;font-size:34px;margin-bottom:8px;opacity:.7}
+.ph.has::after,.ph.has .hint{display:none}
+.ph.ai.has::before{content:"Temsilî görsel";position:absolute;left:10px;top:10px;font-size:12px;font-weight:700;letter-spacing:.04em;padding:4px 10px;border-radius:12px;background:rgba(20,38,63,.62);color:#fff;z-index:2}
+.map{display:flex;flex-direction:column;gap:14px;margin-top:34px}
+.src{font-size:14px;color:var(--dim);margin-top:14px}
+.pilot{display:grid;grid-template-columns:360px 1fr;gap:56px;margin-top:30px;align-items:center}
+.pv{aspect-ratio:9/16;border-radius:30px;background:var(--navy);overflow:hidden;position:relative;box-shadow:0 40px 80px -30px rgba(20,38,63,.6)}
+.pv video{width:100%;height:100%;object-fit:cover;display:none}
+.pv.has video{display:block}
+#prog{position:fixed;left:0;bottom:0;height:5px;background:linear-gradient(90deg,var(--gold),var(--blue));transition:width .8s var(--ease);z-index:20}
+#count{position:fixed;right:34px;bottom:22px;font-size:15px;font-weight:700;letter-spacing:.12em;color:var(--dim);z-index:20}
+#brand{position:fixed;left:34px;bottom:20px;font-size:14px;font-weight:700;letter-spacing:.18em;color:var(--dim);text-transform:uppercase;z-index:20}
+#s-cover .ph{position:absolute;right:0;top:0;width:900px;height:1080px;border-radius:0}
+#s-cover .ph::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--bg) 0%,rgba(244,241,232,.0) 38%);z-index:1}
+#s-cover .ct{position:relative;z-index:2;margin-top:120px;max-width:1080px}
+#s-cover .sub{font-size:32px;line-height:1.45;color:var(--muted);margin-top:34px;max-width:860px}
+#s-cover .who{position:absolute;left:130px;bottom:110px;z-index:2}
+#s-cover .who b{display:block;font-size:28px;color:var(--navy)}
+#s-cover .who span{font-size:20px;color:var(--muted)}
+.q{flex:1;background:var(--white);border-radius:28px;padding:54px 30px;box-shadow:0 0 0 1px var(--line),0 24px 50px -30px rgba(20,38,63,.35);text-align:center}
+.q b{display:block;font-size:34px;font-weight:800;color:var(--navy);letter-spacing:-.01em}
+.q span{display:block;font-size:20px;color:var(--muted);margin-top:10px;line-height:1.4}
+.year{position:relative;margin-top:90px;height:150px}
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:8px}
+.months div{height:90px;border-radius:14px;background:rgba(31,58,95,.07);position:relative}
+.months div span{position:absolute;bottom:-38px;left:0;right:0;text-align:center;font-size:16px;font-weight:700;color:var(--dim);letter-spacing:.08em}
+.months div::before{content:"";position:absolute;inset:0;border-radius:14px;background:linear-gradient(90deg,var(--blue),var(--sky));transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.slide.play .months div::before{transform:scaleX(1);transition-delay:calc(.5s + var(--i)*.06s)}
+.months .fest{overflow:visible}
+.months .fest::after{content:"YEGFEST · 3 gün";position:absolute;left:50%;top:-58px;transform:translateX(-50%);white-space:nowrap;font-size:18px;font-weight:800;color:var(--gold2)}
+.months .fest i{position:absolute;left:30%;width:22%;top:0;bottom:0;background:var(--gold);border-radius:6px;z-index:2;animation:blink 1.4s ease-in-out 3}
+@keyframes blink{50%{opacity:.25}}
+.pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;margin-top:120px}
+.pill{padding:32px 30px;border-radius:24px;background:var(--white);box-shadow:0 0 0 1px var(--line)}
+.pill .pi{font-size:40px}
+.pill h4{margin:14px 0 8px;font-size:25px}
+.pill p{font-size:18px}
+.org{position:relative;width:1660px;height:720px;margin-top:26px}
+.org svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.org path{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:1400;stroke-dashoffset:1400}
+.slide.play .org path{animation:draw 1s var(--soft) forwards;animation-delay:var(--d,.4s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+.ob{position:absolute;background:var(--white);border-radius:20px;box-shadow:0 0 0 1px var(--line),0 18px 40px -26px rgba(20,38,63,.4);padding:16px 18px;text-align:center}
+.ob b{display:block;font-size:22px;color:var(--navy);line-height:1.2}
+.ob span{display:block;font-size:16px;color:var(--muted);margin-top:5px;line-height:1.35}
+.ob .hc{font-style:normal;display:inline-block;margin-top:9px;font-size:15px;font-weight:800;color:#fff;background:var(--blue);padding:4px 12px;border-radius:20px}
+.ob.top{background:var(--navy)}
+.ob.top b{color:#fff}
+.ob.top span{color:rgba(255,255,255,.75)}
+.ob.gold{background:linear-gradient(135deg,#FBF3DA,#fff);box-shadow:0 0 0 2px var(--gold)}
+table.t{width:100%;border-collapse:separate;border-spacing:0 10px}
+.t th{text-align:left;font-size:15px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold2);padding:0 22px 4px}
+.t td{background:var(--white);padding:22px 24px;font-size:22px;color:var(--ink);line-height:1.4}
+.t td:first-child{border-radius:16px 0 0 16px;font-weight:800;color:var(--navy)}
+.t td:last-child{border-radius:0 16px 16px 0}
+.t td.num{font-size:28px;font-weight:800;color:var(--blue);white-space:nowrap}
+.gantt{margin-top:34px;display:grid;grid-template-columns:360px 1fr;row-gap:12px}
+.gh{display:grid;grid-template-columns:repeat(12,1fr);font-size:17px;font-weight:800;letter-spacing:.06em;color:var(--dim);text-align:center;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.gl{font-size:22px;font-weight:700;color:var(--navy);display:flex;align-items:center;gap:12px}
+.gl i{font-style:normal;font-size:24px}
+.gr{position:relative;height:52px;background:repeating-linear-gradient(90deg,transparent 0,transparent calc(100%/12 - 1px),var(--line) calc(100%/12 - 1px),var(--line) calc(100%/12))}
+.bar{position:absolute;top:8px;height:36px;border-radius:10px;background:linear-gradient(90deg,var(--navy),var(--blue));transform:scaleX(0);transform-origin:left;
+  font-size:16px;font-weight:700;color:#fff;display:flex;align-items:center;padding-left:12px;white-space:nowrap;overflow:hidden}
+.bar.light{background:repeating-linear-gradient(135deg,rgba(46,120,199,.35) 0 10px,rgba(46,120,199,.18) 10px 20px);color:var(--navy)}
+.bar.gold{background:linear-gradient(90deg,var(--gold2),var(--gold3))}
+.slide.play .bar{animation:grow .9s var(--ease) forwards;animation-delay:var(--d,.4s)}
+@keyframes grow{to{transform:scaleX(1)}}
+.festcol{position:absolute;top:0;bottom:0;left:calc(100%/12*10);width:calc(100%/12);background:rgba(201,162,39,.14);border-radius:10px}
+.flips{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:40px}
+.flip{height:620px;perspective:1600px;cursor:pointer}
+.fi{position:relative;width:100%;height:100%;transition:transform .9s var(--ease);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}
+.ff,.fb{position:absolute;inset:0;backface-visibility:hidden;border-radius:26px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(20,38,63,.45),0 0 0 1px var(--line)}
+.ff{background:#fff;display:flex;flex-direction:column}
+.ff .ph{height:330px;border-radius:0}
+.ff .fc{padding:26px 26px}
+.ff h3{font-size:29px;margin:12px 0 8px}
+.ff .len{font-size:46px;font-weight:800;color:var(--blue);letter-spacing:-.02em}
+.ff .tap{position:absolute;right:20px;bottom:18px;font-size:14px;font-weight:700;color:var(--dim)}
+.fb{background:var(--navy);transform:rotateY(180deg);padding:34px 30px;color:#fff;display:flex;flex-direction:column;gap:16px}
+.fb h3{color:#fff;font-size:26px;margin-bottom:4px}
+.fb div{border-top:1px solid rgba(255,255,255,.14);padding-top:12px}
+.fb small{display:block;font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--sky);margin-bottom:5px}
+.fb span{font-size:19px;line-height:1.4;color:rgba(255,255,255,.92)}
+@keyframes lit{to{box-shadow:0 0 0 4px var(--gold),0 18px 40px -16px rgba(201,162,39,.7);background:#FFFBEF}}
+.script{margin-top:26px;display:grid;grid-template-columns:130px 1fr 1fr;gap:0;border-radius:20px;overflow:hidden;box-shadow:0 0 0 1px var(--line);background:#fff}
+.script > div{padding:18px 22px;font-size:20px;line-height:1.42;border-top:1px solid var(--line)}
+.script .tc{font-weight:800;color:var(--blue);font-size:17px}
+.script .vo{font-family:'Fraunces',serif;font-style:italic;color:var(--navy)}
+.small{font-size:18px;color:var(--muted);margin-top:14px;line-height:1.45}
+.calc{width:540px;flex-shrink:0;background:var(--navy);border-radius:28px;padding:34px;color:#fff}
+.mx td{font-size:21px;padding:20px 22px}
+.mx th{font-size:14px}
+.mx td:first-child{font-size:22px}
+.d90{position:relative;margin-top:70px}
+.d90 .ln{position:absolute;left:0;right:0;top:46px;height:6px;border-radius:6px;background:rgba(31,58,95,.1);overflow:hidden}
+.d90 .ln i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--blue))}
+.slide.play .d90 .ln i{width:100%;transition:width 1.4s var(--soft) .25s}
+.d90 .sp{position:relative;display:grid;grid-template-columns:repeat(6,1fr);gap:20px}
+.d90 .dot{width:98px;height:98px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--gold);display:flex;align-items:center;justify-content:center;font-size:38px;margin-bottom:22px}
+.d90 small{font-size:15px;font-weight:800;letter-spacing:.12em;color:var(--gold2);text-transform:uppercase}
+.d90 h4{font-size:27px;margin:8px 0 8px;line-height:1.22}
+.d90 p{font-size:20px}
+.contact{text-align:right;font-size:21px;line-height:1.6;color:var(--muted)}
+.contact b{color:var(--navy);font-size:26px}
+#brand{display:flex;align-items:center;gap:12px}
+#brand .dots{display:flex;gap:6px}
+#brand .dots i{width:8px;height:8px;border-radius:50%;background:rgba(31,58,95,.18)}
+#brand .dots i.on{background:var(--gold);width:22px;border-radius:6px}
+.agenda{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-top:44px}
+.ag{background:#fff;border-radius:26px;padding:30px 26px;box-shadow:0 0 0 1px var(--line),0 24px 50px -34px rgba(20,38,63,.4);cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s;display:flex;flex-direction:column}
+.ag:hover{transform:translateY(-8px);box-shadow:0 0 0 2px var(--gold),0 30px 60px -30px rgba(20,38,63,.5)}
+.ag .no{font-family:'Fraunces',serif;font-style:italic;font-size:62px;line-height:1;color:var(--gold2)}
+.ag h3{font-size:26px;line-height:1.2;margin:14px 0 14px}
+.ag small{font-size:13px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+.ag span{display:block;font-size:18px;color:var(--ink);line-height:1.4;margin-top:8px}
+.slide.div{background:linear-gradient(120deg,rgba(31,58,95,.04),rgba(201,162,39,.08))}
+.dv{display:grid;grid-template-columns:420px 1fr;gap:70px;align-items:center}
+.dv .big{font-family:'Fraunces',serif;font-style:italic;font-weight:700;font-size:340px;line-height:.8;color:var(--gold);letter-spacing:-.04em}
+.dv h1{font-size:104px}
+.dv p{font-size:28px;color:var(--muted);margin-top:24px;max-width:900px;line-height:1.45}
+.dvlist{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+.dvlist span{font-size:19px;font-weight:700;color:var(--navy);background:#fff;padding:12px 20px;border-radius:30px;box-shadow:0 0 0 1px var(--line)}
+.shifts{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:40px}
+.sh{background:#fff;border-radius:26px;padding:30px 28px;box-shadow:0 0 0 1px var(--line)}
+.sh .ic{font-size:44px}
+.sh h3{font-size:25px;margin:16px 0 18px;line-height:1.2}
+.sh .ft{display:grid;grid-template-columns:76px 1fr;gap:10px;padding:12px 0;border-top:1px solid var(--line);font-size:18px;line-height:1.4}
+.sh .ft small{font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding-top:3px}
+.sh .ft.to small{color:var(--green)}
+.sh .ft.to span{color:var(--navy);font-weight:600}
+.foot{margin-top:18px;font-size:18px;color:var(--muted);display:flex;gap:10px;align-items:center}
+.foot b{color:var(--navy)}
+.levers{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:36px}
+.lv{background:#fff;border-radius:24px;padding:28px 28px;box-shadow:0 0 0 1px var(--line);position:relative;overflow:hidden}
+.lv .ic{width:62px;height:62px;border-radius:18px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:32px}
+.lv h3{font-size:24px;margin:16px 0 8px}
+.lv p{font-size:18px}
+.lv .ef{display:inline-block;margin-top:14px;font-size:14px;font-weight:800;letter-spacing:.04em;color:var(--green);background:rgba(94,140,74,.12);padding:6px 12px;border-radius:14px}
+.lv .n{position:absolute;right:24px;top:18px;font-family:'Fraunces',serif;font-style:italic;font-size:44px;color:rgba(201,162,39,.35)}
+.spgrid{display:grid;grid-template-columns:1fr 1.5fr;gap:30px;margin-top:30px;align-items:start}
+.kind{display:grid;gap:16px}
+.kd{border-radius:22px;padding:24px 26px;background:#fff;box-shadow:0 0 0 1px var(--line)}
+.kd h3{font-size:24px;display:flex;gap:10px;align-items:center}
+.kd p{font-size:18px;margin-top:8px}
+.kd.navy{background:var(--navy)}
+.kd.navy h3{color:#fff}
+.kd.navy p{color:rgba(255,255,255,.8)}
+.proc{display:flex;margin-top:26px}
+.proc div{flex:1;position:relative;padding:16px 10px 0;text-align:center;border-top:4px solid var(--gold)}
+.proc div::before{content:"";position:absolute;left:50%;top:-12px;transform:translateX(-50%);width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 0 0 4px var(--gold)}
+.proc b{display:block;font-size:15px;color:var(--blue);letter-spacing:.06em}
+.proc span{font-size:17px;color:var(--navy);font-weight:700;line-height:1.3;display:block;margin-top:4px}
+.hsteps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:50px;position:relative}
+.hs{padding:0 22px;position:relative}
+.hs .c{width:86px;height:86px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--gold);display:flex;align-items:center;justify-content:center;font-size:36px;position:relative;z-index:2}
+.hs::after{content:"";position:absolute;left:108px;right:-22px;top:42px;height:3px;background:repeating-linear-gradient(90deg,var(--gold) 0 10px,transparent 10px 18px)}
+.hs:last-child::after{display:none}
+.hs small{display:block;font-size:14px;font-weight:800;letter-spacing:.14em;color:var(--gold2);margin-top:22px}
+.hs h3{font-size:26px;margin:6px 0 8px}
+.hs p{font-size:19px}
+.outs{display:flex;gap:12px;flex-wrap:wrap;margin-top:44px;align-items:center}
+.outs b{font-size:19px;color:var(--navy);margin-right:6px}
+.outs span{font-size:18px;font-weight:700;padding:10px 18px;border-radius:30px;background:rgba(201,162,39,.16);color:var(--gold2)}
+.why{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:30px}
+.wy{background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 0 0 1px var(--line)}
+.wy .ic{font-size:36px}
+.wy h3{font-size:23px;margin:10px 0 6px}
+.wy p{font-size:18px}
+.tool{display:inline-flex;margin-top:22px;font-family:'Fraunces',serif;font-style:italic;font-size:26px;color:var(--navy);background:rgba(201,162,39,.14);padding:12px 24px;border-radius:40px}
+.model{display:flex;align-items:stretch;gap:0;margin-top:34px}
+.md{flex:1;text-align:center;position:relative;padding:0 8px}
+.md .c{width:100px;height:100px;margin:0 auto;border-radius:28px;background:#fff;box-shadow:0 0 0 2px var(--line);display:flex;align-items:center;justify-content:center;font-size:44px;transition:box-shadow .5s,background .5s}
+.slide.play .md .c{animation:lit .01s forwards;animation-delay:calc(.8s + var(--i)*.45s)}
+.md::after{content:"→";position:absolute;right:-14px;top:30px;font-size:30px;color:var(--gold2);font-weight:800}
+.md:last-child::after{display:none}
+.md h4{font-size:21px;margin:14px 0 4px}
+.md p{font-size:16px;line-height:1.4}
+.md .who{display:inline-block;margin-top:8px;font-size:13px;font-weight:800;letter-spacing:.06em;color:var(--blue);background:rgba(46,120,199,.1);padding:4px 10px;border-radius:12px}
+.tpl{margin-top:30px}
+.tbar{position:relative;display:flex;height:120px;border-radius:24px;overflow:hidden;box-shadow:0 0 0 1px var(--line),0 24px 50px -30px rgba(20,38,63,.45)}
+.tseg{position:relative;display:flex;flex-direction:column;justify-content:center;padding:0 22px;color:#fff;transition:filter .4s,transform .4s;filter:saturate(.55) brightness(1.05)}
+.tseg.on{filter:none}
+.tseg b{font-size:24px;letter-spacing:-.01em}
+.tseg span{font-size:15px;opacity:.85}
+.tseg:nth-child(1){background:#C9A227}
+.tseg:nth-child(2){background:#B8900F}
+.tseg:nth-child(3){background:#2E78C7}
+.tseg:nth-child(4){background:#1F3A5F}
+.tseg:nth-child(5){background:#14263F}
+.tseg .ic{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:40px;opacity:.9}
+.thead{position:absolute;top:-10px;bottom:-10px;width:4px;background:#fff;box-shadow:0 0 0 2px var(--navy),0 0 20px rgba(255,255,255,.9);border-radius:4px;left:0;z-index:3}
+.tclock{display:flex;justify-content:space-between;margin-top:12px;font-size:15px;font-weight:800;color:var(--dim)}
+.tdet{display:grid;grid-template-columns:420px 1fr;gap:34px;margin-top:26px;align-items:center}
+.tdet .ph{height:260px}
+.tdet .now{font-size:15px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--gold2)}
+.tdet h3{font-size:42px;margin:6px 0 16px;letter-spacing:-.02em}
+.tdet .ln{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:14px 0;border-top:1px solid var(--line);font-size:21px;line-height:1.4}
+.tdet .ln small{font-size:14px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);padding-top:4px}
+.tdet .ln.vo span{font-family:'Fraunces',serif;font-style:italic;color:var(--navy)}
+.tdet .fade{animation:fd .5s var(--ease)}
+@keyframes fd{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.ringnote{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:18px;color:var(--muted)}
+.shots{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:30px}
+.sht{background:#fff;border-radius:20px;padding:20px 22px;box-shadow:0 0 0 1px var(--line);display:flex;gap:14px;align-items:flex-start}
+.sht i{font-style:normal;font-size:34px}
+.sht small{display:block;font-size:13px;font-weight:800;color:var(--gold2);letter-spacing:.1em}
+.sht b{display:block;font-size:20px;color:var(--navy);line-height:1.25;margin-top:2px}
+.sht span{font-size:15px;color:var(--muted)}
+.rules2{display:grid;grid-template-columns:1.3fr 1fr;gap:20px;margin-top:22px}
+.rbox{background:var(--navy);color:#fff;border-radius:22px;padding:22px 26px}
+.rbox h4{color:var(--gold3);font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+.rbox ul{list-style:none;display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.rbox li{font-size:18px;background:rgba(255,255,255,.1);padding:9px 14px;border-radius:14px}
+.dbox{background:#fff;border-radius:22px;padding:22px 26px;box-shadow:0 0 0 2px var(--gold)}
+.dbox h4{color:var(--gold2);font-size:15px;letter-spacing:.14em;text-transform:uppercase}
+.dbox code{display:block;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:18px;color:var(--navy);margin-top:10px}
+.dbox p{font-size:16px;margin-top:8px}
+.pub2{display:grid;grid-template-columns:1.05fr 1fr;gap:30px;margin-top:28px}
+.wk{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.wk div{background:#fff;border-radius:16px;padding:14px 8px;min-height:190px;box-shadow:0 0 0 1px var(--line);text-align:center}
+.wk small{display:block;font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--dim);margin-bottom:10px}
+.wk span{display:block;font-size:14px;font-weight:700;line-height:1.3;padding:9px 6px;border-radius:12px;margin-top:6px}
+.wk .r{background:rgba(46,120,199,.14);color:var(--blue)}
+.wk .t{background:rgba(201,162,39,.2);color:var(--gold2)}
+.wk .p{background:rgba(94,140,74,.14);color:var(--green)}
+.calc2{margin-top:16px;font-size:20px;color:var(--navy);background:rgba(201,162,39,.14);border-radius:16px;padding:14px 18px}
+.calc2 b{color:var(--gold2)}
+.phase{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;margin-top:8px}
+.phase div{border-radius:12px;padding:10px 12px;font-size:15px;font-weight:700;line-height:1.3;color:#fff}
+.mnames{display:grid;grid-template-columns:repeat(12,1fr);gap:4px;font-size:13px;font-weight:800;color:var(--dim);text-align:center;letter-spacing:.06em}
+.multi{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:20px}
+.multi div{background:#fff;border-radius:16px;padding:14px 16px;box-shadow:0 0 0 1px var(--line);display:flex;gap:12px;align-items:center}
+.multi i{font-style:normal;font-size:28px}
+.multi b{display:block;font-size:17px;color:var(--navy)}
+.multi span{font-size:14px;color:var(--muted)}
+.collab{margin-top:16px;font-size:18px;color:var(--ink);line-height:1.45}
+.collab b{color:var(--navy)}
+.demo{display:grid;grid-template-columns:1.2fr 1fr;gap:50px;margin-top:34px;align-items:center}
+.persp3{display:flex;flex-direction:column;gap:16px}
+.p3{display:flex;gap:18px;align-items:center;background:#fff;border-radius:22px;padding:20px 24px;box-shadow:0 0 0 1px var(--line)}
+.p3 i{font-style:normal;font-size:42px}
+.p3 small{display:block;font-size:13px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--gold2);margin-bottom:2px}
+.p3 b{display:block;font-size:23px;color:var(--navy)}
+.p3 span{font-size:17px;color:var(--muted)}
+.qrbig{text-align:center;background:#fff;border-radius:30px;padding:34px;box-shadow:0 0 0 1px var(--line),0 30px 60px -30px rgba(20,38,63,.45)}
+.qrbig img{width:300px;height:300px}
+.qrbig b{display:block;font-size:24px;color:var(--navy);margin-top:14px}
+.qrbig span{display:block;font-size:17px;color:var(--muted);margin-top:4px}
+.qrbig a{display:inline-block;margin-top:16px;font-size:17px;font-weight:800;color:#fff;background:var(--navy);padding:12px 22px;border-radius:30px;text-decoration:none}
+.themes{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+.themes span{font-size:18px;font-weight:700;padding:11px 18px;border-radius:30px;background:#fff;box-shadow:0 0 0 1px var(--line);color:var(--navy)}
+.themes span.k{background:var(--navy);color:#fff}
+.hk{display:grid;grid-template-columns:repeat(7,1fr);gap:0;margin-top:44px;position:relative}
+.hk::before{content:"";position:absolute;left:3%;right:3%;top:30px;height:4px;background:linear-gradient(90deg,var(--gold),var(--blue));border-radius:4px}
+.hm{text-align:center;padding:0 8px;position:relative}
+.hm .c{width:62px;height:62px;margin:0 auto;border-radius:50%;background:#fff;box-shadow:0 0 0 3px var(--gold);display:flex;align-items:center;justify-content:center;font-size:26px;position:relative;z-index:2}
+.hm.fin .c{background:var(--gold);box-shadow:0 0 0 3px var(--gold),0 0 0 10px rgba(201,162,39,.2)}
+.hm small{display:block;font-size:14px;font-weight:800;letter-spacing:.1em;color:var(--blue);margin-top:14px}
+.hm b{display:block;font-size:20px;color:var(--navy);margin:4px 0 6px;line-height:1.2}
+.hm p{font-size:15px;line-height:1.4}
+.ch3{display:flex;gap:14px;margin-top:30px;align-items:center;flex-wrap:wrap}
+.ch3 b{font-size:19px;color:var(--navy);margin-right:6px}
+.ch3 span{font-size:17px;font-weight:700;padding:10px 16px;border-radius:30px;background:rgba(46,120,199,.1);color:var(--blue)}
+.yl{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:40px}
+.yc2{background:#fff;border-radius:26px;padding:32px 30px;box-shadow:0 0 0 1px var(--line);position:relative}
+.yc2 .ic{font-size:46px}
+.yc2 h3{font-size:27px;margin:14px 0 10px}
+.yc2 p{font-size:19px}
+.yc2 .when{display:inline-block;margin-top:16px;font-size:15px;font-weight:800;color:var(--blue);background:rgba(46,120,199,.1);padding:7px 13px;border-radius:14px}
+.net{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:30px;align-items:center}
+.netviz{position:relative;height:560px}
+.netviz svg{position:absolute;inset:0;width:100%;height:100%}
+.netviz .nd{position:absolute;transform:translate(-50%,-50%);background:#fff;border-radius:18px;padding:10px 14px;font-size:16px;font-weight:800;color:var(--navy);box-shadow:0 0 0 1px var(--line),0 14px 30px -18px rgba(20,38,63,.5);white-space:nowrap}
+.netviz .nd.hub{background:var(--navy);color:#fff;font-size:22px;padding:18px 24px;border-radius:24px}
+.netviz path{fill:none;stroke:var(--gold);stroke-width:2.5;stroke-dasharray:6 8;animation:dash 2.5s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-56}}
+.feat{display:flex;flex-direction:column;gap:14px}
+.fe{display:flex;gap:16px;align-items:center;background:#fff;border-radius:20px;padding:18px 22px;box-shadow:0 0 0 1px var(--line)}
+.fe i{font-style:normal;font-size:34px}
+.fe b{display:block;font-size:21px;color:var(--navy)}
+.fe span{font-size:16px;color:var(--muted)}
+.kp6{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+.kp6 div{background:#fff;border-radius:22px;padding:24px 26px;box-shadow:0 0 0 1px var(--line)}
+.kp6 i{font-style:normal;font-size:34px}
+.kp6 b{display:block;font-size:23px;color:var(--navy);margin:8px 0 4px}
+.kp6 span{font-size:17px;color:var(--muted)}
+.kp6 .rep{background:var(--navy)}
+.kp6 .rep b{color:#fff}
+.kp6 .rep span{color:rgba(255,255,255,.8)}
+.ty{display:flex;flex-direction:column;justify-content:center;height:100%}
+.ty h1{font-size:150px}
+.ty .next{margin-top:40px;font-size:22px;color:var(--muted)}
+.ty .next b{color:var(--navy)}
+.ty .contact{margin-top:60px;text-align:left}
+.ty .links{margin-top:18px;font-size:19px;font-weight:800;color:var(--blue)}
+.ty .links span{color:var(--dim);margin:0 8px}
+.wheelwrap{position:relative;height:800px;margin-top:0;zoom:.86}
+.wheel{position:absolute;left:50%;top:50%;width:580px;height:580px;margin:-290px 0 0 -290px;animation:wspin 70s linear infinite}
+.wheel svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.wheel circle{fill:none;stroke:var(--gold);stroke-width:3;stroke-dasharray:4 10}
+.wheel line{stroke:rgba(201,162,39,.45);stroke-width:2}
+.cab{position:absolute;left:50%;top:50%;width:226px;margin:-98px 0 0 -113px;transform:rotate(calc(var(--i)*60deg)) translateY(-290px) rotate(calc(var(--i)*-60deg))}
+.cabi{background:#fff;border-radius:20px;padding:10px;box-shadow:0 24px 50px -24px rgba(20,38,63,.5),0 0 0 1px var(--line);animation:wcounter 70s linear infinite}
+.cabi .ph{height:118px;border-radius:12px}
+.cabi .ph::after{font-size:10px;padding:5px 7px}
+.cabi .ph .hint{font-size:12px;padding:8px 10px 26px}
+.cabi .ph .hint::before{font-size:22px;margin-bottom:4px}
+.cabi .tc{font-size:13px;font-weight:800;color:var(--blue);margin:10px 4px 2px}
+.cabi b{display:block;font-size:17px;color:var(--navy);margin:0 4px 2px}
+.wheelwrap:hover .wheel,.wheelwrap:hover .cabi{animation-play-state:paused}
+@keyframes wspin{to{transform:rotate(360deg)}}
+@keyframes wcounter{to{transform:rotate(-360deg)}}
+.whub{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border-radius:50%;background:var(--navy);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 10px rgba(201,162,39,.25)}
+.whub b{font-size:36px;color:var(--gold3);line-height:1}
+.whub span{font-size:16px;opacity:.8;margin-top:4px}
+.netqr{display:flex;gap:20px;align-items:center;margin-top:6px;background:#fff;border-radius:22px;padding:16px 20px;box-shadow:0 0 0 2px var(--gold)}
+.netqr img{width:132px;height:132px;border-radius:10px}
+.netqr .live2{font-size:14px;font-weight:800;letter-spacing:.08em;color:var(--green);text-transform:uppercase}
+.netqr b{display:block;font-size:24px;color:var(--navy);margin:4px 0 10px}
+.netqr a{display:inline-block;font-size:16px;font-weight:800;color:#fff;background:var(--navy);padding:10px 18px;border-radius:30px;text-decoration:none}
+body.black::after{content:"";position:fixed;inset:0;background:#000;z-index:100}
+#s-hack{position:relative}
+.hkqr{position:absolute;right:130px;top:92px;display:flex;gap:18px;align-items:center;background:#fff;border-radius:22px;padding:14px 20px 14px 14px;box-shadow:0 0 0 2px var(--gold),0 24px 50px -30px rgba(20,38,63,.5);max-width:520px}
+.hkqr svg{width:128px;height:128px;border-radius:10px;flex:none}
+.hkqr .live2{font-size:13px;font-weight:800;letter-spacing:.08em;color:var(--green);text-transform:uppercase}
+.hkqr b{display:block;white-space:nowrap;font-size:17px;color:var(--navy);margin:4px 0 10px}
+.hkqr a{display:inline-block;font-size:15px;font-weight:800;color:#fff;background:var(--navy);padding:9px 16px;border-radius:30px;text-decoration:none}
+</style>
+</head>
+<body>
+<canvas id="bg"></canvas>
+<div class="glow g1"></div><div class="glow g2"></div><div class="glow g3"></div>
+<div id="stage">
+
+<!-- ================= KAPAK ================= -->
+<section class="slide" id="s-cover" data-sec="0">
+  <div class="ph" data-img="kapak.jpg"><div class="hint">YEGFEST festival alanının geniş bir genel görünümü (dikey/kare kırpılabilir)</div></div>
+  <div class="ct">
+    <div class="kicker in">YEGFEST · Uygulama Yol Haritası</div>
+    <h1 class="in" style="--d:.15s">Öneriden<br><em>uygulamaya</em></h1>
+    <div class="sub in" style="--d:.35s">Stratejik yaklaşım, bütçe ve sponsorluk, tanıtım ve bilinirlik, projeler ve uygulama takvimi</div>
+  </div>
+  <div class="who in" style="--d:.6s"><b>Harun Eymen Vural</b><span>Buharkent Yerel Eylem Grubu Derneği · Kasım 2026</span></div>
+</section>
+
+<!-- ================= AKIŞ ================= -->
+<section class="slide" id="s-flow" data-sec="0">
+  <div class="kicker in">Talebiniz ve sunumun akışı</div>
+  <h2 class="in" style="--d:.1s">Beş bölümde <em>uygulama planı</em></h2>
+  <p class="lead in" style="--d:.2s;margin-top:16px">İstediğiniz her başlık bir bölüme karşılık geliyor: kim, kaç kişiyle, hangi yöntemle, ne kadar sürede.</p>
+  <div class="agenda">
+    <div class="ag in pop" data-int data-go="d1" style="--d:.35s"><div class="no">01</div><h3>Stratejik yaklaşım</h3><small>Talebinizdeki karşılığı</small><span>Görev dağılımı ve ekipler</span></div>
+    <div class="ag in pop" data-int data-go="d2" style="--d:.47s"><div class="no">02</div><h3>Bütçe ve sponsorluk</h3><small>Talebinizdeki karşılığı</small><span>Kaynak ihtiyacı ve maliyetin azaltılması</span></div>
+    <div class="ag in pop" data-int data-go="d3" style="--d:.59s"><div class="no">03</div><h3>Tanıtım, reklam ve bilinirlik</h3><small>Talebinizdeki karşılığı</small><span>Video: konu, senaryo, çekim, kurgu, yayın</span></div>
+    <div class="ag in pop" data-int data-go="d4" style="--d:.71s"><div class="no">04</div><h3>Projeler</h3><small>Talebinizdeki karşılığı</small><span>Faaliyetlerin aşamaları ve yöntemi</span></div>
+    <div class="ag in pop" data-int data-go="d5" style="--d:.83s"><div class="no">05</div><h3>Uygulama planı</h3><small>Talebinizdeki karşılığı</small><span>Takvim, süreler ve ölçme</span></div>
+  </div>
+</section>
+
+<!-- ================= BÖLÜM 1 ================= -->
+<section class="slide div" id="d1" data-sec="1" data-title="Bölüm kapağı">
+  <div class="dv">
+    <div class="big in pop">01</div>
+    <div><div class="kicker in" style="--d:.15s">Bölüm 1</div><h1 class="in" style="--d:.2s">Stratejik <em>yaklaşım</em></h1>
+      <p class="in" style="--d:.35s">YEGFEST'i nereye taşıyoruz ve bunu kimlerle, nasıl bir yapıyla yapıyoruz.</p>
+      <div class="dvlist in" style="--d:.5s"></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-vision" data-sec="1" data-title="3 günden 365 güne">
+  <div class="kicker in">Vizyon</div>
+  <h2 class="in" style="--d:.1s">3 günden <em>365 güne</em></h2>
+  <p class="lead in" style="--d:.25s;margin-top:18px">Festival üç gün sürer. Ürünlerin, üreticilerin ve sofraların hikâyesi yıl boyu anlatılabilir.</p>
+  <div class="year in" style="--d:.4s">
+    <div class="months">
+      <div style="--i:0"><span>KAS</span></div><div style="--i:1"><span>ARA</span></div><div style="--i:2"><span>OCA</span></div><div style="--i:3"><span>ŞUB</span></div>
+      <div style="--i:4"><span>MAR</span></div><div style="--i:5"><span>NİS</span></div><div style="--i:6"><span>MAY</span></div><div style="--i:7"><span>HAZ</span></div>
+      <div style="--i:8"><span>TEM</span></div><div style="--i:9"><span>AĞU</span></div><div class="fest" style="--i:10"><i></i><span>EYL</span></div><div style="--i:11"><span>EKİ</span></div>
+    </div>
+  </div>
+  <div class="pillars">
+    <div class="pill in" style="--d:1.25s"><div class="pi">🏷️</div><h4>Ortak marka</h4><p>Tüm YEG'ler aynı görsel dille, aynı ses tonuyla</p></div>
+    <div class="pill in" style="--d:1.35s"><div class="pi">🎬</div><h4>Sürekli içerik</h4><p>155 ilçenin hikâyesi yıl boyu sosyal medyada</p></div>
+    <div class="pill in" style="--d:1.45s"><div class="pi">💡</div><h4>Gençlik ve yenilik</h4><p>Hackathon ve gönüllülerle gençlerin katılımı</p></div>
+    <div class="pill in" style="--d:1.55s"><div class="pi">🌍</div><h4>Uluslararası ağ</h4><p>Avrupa'daki YEG'lerle kalıcı iş birliği</p></div>
+  </div>
+</section>
+
+<section class="slide" id="s-shift" data-sec="1" data-title="Dört temel değişim">
+  <div class="kicker in">Stratejik yaklaşım</div>
+  <h2 class="in" style="--d:.1s">Dört temel <em>değişim</em></h2>
+  <div class="shifts">
+    <div class="sh in" style="--d:.3s"><div class="ic">🏷️</div><h3>Etkinlikten markaya</h3>
+      <div class="ft"><small>Bugün</small><span>Yılda bir kez yapılan bir fuar</span></div><div class="ft to"><small>Hedef</small><span>Yıl boyu tanınan bir kırsal kalkınma markası</span></div></div>
+    <div class="sh in" style="--d:.42s"><div class="ic">🧭</div><h3>Tek merkez, yerel üretim</h3>
+      <div class="ft"><small>Bugün</small><span>İş yükü merkezde toplanıyor</span></div><div class="ft to"><small>Hedef</small><span>155 YEG üretir, tek merkez koordine eder</span></div></div>
+    <div class="sh in" style="--d:.54s"><div class="ic">💡</div><h3>Gençlik ve yenilik</h3>
+      <div class="ft"><small>Bugün</small><span>Gençler çoğunlukla ziyaretçi</span></div><div class="ft to"><small>Hedef</small><span>Gençler fikir üreten, sahnede sunan katılımcı</span></div></div>
+    <div class="sh in" style="--d:.66s"><div class="ic">🌍</div><h3>Ulusaldan uluslararasına</h3>
+      <div class="ft"><small>Bugün</small><span>Ulusal ölçekte bir vitrin</span></div><div class="ft to"><small>Hedef</small><span>Avrupa YEG'leriyle kalıcı bir ağ</span></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-org" data-sec="1" data-title="Yönetim modeli">
+  <div class="kicker in">Yönetim modeli</div>
+  <h2 class="in" style="--d:.1s">Kim, <em>hangi katmanda?</em></h2>
+  <div class="org">
+    <svg viewBox="0 0 1660 720">
+      <path d="M830 92 V150" style="--d:.35s"/>
+      <path d="M830 238 V282 M150 282 H1510 M150 282 V322 M490 282 V322 M830 282 V322 M1170 282 V322 M1510 282 V322" style="--d:.6s"/>
+      <path d="M150 452 V488 M490 452 V488 M830 452 V488 M1170 452 V488 M1510 452 V488 M150 488 H1510 M830 488 V522" style="--d:.95s"/>
+      <path d="M830 604 V636" style="--d:1.2s"/>
+    </svg>
+    <div class="ob top in pop" style="left:600px;top:0;width:460px;--d:.15s"><b>Daire Başkanlığı</b><span>Yönlendirme ve onay</span></div>
+    <div class="ob gold in pop" style="left:610px;top:150px;width:440px;--d:.4s"><b>Koordinasyon Masası</b><span>Bakanlık sorumlusu + YEG koordinatörü</span><i class="hc">2 kişi</i></div>
+    <div class="ob in pop" style="left:20px;top:322px;width:260px;--d:.65s"><b>Marka ve Tanıtım</b><span>Marka, video, sosyal medya</span><i class="hc">3 kişi</i></div>
+    <div class="ob in pop" style="left:360px;top:322px;width:260px;--d:.7s"><b>Bütçe ve Sponsorluk</b><span>Maliyet, sponsor, protokol</span><i class="hc">2 kişi</i></div>
+    <div class="ob in pop" style="left:700px;top:322px;width:260px;--d:.75s"><b>Dijital Platform</b><span>Site, QR, pasaport</span><i class="hc">2 kişi</i></div>
+    <div class="ob in pop" style="left:1040px;top:322px;width:260px;--d:.8s"><b>Gençlik ve Uluslararası</b><span>Hackathon, gönüllü, YEG ağı</span><i class="hc">2 kişi</i></div>
+    <div class="ob in pop" style="left:1380px;top:322px;width:260px;--d:.85s"><b>Ölçme ve Raporlama</b><span>Göstergeler, etki raporu</span><i class="hc">1 kişi</i></div>
+    <div class="ob in pop" style="left:530px;top:522px;width:600px;--d:1.05s"><b>7 Bölge Koordinatörü</b><span>Her coğrafi bölgeden 1 YEG temsilcisi</span></div>
+    <div class="ob gold in pop" style="left:430px;top:636px;width:800px;--d:1.3s"><b>155 YEG · içerik üretimi ve yerel koordinasyon</b></div>
+  </div>
+</section>
+
+<section class="slide" id="s-hr" data-sec="1" data-title="Ekip ve rol dağılımı">
+  <div class="kicker in">Ekip ve rol dağılımı</div>
+  <h2 class="in" style="--d:.1s">Küçük çekirdek, <em>geniş ağ</em></h2>
+  <table class="t" style="margin-top:22px">
+    <tr class="in" style="--d:.2s"><th>Katman</th><th>Kişi</th><th>Kimlerden</th><th>Görev</th></tr>
+    <tr class="in" style="--d:.3s"><td>Koordinasyon Masası</td><td class="num">2</td><td>1 Bakanlık sorumlusu + 1 YEG koordinatörü</td><td>Takvim, iletişim, onay akışı</td></tr>
+    <tr class="in" style="--d:.4s"><td>Çalışma grupları</td><td class="num">10</td><td>Gönüllü YEG temsilcileri</td><td>5 grupta iş paylaşımı</td></tr>
+    <tr class="in" style="--d:.5s"><td>Bölge koordinatörleri</td><td class="num">7</td><td>Her coğrafi bölgeden 1 YEG temsilcisi</td><td>Bölgesindeki YEG'lerin takibi</td></tr>
+    <tr class="in" style="--d:.6s"><td>YEG'ler</td><td class="num">155</td><td>Her YEG'in mevcut personeli</td><td>Kendi ilçesinin çekimi ve içeriği</td></tr>
+    <tr class="in" style="--d:.7s"><td>Gönüllüler</td><td class="num">Çağrıyla</td><td>Festival için açılacak gönüllü çağrısı</td><td>Festival günleri ve atölyeler</td></tr>
+  </table>
+  <div class="foot in" style="--d:.9s">ℹ️ <span>Rakamlar başlangıç önerisidir; <b>ihtiyaca ve katılıma göre güncellenir.</b> Haftalık 1 saat çevrimiçi toplantı, aylık durum raporu.</span></div>
+</section>
+
+<!-- ================= BÖLÜM 2 ================= -->
+<section class="slide div" id="d2" data-sec="2" data-title="Bölüm kapağı">
+  <div class="dv">
+    <div class="big in pop">02</div>
+    <div><div class="kicker in" style="--d:.15s">Bölüm 2</div><h1 class="in" style="--d:.2s">Bütçe ve <em>sponsorluk</em></h1>
+      <p class="in" style="--d:.35s">Festivali daha az maliyetle, daha geniş katılımla nasıl yaparız?</p>
+      <div class="dvlist in" style="--d:.5s"></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-cost" data-sec="2" data-title="Maliyeti azaltmanın yolları">
+  <div class="kicker in">Maliyet</div>
+  <h2 class="in" style="--d:.1s">Maliyeti azaltmanın <em>altı yolu</em></h2>
+  <div class="levers">
+    <div class="lv in pop" style="--d:.3s"><span class="n">1</span><div class="ic">📱</div><h3>Yerelden üretim</h3><p>Videolar YEG'lerin kendi telefonlarıyla, ortak şablona göre çekilir. Dış prodüksiyon gerekmez.</p><span class="ef">Prodüksiyon gideri yok</span></div>
+    <div class="lv in pop" style="--d:.4s"><span class="n">2</span><div class="ic">🏛️</div><h3>Kurum imkânları</h3><p>Tasarım, kurgu ve duyurular Bakanlık, TKDK ve iş birliği kurumlarının mevcut kanallarıyla yürütülür.</p><span class="ef">Mevcut kaynak kullanımı</span></div>
+    <div class="lv in pop" style="--d:.5s"><span class="n">3</span><div class="ic">🤝</div><h3>Ayni sponsorluk</h3><p>Stant malzemesi, baskı, ikram, ulaşım ve konaklama nakit yerine ürün ve hizmet olarak karşılanır.</p><span class="ef">Nakit ihtiyacı azalır</span></div>
+    <div class="lv in pop" style="--d:.6s"><span class="n">4</span><div class="ic">🏘️</div><h3>Yerel destekçiler</h3><p>Her YEG kendi bölgesinden destekçi bulur; yük merkezden yerele dağılır.</p><span class="ef">155 noktadan destek</span></div>
+    <div class="lv in pop" style="--d:.7s"><span class="n">5</span><div class="ic">🎓</div><h3>Kurumsal iş birlikleri</h3><p>Üniversiteler, kalkınma ajansları ve belediyelerle mentorluk, mekân ve gönüllü desteği.</p><span class="ef">Hizmet alımı yerine ortaklık</span></div>
+    <div class="lv in pop" style="--d:.8s"><span class="n">6</span><div class="ic">📲</div><h3>Dijitalleşme</h3><p>QR katalog ve dijital pasaport, broşür ve basılı materyal ihtiyacını azaltır.</p><span class="ef">Baskı maliyeti düşer</span></div>
+  </div>
+</section>
+
+<section class="slide" id="s-spon" data-sec="2" data-title="Sponsorluk modeli">
+  <div class="kicker in">Sponsorluk</div>
+  <h2 class="in" style="--d:.1s">Sponsorluk <em>modeli</em></h2>
+  <div class="spgrid">
+    <div class="kind">
+      <div class="kd in left" style="--d:.3s"><h3>💳 Nakdi destek</h3><p>Ana sponsorluk ve özel bölüm sponsorlukları; Bakanlık onaylı protokolle.</p></div>
+      <div class="kd in left" style="--d:.42s"><h3>📦 Ayni destek</h3><p>Baskı, stant, ikram, ulaşım, konaklama, ödül. Nakit akışına girmeden maliyeti karşılar.</p></div>
+      <div class="kd navy in left" style="--d:.54s"><h3>🔒 İlke</h3><p>Tüm paketler mevzuata uygun hazırlanır ve Daire Başkanlığı onayından geçer.</p></div>
+    </div>
+    <div class="in right" style="--d:.4s">
+      <table class="t" style="border-spacing:0 8px">
+        <tr><th>Paket</th><th>Sponsora karşılığı</th><th>Örnek sektör</th></tr>
+        <tr><td>Ana Sponsor</td><td>Festival adıyla birlikte anılma, açılışta yer</td><td>Bankacılık, telekom</td></tr>
+        <tr><td>İnovasyon Ödülü</td><td>Hackathon ödüllerinde isim hakkı</td><td>Tarım teknolojisi, tohum, makine</td></tr>
+        <tr><td>Lezzet Sahnesi</td><td>Yöresel sofra programında görünürlük</td><td>Gıda, mutfak ürünleri</td></tr>
+        <tr><td>Dijital Ortak</td><td>Platform ve sosyal medya içeriklerinde görünürlük</td><td>Telekom, kargo, e-ticaret</td></tr>
+        <tr><td>Yerel Destekçi</td><td>Kendi bölgesinin standında görünürlük</td><td>Yerel işletmeler</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="proc in" style="--d:.8s">
+    <div><b>OCAK</b><span>Sponsorluk dosyası</span></div><div><b>ŞUBAT</b><span>Onay ve hedef liste</span></div><div><b>MART–MAYIS</b><span>Görüşmeler</span></div><div><b>HAZİRAN</b><span>Protokoller</span></div><div><b>EYLÜL</b><span>Festivalde görünürlük</span></div><div><b>EKİM</b><span>Sponsor raporu</span></div>
+  </div>
+</section>
+
+<!-- ================= BÖLÜM 3 ================= -->
+<section class="slide div" id="d3" data-sec="3" data-title="Bölüm kapağı">
+  <div class="dv">
+    <div class="big in pop">03</div>
+    <div><div class="kicker in" style="--d:.15s">Bölüm 3</div><h1 class="in" style="--d:.2s">Tanıtım, reklam ve <em>bilinirlik</em></h1>
+      <p class="in" style="--d:.35s">Ortak marka ve video ile YEGFEST'i yıl boyu görünür kılmak.</p>
+      <div class="dvlist in" style="--d:.5s"></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-brand" data-sec="3" data-title="Ortak marka kimliği">
+  <div class="kicker in">Marka</div>
+  <h2 class="in" style="--d:.1s">Ortak <em>marka kimliği</em></h2>
+  <p class="lead in" style="--d:.2s;margin-top:14px">155 YEG aynı görsel dille göründüğünde YEGFEST tek bir marka olarak hatırlanır.</p>
+  <div class="hsteps">
+    <div class="hs in" style="--d:.35s"><div class="c">🔎</div><small>ADIM 1 · 1 HAFTA</small><h3>Analiz</h3><p>2026 görselleri ve YEG'lerin geri bildirimleri</p></div>
+    <div class="hs in" style="--d:.5s"><div class="c">🤝</div><small>ADIM 2 · 1 GÜN</small><h3>Atölye</h3><p>Daire Başkanlığı ile değerler, ses tonu, slogan</p></div>
+    <div class="hs in" style="--d:.65s"><div class="c">🎨</div><small>ADIM 3 · 4 HAFTA</small><h3>Tasarım</h3><p>Logo kullanımı, renkler, stant ve sosyal medya şablonları</p></div>
+    <div class="hs in" style="--d:.8s"><div class="c">📦</div><small>ADIM 4 · 1 HAFTA</small><h3>Onay ve dağıtım</h3><p>Onaylanan kılavuz tüm YEG'lerle paylaşılır</p></div>
+  </div>
+  <div class="outs in" style="--d:1s"><b>Çıktılar:</b><span>Marka kılavuzu</span><span>Sosyal medya şablonları</span><span>Video giriş-kapanış paketi</span><span>Stant görsel şablonu</span></div>
+</section>
+
+<section class="slide" id="s-why" data-sec="3" data-title="Neden video ve nasıl üretilir">
+  <div class="kicker in">Video</div>
+  <h2 class="in" style="--d:.1s">Neden video, <em>nasıl üretilir?</em></h2>
+  <div class="why">
+    <div class="wy in" style="--d:.25s"><div class="ic">🧠</div><h3>Görsel hafıza</h3><p>Ürün, ilçesi ve üreticisiyle birlikte akılda kalır.</p></div>
+    <div class="wy in" style="--d:.35s"><div class="ic">📣</div><h3>Tanıtım ve reklam</h3><p>Festival öncesi merak, festival sonrası süreklilik sağlar.</p></div>
+    <div class="wy in" style="--d:.45s"><div class="ic">🔁</div><h3>Paylaşılabilirlik</h3><p>Bir video; YEGFEST, kurum ve 155 YEG hesabında aynı anda yayılır.</p></div>
+  </div>
+  <div class="tool in" style="--d:.55s">Video amaç değil, araç: hedef bilinirlik.</div>
+  <div class="model">
+    <div class="md in" style="--i:0;--d:.7s"><div class="c">📱</div><h4>Çekim</h4><p>Her YEG kendi telefonuyla çeker</p><span class="who">155 YEG</span></div>
+    <div class="md in" style="--i:1;--d:.8s"><div class="c">📋</div><h4>Ortak şablon</h4><p>Herkes aynı 60 sn şablonuna göre</p><span class="who">Marka ve Tanıtım</span></div>
+    <div class="md in" style="--i:2;--d:.9s"><div class="c">☁️</div><h4>Drive'da toplama</h4><p>Bölge › ilçe klasörüne yükleme</p><span class="who">Bölge koordinatörü</span></div>
+    <div class="md in" style="--i:3;--d:1s"><div class="c">🎬</div><h4>Tek elden kurgu</h4><p>Aynı marka diliyle, merkezde</p><span class="who">Merkez</span></div>
+    <div class="md in" style="--i:4;--d:1.1s"><div class="c">📣</div><h4>Onay ve yayın</h4><p>Takvime göre, tüm hesaplarda</p><span class="who">Koordinasyon</span></div>
+  </div>
+</section>
+
+<section class="slide" id="s-formats" data-sec="3" data-title="Dört format">
+  <div class="kicker in">İçerik formatları</div>
+  <h2 class="in" style="--d:.1s">Dört format, <em>dört amaç</em></h2>
+  <div class="flips">
+    <div class="flip in pop" data-int style="--d:.3s"><div class="fi">
+      <div class="ff"><div class="ph ai" data-img="format-hikaye.jpg"><div class="hint">Bir üreticinin portresi (bahçede/tarlada)</div></div><div class="fc"><span class="tag">Ana seri</span><h3>Bir İlçe, Bir Hikâye</h3><div class="len">60 sn</div></div><span class="tap">Çevir ↻</span></div>
+      <div class="fb"><h3>Bir İlçe, Bir Hikâye</h3><div><small>Amaç</small><span>Her ilçeyi ürünüyle tanıtmak</span></div><div><small>Adet</small><span>155, her ilçeye 1</span></div><div><small>Kim çeker</small><span>YEG kendi telefonuyla; kurgu merkezde</span></div><div><small>Nerede</small><span>Instagram, YouTube, platform</span></div></div>
+    </div></div>
+    <div class="flip in pop" data-int style="--d:.45s"><div class="fi">
+      <div class="ff"><div class="ph ai" data-img="format-belgesel.jpg"><div class="hint">Geniş doğa/tarla görüntüsü, hasat</div></div><div class="fc"><span class="tag blue">Mini belgesel</span><h3>Ürünün Yolculuğu</h3><div class="len">3–5 dk</div></div><span class="tap">Çevir ↻</span></div>
+      <div class="fb"><h3>Ürünün Yolculuğu</h3><div><small>Amaç</small><span>Öne çıkan ürünlerin derin hikâyesi</span></div><div><small>Adet</small><span>Ayda 1</span></div><div><small>Kim çeker</small><span>Seçilen YEG + merkez ekip</span></div><div><small>Nerede</small><span>YouTube, festival ekranları</span></div></div>
+    </div></div>
+    <div class="flip in pop" data-int style="--d:.6s"><div class="fi">
+      <div class="ff"><div class="ph ai" data-img="format-sofra.jpg"><div class="hint">Yöresel bir yemek / sofra</div></div><div class="fc"><span class="tag green">Tarif</span><h3>Yöresel Sofra</h3><div class="len">1–2 dk</div></div><span class="tap">Çevir ↻</span></div>
+      <div class="fb"><h3>Yöresel Sofra</h3><div><small>Amaç</small><span>Ürünü sofradaki karşılığıyla göstermek</span></div><div><small>Adet</small><span>Haftada 1</span></div><div><small>Kim çeker</small><span>YEG, yerel aşçılarla</span></div><div><small>Nerede</small><span>Instagram, platform tarif arşivi</span></div></div>
+    </div></div>
+    <div class="flip in pop" data-int style="--d:.75s"><div class="fi">
+      <div class="ff"><div class="ph ai" data-img="format-film.jpg"><div class="hint">Festivalden coşkulu bir an</div></div><div class="fc"><span class="tag">Lansman</span><h3>YEGFEST Tanıtım Filmi</h3><div class="len">90 + 30 sn</div></div><span class="tap">Çevir ↻</span></div>
+      <div class="fb"><h3>YEGFEST Tanıtım Filmi</h3><div><small>Amaç</small><span>Festivale davet</span></div><div><small>Kaynak</small><span>155 ilçe videosundan derleme</span></div><div><small>Kim</small><span>Merkez ekip</span></div><div><small>Ne zaman</small><span>Temmuz'da lansman</span></div></div>
+    </div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-tpl" data-sec="3" data-title="60 saniyelik şablon">
+  <div class="kicker in">Ortak şablon</div>
+  <h2 class="in" style="--d:.1s">Her video aynı <em>60 saniye</em></h2>
+  <div class="tpl in" style="--d:.3s">
+    <div class="tbar" id="tbar">
+      <div class="tseg" style="flex:5"><b>Kanca</b><span>0–5 sn</span></div>
+      <div class="tseg" style="flex:10"><b>İnsan</b><span>5–15 sn</span><i class="ic">🧑‍🌾</i></div>
+      <div class="tseg" style="flex:25"><b>Süreç: topraktan ürüne</b><span>15–40 sn</span><i class="ic">🌱</i></div>
+      <div class="tseg" style="flex:12"><b>Sofra</b><span>40–52 sn</span><i class="ic">🍽️</i></div>
+      <div class="tseg" style="flex:8"><b>Kapanış</b><span>52–60 sn</span></div>
+      <div class="thead" id="thead"></div>
+    </div>
+    <div class="tclock"><span>00:00</span><span id="tnow">00:00</span><span>01:00</span></div>
+    <div class="tdet">
+      <div class="ph ai" id="tph" data-img="sb-1.jpg"><div class="hint">Storyboard karesi</div></div>
+      <div id="tdesc"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s-story" data-sec="3" data-title="Örnek: Buharkent inciri">
+  <div class="kicker in">Örnek storyboard</div>
+  <h2 class="in" style="--d:.1s">Buharkent inciri: <em>60 saniye, 6 kare</em></h2>
+  <div class="wheelwrap in" style="--d:.3s" data-int>
+    <div class="wheel"><svg viewBox="0 0 600 600"><circle cx="300" cy="300" r="300"/><line x1="300" y1="300" x2="300.0" y2="0.0"/><line x1="300" y1="300" x2="559.8" y2="150.0"/><line x1="300" y1="300" x2="559.8" y2="450.0"/><line x1="300" y1="300" x2="300.0" y2="600.0"/><line x1="300" y1="300" x2="40.2" y2="450.0"/><line x1="300" y1="300" x2="40.2" y2="150.0"/></svg><div class="cab" style="--i:0"><div class="cabi"><div class="ph ai" data-img="sb-1.jpg"><div class="hint">Gün doğumunda incir ağacı</div></div><div class="tc">0–5 sn · Kanca</div><b>Işık, yaprak, sessizlik</b></div></div><div class="cab" style="--i:1"><div class="cabi"><div class="ph ai" data-img="sb-2.jpg"><div class="hint">Üreticinin portresi</div></div><div class="tc">5–15 sn · İnsan</div><b>“Üç kuşaktır…”</b></div></div><div class="cab" style="--i:2"><div class="cabi"><div class="ph ai" data-img="sb-3.jpg"><div class="hint">Yerden incir toplayan eller</div></div><div class="tc">15–25 sn · Hasat</div><b>Eller, sepet, toprak</b></div></div><div class="cab" style="--i:3"><div class="cabi"><div class="ph ai" data-img="sb-4.jpg"><div class="hint">Güneşte kuruyan incirler</div></div><div class="tc">25–40 sn · Kurutma</div><b>Sergiler</b></div></div><div class="cab" style="--i:4"><div class="cabi"><div class="ph ai" data-img="sb-5.jpg"><div class="hint">İncir uyutması / sofra</div></div><div class="tc">40–52 sn · Sofra</div><b>Aile, tatlı, paylaşım</b></div></div><div class="cab" style="--i:5"><div class="cabi"><div class="ph ai" data-img="sb-6.jpg"><div class="hint">Paketli ürün</div></div><div class="tc">52–60 sn · Kapanış</div><b>“155 hikâyeden biri”</b></div></div></div>
+    <div class="whub"><b>60 sn</b><span>6 kare</span></div>
+    <div class="ringnote">Fareyi üzerine getirince durur</div>
+  </div>
+</section>
+
+<section class="slide" id="s-shots" data-sec="3" data-title="İlçelerden istenen çekimler">
+  <div class="kicker in">İlçelerden istenen</div>
+  <h2 class="in" style="--d:.1s">Sekiz temel <em>çekim</em></h2>
+  <p class="lead in" style="--d:.2s;margin-top:12px">Çekim gününü her ilçe kendisi belirler. Merkezden yalnızca bu liste ve ortak şablon gider.</p>
+  <div class="shots">
+    <div class="sht in" style="--d:.3s"><i>🌄</i><div><small>01</small><b>Ürünün yetiştiği yer</b><span>Geniş plan</span></div></div>
+    <div class="sht in" style="--d:.36s"><i>🧑‍🌾</i><div><small>02</small><b>Üreticinin portresi</b><span>Yarım boy</span></div></div>
+    <div class="sht in" style="--d:.42s"><i>🎙️</i><div><small>03</small><b>Üreticinin konuşması</b><span>2–3 cümle</span></div></div>
+    <div class="sht in" style="--d:.48s"><i>✋</i><div><small>04</small><b>İş başındaki eller</b><span>Yakın plan</span></div></div>
+    <div class="sht in" style="--d:.54s"><i>⚙️</i><div><small>05</small><b>Ürünün işlenmesi</b><span>Hasat, kurutma, hazırlık</span></div></div>
+    <div class="sht in" style="--d:.6s"><i>🍽️</i><div><small>06</small><b>Yöresel yemek</b><span>Sofra veya tarif</span></div></div>
+    <div class="sht in" style="--d:.66s"><i>📦</i><div><small>07</small><b>Ürünün son hâli</b><span>Paketli veya sergilenmiş</span></div></div>
+    <div class="sht in" style="--d:.72s"><i>🏞️</i><div><small>08</small><b>İlçeden bir manzara</b><span>Kapanış için</span></div></div>
+  </div>
+  <div class="rules2">
+    <div class="rbox in" style="--d:.85s"><h4>Kurallar</h4><ul><li>Dikey çek</li><li>Her çekim en az 10 sn</li><li>Konuşmayı sessiz ortamda al</li><li>Çekilen kişiden izin formu</li></ul></div>
+    <div class="dbox in" style="--d:.95s"><h4>Gönderim</h4><code>YEGFEST-Drive › Bölge › İlçe adı</code><p>Bölge koordinatörü eksikleri takip eder.</p></div>
+  </div>
+</section>
+
+
+
+<section class="slide" id="s-pub" data-sec="3" data-title="Yayın planı">
+  <div class="kicker in">Yayın planı</div>
+  <h2 class="in" style="--d:.1s">YEGFEST Instagram: <em>bir yıla yayılan ritim</em></h2>
+  <div class="pub2">
+    <div class="in left" style="--d:.3s">
+      <h3 style="margin-bottom:12px">Örnek hafta</h3>
+      <div class="wk">
+        <div><small>PZT</small><span class="r">Ege</span><span class="r">Karadeniz</span></div>
+        <div><small>SAL</small><span class="t">Yöresel Sofra</span></div>
+        <div><small>ÇAR</small><span class="r">İç Anadolu</span><span class="r">Akdeniz</span></div>
+        <div><small>PER</small><span class="p">Üretici portresi</span></div>
+        <div><small>CUM</small><span class="r">Doğu</span><span class="r">Güneydoğu</span></div>
+        <div><small>CMT</small><span class="t">Duyuru · geri sayım</span></div>
+        <div><small>PAZ</small><span class="r">Marmara</span></div>
+      </div>
+      <div class="calc2">Haftada <b>7 ilçe videosu</b>, farklı bölgelerden → 155 ilçe ≈ <b>22 hafta</b>; arada tarif, üretici ve duyuru içerikleri.</div>
+    </div>
+    <div class="in right" style="--d:.45s">
+      <h3 style="margin-bottom:12px">Yıl boyu akış</h3>
+      <div class="mnames"><span>KAS</span><span>ARA</span><span>OCA</span><span>ŞUB</span><span>MAR</span><span>NİS</span><span>MAY</span><span>HAZ</span><span>TEM</span><span>AĞU</span><span>EYL</span><span>EKİ</span></div>
+      <div class="phase">
+        <div style="grid-column:1/5;background:#8EA3BD">Hazırlık · hesap açılışı, ilk çekimler</div>
+        <div style="grid-column:5/10;background:var(--blue)">155 ilçe serisi · tarif · üretici</div>
+        <div style="grid-column:10/11;background:var(--gold2)">Film</div>
+        <div style="grid-column:11/12;background:var(--gold)">Canlı</div>
+        <div style="grid-column:12/13;background:var(--navy)">Sonrası</div>
+      </div>
+      <div class="multi">
+        <div><i>🎞️</i><div><b>60 sn Reels</b><span>Ana video</span></div></div>
+        <div><i>⏱️</i><div><b>15 sn hikâye</b><span>Merak uyandıran kısa kesit</span></div></div>
+        <div><i>🖼️</i><div><b>Fotoğraf karuseli</b><span>Çekimden kareler</span></div></div>
+        <div><i>📝</i><div><b>Tarif kartı</b><span>Kaydedilebilir içerik</span></div></div>
+      </div>
+      <p class="collab"><b>Tek video, dört içerik.</b> Ortak gönderiyle YEGFEST, Bakanlık, TKDK, TRGM ve ilgili YEG hesaplarında aynı anda yayınlanır.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BÖLÜM 4 ================= -->
+<section class="slide div" id="d4" data-sec="4" data-title="Bölüm kapağı">
+  <div class="dv">
+    <div class="big in pop">04</div>
+    <div><div class="kicker in" style="--d:.15s">Bölüm 4</div><h1 class="in" style="--d:.2s">Kısa sürede uygulanabilir <em>projeler</em></h1>
+      <p class="in" style="--d:.35s">Gerçekçi, düşük maliyetli ve festivale doğrudan değer katan dört proje.</p>
+      <div class="dvlist in" style="--d:.5s"></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-platform" data-sec="4" data-title="Dijital platform">
+  <div class="kicker in">Proje · Dijital platform</div>
+  <h2 class="in" style="--d:.1s">Tek platform, <em>üç ekran</em></h2>
+  <p class="lead in" style="--d:.2s;margin-top:12px">Simülasyon hazır ve canlı: festival salonu, genel harita ve yönetim paneli aynı veriyi kullanır.</p>
+  <div class="demo">
+    <div class="persp3">
+      <div class="p3 in left" style="--d:.3s"><i>🎪</i><div><small>Festivalde · ziyaretçi</small><b>3D festival salonu</b><span>155 stantlı salonu gezer; pilot stantta QR okutur, ürünün hikâyesi ve tarifi açılır, pasaportuna damga alır.</span></div></div>
+      <div class="p3 in left" style="--d:.4s"><i>🗺️</i><div><small>Yıl boyu · herkes</small><b>Genel harita</b><span>155 YEG 3D Türkiye haritasında; bölgeye ve içerik aşamasına göre filtrelenir, ilçe sayfasına geçilir.</span></div></div>
+      <div class="p3 in left" style="--d:.5s"><i>🏛️</i><div><small>Bakanlık ve YEG'ler</small><b>Yönetim paneli</b><span>İçerik onay akışı, YEG listesi, stant yerleşimi, yayın takvimi ve QR yönetimi tek ekranda.</span></div></div>
+    </div>
+    <div class="qrbig in pop" style="--d:.5s"><img src="data:image/png;base64,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" alt="Simülasyon QR"><b>Canlı simülasyon</b><span>yegfest-prototip.vercel.app</span><a href="https://yegfest-prototip.vercel.app" target="_blank" data-int>Simülasyonu aç →</a></div>
+  </div>
+</section>
+
+<section class="slide" id="s-hack" data-sec="4" data-title="Kırsal İnovasyon Hackathonu">
+  <div class="kicker in">Proje · Gençlik ve yenilik</div>
+  <h2 class="in" style="--d:0.07s">Kırsal İnovasyon <em>Hackathonu</em></h2>
+  <p class="lead in" style="--d:0.14s;margin-top:12px;max-width:1060px">Genç çiftçileri, öğrencileri ve girişimcileri tarımda yenilik ve teknolojiyle buluşturan 6 aylık süreç. En iyi üç fikir festivalde ağırlanır.</p>
+  <div class="hkqr in pop" style="--d:.5s" data-int><svg viewBox="0 0 37 37" xmlns="http://www.w3.org/2000/svg" shape-rendering="crispEdges"><rect width="100%" height="100%" fill="#fff"/><path d="M2,2h1v1h-1zM3,2h1v1h-1zM4,2h1v1h-1zM5,2h1v1h-1zM6,2h1v1h-1zM7,2h1v1h-1zM8,2h1v1h-1zM10,2h1v1h-1zM12,2h1v1h-1zM13,2h1v1h-1zM18,2h1v1h-1zM21,2h1v1h-1zM22,2h1v1h-1zM24,2h1v1h-1zM25,2h1v1h-1zM28,2h1v1h-1zM29,2h1v1h-1zM30,2h1v1h-1zM31,2h1v1h-1zM32,2h1v1h-1zM33,2h1v1h-1zM34,2h1v1h-1zM2,3h1v1h-1zM8,3h1v1h-1zM10,3h1v1h-1zM11,3h1v1h-1zM12,3h1v1h-1zM14,3h1v1h-1zM16,3h1v1h-1zM18,3h1v1h-1zM19,3h1v1h-1zM23,3h1v1h-1zM24,3h1v1h-1zM25,3h1v1h-1zM26,3h1v1h-1zM28,3h1v1h-1zM34,3h1v1h-1zM2,4h1v1h-1zM4,4h1v1h-1zM5,4h1v1h-1zM6,4h1v1h-1zM8,4h1v1h-1zM12,4h1v1h-1zM15,4h1v1h-1zM16,4h1v1h-1zM17,4h1v1h-1zM18,4h1v1h-1zM20,4h1v1h-1zM22,4h1v1h-1zM24,4h1v1h-1zM26,4h1v1h-1zM28,4h1v1h-1zM30,4h1v1h-1zM31,4h1v1h-1zM32,4h1v1h-1zM34,4h1v1h-1zM2,5h1v1h-1zM4,5h1v1h-1zM5,5h1v1h-1zM6,5h1v1h-1zM8,5h1v1h-1zM10,5h1v1h-1zM11,5h1v1h-1zM13,5h1v1h-1zM14,5h1v1h-1zM17,5h1v1h-1zM20,5h1v1h-1zM21,5h1v1h-1zM23,5h1v1h-1zM26,5h1v1h-1zM28,5h1v1h-1zM30,5h1v1h-1zM31,5h1v1h-1zM32,5h1v1h-1zM34,5h1v1h-1zM2,6h1v1h-1zM4,6h1v1h-1zM5,6h1v1h-1zM6,6h1v1h-1zM8,6h1v1h-1zM13,6h1v1h-1zM18,6h1v1h-1zM19,6h1v1h-1zM20,6h1v1h-1zM26,6h1v1h-1zM28,6h1v1h-1zM30,6h1v1h-1zM31,6h1v1h-1zM32,6h1v1h-1zM34,6h1v1h-1zM2,7h1v1h-1zM8,7h1v1h-1zM11,7h1v1h-1zM13,7h1v1h-1zM15,7h1v1h-1zM16,7h1v1h-1zM17,7h1v1h-1zM18,7h1v1h-1zM20,7h1v1h-1zM23,7h1v1h-1zM24,7h1v1h-1zM26,7h1v1h-1zM28,7h1v1h-1zM34,7h1v1h-1zM2,8h1v1h-1zM3,8h1v1h-1zM4,8h1v1h-1zM5,8h1v1h-1zM6,8h1v1h-1zM7,8h1v1h-1zM8,8h1v1h-1zM10,8h1v1h-1zM12,8h1v1h-1zM14,8h1v1h-1zM16,8h1v1h-1zM18,8h1v1h-1zM20,8h1v1h-1zM22,8h1v1h-1zM24,8h1v1h-1zM26,8h1v1h-1zM28,8h1v1h-1zM29,8h1v1h-1zM30,8h1v1h-1zM31,8h1v1h-1zM32,8h1v1h-1zM33,8h1v1h-1zM34,8h1v1h-1zM10,9h1v1h-1zM13,9h1v1h-1zM14,9h1v1h-1zM17,9h1v1h-1zM18,9h1v1h-1zM19,9h1v1h-1zM21,9h1v1h-1zM24,9h1v1h-1zM26,9h1v1h-1zM2,10h1v1h-1zM4,10h1v1h-1zM5,10h1v1h-1zM7,10h1v1h-1zM8,10h1v1h-1zM9,10h1v1h-1zM12,10h1v1h-1zM16,10h1v1h-1zM17,10h1v1h-1zM18,10h1v1h-1zM19,10h1v1h-1zM20,10h1v1h-1zM23,10h1v1h-1zM25,10h1v1h-1zM28,10h1v1h-1zM31,10h1v1h-1zM33,10h1v1h-1zM34,10h1v1h-1zM6,11h1v1h-1zM7,11h1v1h-1zM9,11h1v1h-1zM10,11h1v1h-1zM11,11h1v1h-1zM13,11h1v1h-1zM15,11h1v1h-1zM18,11h1v1h-1zM19,11h1v1h-1zM20,11h1v1h-1zM21,11h1v1h-1zM22,11h1v1h-1zM24,11h1v1h-1zM25,11h1v1h-1zM28,11h1v1h-1zM29,11h1v1h-1zM31,11h1v1h-1zM32,11h1v1h-1zM33,11h1v1h-1zM34,11h1v1h-1zM2,12h1v1h-1zM5,12h1v1h-1zM6,12h1v1h-1zM8,12h1v1h-1zM9,12h1v1h-1zM10,12h1v1h-1zM15,12h1v1h-1zM20,12h1v1h-1zM22,12h1v1h-1zM23,12h1v1h-1zM24,12h1v1h-1zM25,12h1v1h-1zM28,12h1v1h-1zM29,12h1v1h-1zM30,12h1v1h-1zM31,12h1v1h-1zM33,12h1v1h-1zM34,12h1v1h-1zM3,13h1v1h-1zM5,13h1v1h-1zM6,13h1v1h-1zM7,13h1v1h-1zM11,13h1v1h-1zM12,13h1v1h-1zM14,13h1v1h-1zM17,13h1v1h-1zM18,13h1v1h-1zM19,13h1v1h-1zM21,13h1v1h-1zM22,13h1v1h-1zM23,13h1v1h-1zM24,13h1v1h-1zM25,13h1v1h-1zM26,13h1v1h-1zM28,13h1v1h-1zM29,13h1v1h-1zM31,13h1v1h-1zM2,14h1v1h-1zM8,14h1v1h-1zM9,14h1v1h-1zM13,14h1v1h-1zM16,14h1v1h-1zM17,14h1v1h-1zM18,14h1v1h-1zM22,14h1v1h-1zM23,14h1v1h-1zM24,14h1v1h-1zM26,14h1v1h-1zM27,14h1v1h-1zM29,14h1v1h-1zM30,14h1v1h-1zM31,14h1v1h-1zM3,15h1v1h-1zM7,15h1v1h-1zM11,15h1v1h-1zM12,15h1v1h-1zM15,15h1v1h-1zM16,15h1v1h-1zM22,15h1v1h-1zM26,15h1v1h-1zM29,15h1v1h-1zM31,15h1v1h-1zM33,15h1v1h-1zM2,16h1v1h-1zM3,16h1v1h-1zM4,16h1v1h-1zM5,16h1v1h-1zM8,16h1v1h-1zM10,16h1v1h-1zM12,16h1v1h-1zM14,16h1v1h-1zM15,16h1v1h-1zM16,16h1v1h-1zM21,16h1v1h-1zM22,16h1v1h-1zM28,16h1v1h-1zM29,16h1v1h-1zM30,16h1v1h-1zM2,17h1v1h-1zM3,17h1v1h-1zM5,17h1v1h-1zM6,17h1v1h-1zM7,17h1v1h-1zM10,17h1v1h-1zM11,17h1v1h-1zM12,17h1v1h-1zM13,17h1v1h-1zM14,17h1v1h-1zM15,17h1v1h-1zM17,17h1v1h-1zM23,17h1v1h-1zM26,17h1v1h-1zM27,17h1v1h-1zM28,17h1v1h-1zM29,17h1v1h-1zM31,17h1v1h-1zM32,17h1v1h-1zM2,18h1v1h-1zM4,18h1v1h-1zM7,18h1v1h-1zM8,18h1v1h-1zM12,18h1v1h-1zM13,18h1v1h-1zM16,18h1v1h-1zM18,18h1v1h-1zM20,18h1v1h-1zM23,18h1v1h-1zM27,18h1v1h-1zM28,18h1v1h-1zM30,18h1v1h-1zM32,18h1v1h-1zM2,19h1v1h-1zM4,19h1v1h-1zM7,19h1v1h-1zM9,19h1v1h-1zM13,19h1v1h-1zM14,19h1v1h-1zM17,19h1v1h-1zM20,19h1v1h-1zM22,19h1v1h-1zM24,19h1v1h-1zM25,19h1v1h-1zM26,19h1v1h-1zM28,19h1v1h-1zM30,19h1v1h-1zM31,19h1v1h-1zM33,19h1v1h-1zM34,19h1v1h-1zM4,20h1v1h-1zM5,20h1v1h-1zM7,20h1v1h-1zM8,20h1v1h-1zM9,20h1v1h-1zM10,20h1v1h-1zM11,20h1v1h-1zM13,20h1v1h-1zM14,20h1v1h-1zM15,20h1v1h-1zM17,20h1v1h-1zM18,20h1v1h-1zM20,20h1v1h-1zM22,20h1v1h-1zM23,20h1v1h-1zM28,20h1v1h-1zM29,20h1v1h-1zM30,20h1v1h-1zM32,20h1v1h-1zM33,20h1v1h-1zM2,21h1v1h-1zM4,21h1v1h-1zM10,21h1v1h-1zM11,21h1v1h-1zM12,21h1v1h-1zM13,21h1v1h-1zM16,21h1v1h-1zM18,21h1v1h-1zM19,21h1v1h-1zM20,21h1v1h-1zM21,21h1v1h-1zM24,21h1v1h-1zM26,21h1v1h-1zM27,21h1v1h-1zM30,21h1v1h-1zM2,22h1v1h-1zM3,22h1v1h-1zM7,22h1v1h-1zM8,22h1v1h-1zM15,22h1v1h-1zM18,22h1v1h-1zM24,22h1v1h-1zM31,22h1v1h-1zM32,22h1v1h-1zM34,22h1v1h-1zM2,23h1v1h-1zM4,23h1v1h-1zM5,23h1v1h-1zM6,23h1v1h-1zM7,23h1v1h-1zM9,23h1v1h-1zM11,23h1v1h-1zM15,23h1v1h-1zM16,23h1v1h-1zM17,23h1v1h-1zM18,23h1v1h-1zM22,23h1v1h-1zM24,23h1v1h-1zM25,23h1v1h-1zM28,23h1v1h-1zM32,23h1v1h-1zM34,23h1v1h-1zM5,24h1v1h-1zM6,24h1v1h-1zM8,24h1v1h-1zM9,24h1v1h-1zM12,24h1v1h-1zM14,24h1v1h-1zM16,24h1v1h-1zM17,24h1v1h-1zM19,24h1v1h-1zM21,24h1v1h-1zM22,24h1v1h-1zM24,24h1v1h-1zM25,24h1v1h-1zM31,24h1v1h-1zM33,24h1v1h-1zM34,24h1v1h-1zM3,25h1v1h-1zM4,25h1v1h-1zM5,25h1v1h-1zM6,25h1v1h-1zM10,25h1v1h-1zM13,25h1v1h-1zM15,25h1v1h-1zM17,25h1v1h-1zM22,25h1v1h-1zM26,25h1v1h-1zM2,26h1v1h-1zM5,26h1v1h-1zM7,26h1v1h-1zM8,26h1v1h-1zM9,26h1v1h-1zM10,26h1v1h-1zM12,26h1v1h-1zM14,26h1v1h-1zM15,26h1v1h-1zM16,26h1v1h-1zM19,26h1v1h-1zM20,26h1v1h-1zM21,26h1v1h-1zM24,26h1v1h-1zM26,26h1v1h-1zM27,26h1v1h-1zM28,26h1v1h-1zM29,26h1v1h-1zM30,26h1v1h-1zM33,26h1v1h-1zM34,26h1v1h-1zM10,27h1v1h-1zM13,27h1v1h-1zM14,27h1v1h-1zM16,27h1v1h-1zM17,27h1v1h-1zM18,27h1v1h-1zM21,27h1v1h-1zM23,27h1v1h-1zM24,27h1v1h-1zM25,27h1v1h-1zM26,27h1v1h-1zM30,27h1v1h-1zM31,27h1v1h-1zM2,28h1v1h-1zM3,28h1v1h-1zM4,28h1v1h-1zM5,28h1v1h-1zM6,28h1v1h-1zM7,28h1v1h-1zM8,28h1v1h-1zM10,28h1v1h-1zM11,28h1v1h-1zM12,28h1v1h-1zM13,28h1v1h-1zM14,28h1v1h-1zM15,28h1v1h-1zM18,28h1v1h-1zM19,28h1v1h-1zM20,28h1v1h-1zM21,28h1v1h-1zM23,28h1v1h-1zM25,28h1v1h-1zM26,28h1v1h-1zM28,28h1v1h-1zM30,28h1v1h-1zM33,28h1v1h-1zM2,29h1v1h-1zM8,29h1v1h-1zM10,29h1v1h-1zM13,29h1v1h-1zM15,29h1v1h-1zM16,29h1v1h-1zM18,29h1v1h-1zM19,29h1v1h-1zM20,29h1v1h-1zM21,29h1v1h-1zM25,29h1v1h-1zM26,29h1v1h-1zM30,29h1v1h-1zM31,29h1v1h-1zM32,29h1v1h-1zM2,30h1v1h-1zM4,30h1v1h-1zM5,30h1v1h-1zM6,30h1v1h-1zM8,30h1v1h-1zM11,30h1v1h-1zM12,30h1v1h-1zM13,30h1v1h-1zM14,30h1v1h-1zM18,30h1v1h-1zM19,30h1v1h-1zM20,30h1v1h-1zM24,30h1v1h-1zM25,30h1v1h-1zM26,30h1v1h-1zM27,30h1v1h-1zM28,30h1v1h-1zM29,30h1v1h-1zM30,30h1v1h-1zM32,30h1v1h-1zM33,30h1v1h-1zM2,31h1v1h-1zM4,31h1v1h-1zM5,31h1v1h-1zM6,31h1v1h-1zM8,31h1v1h-1zM10,31h1v1h-1zM12,31h1v1h-1zM14,31h1v1h-1zM18,31h1v1h-1zM19,31h1v1h-1zM21,31h1v1h-1zM24,31h1v1h-1zM25,31h1v1h-1zM29,31h1v1h-1zM31,31h1v1h-1zM32,31h1v1h-1zM33,31h1v1h-1zM34,31h1v1h-1zM2,32h1v1h-1zM4,32h1v1h-1zM5,32h1v1h-1zM6,32h1v1h-1zM8,32h1v1h-1zM10,32h1v1h-1zM11,32h1v1h-1zM16,32h1v1h-1zM17,32h1v1h-1zM18,32h1v1h-1zM19,32h1v1h-1zM22,32h1v1h-1zM23,32h1v1h-1zM25,32h1v1h-1zM26,32h1v1h-1zM28,32h1v1h-1zM29,32h1v1h-1zM31,32h1v1h-1zM2,33h1v1h-1zM8,33h1v1h-1zM11,33h1v1h-1zM15,33h1v1h-1zM16,33h1v1h-1zM19,33h1v1h-1zM22,33h1v1h-1zM26,33h1v1h-1zM28,33h1v1h-1zM29,33h1v1h-1zM30,33h1v1h-1zM34,33h1v1h-1zM2,34h1v1h-1zM3,34h1v1h-1zM4,34h1v1h-1zM5,34h1v1h-1zM6,34h1v1h-1zM7,34h1v1h-1zM8,34h1v1h-1zM10,34h1v1h-1zM15,34h1v1h-1zM16,34h1v1h-1zM19,34h1v1h-1zM20,34h1v1h-1zM21,34h1v1h-1zM22,34h1v1h-1zM23,34h1v1h-1zM25,34h1v1h-1zM30,34h1v1h-1zM32,34h1v1h-1z" fill="#14263F"/></svg><div><span class="live2">● Canlı prototip</span><b>yegfest-prototip.vercel.app/hackathon</b><a href="https://yegfest-prototip.vercel.app/hackathon" target="_blank" data-int>Siteyi aç →</a></div></div>
+  <div class="themes in" style="--d:0.21s"><span class="k">Örnek temalar</span><span>🤖 Yapay zekâ destekli verim artışı</span><span>💧 Su ve iklime uyum</span><span>🛒 Ürünün pazara erişimi</span><span>📱 Genç çiftçi için dijital araçlar</span><span>♻️ Döngüsel tarım ve enerji</span></div>
+  <div class="hk">
+    <div class="hm in" style="--d:0.32s"><div class="c">📣</div><small>MART</small><b>Duyuru</b><p>Bakanlık, TKDK ve TRGM hesaplarından</p></div>
+    <div class="hm in" style="--d:0.39s"><div class="c">📝</div><small>MART–NİSAN</small><b>Başvuru</b><p>Genç çiftçi, öğrenci, girişimci; bireysel veya takım</p></div>
+    <div class="hm in" style="--d:0.45s"><div class="c">🔍</div><small>MAYIS</small><b>Ön değerlendirme</b><p>İlk 10 fikir seçilir</p></div>
+    <div class="hm in" style="--d:0.52s"><div class="c">🧑‍🏫</div><small>HAZİRAN–TEMMUZ</small><b>Mentorluk</b><p>Uzman ve akademisyen desteği</p></div>
+    <div class="hm in" style="--d:0.59s"><div class="c">🏁</div><small>AĞUSTOS</small><b>Final</b><p>Çevrimiçi sunumlar, jüri</p></div>
+    <div class="hm fin in" style="--d:0.66s"><div class="c">🏆</div><small>EYLÜL</small><b>Festival</b><p>İlk 3 fikir sahnede sunulur</p></div>
+    <div class="hm in" style="--d:0.73s"><div class="c">🌱</div><small>SONRASI</small><b>Fikir havuzu</b><p>Fikirler destek programlarına yönlendirilir</p></div>
+  </div>
+  <div class="ch3 in" style="--d:0.84s"><b>Ekip:</b><span>Gençlik ve Uluslararası grubu · 2 kişi</span><span>Jüri ve mentorlar · kurum ve üniversitelerden</span><span>Ödül · İnovasyon Ödülü sponsoru</span></div>
+</section>
+
+<section class="slide" id="s-youth" data-sec="4" data-title="Gönüllü ve gençlik katılımı">
+  <div class="kicker in">Proje · Gönüllülük</div>
+  <h2 class="in" style="--d:.1s">Gönüllülerden <em>organizasyon ekibine</em></h2>
+  <div class="yl">
+    <div class="yc2 in pop" style="--d:.3s"><div class="ic">📢</div><h3>Gönüllü çağrısı</h3><p>“Festivalde gönüllü olmak ister misiniz?” çağrısı kurum ve YEG hesaplarından duyurulur.</p><span class="when">Haziran</span></div>
+    <div class="yc2 in pop" style="--d:.45s"><div class="ic">📸</div><h3>Atölye ekibi</h3><p>Gönüllüler arasından ürün fotoğrafçılığı ve sosyal medya atölyelerini yürütecek ekip seçilir.</p><span class="when">Temmuz</span></div>
+    <div class="yc2 in pop" style="--d:.6s"><div class="ic">🧭</div><h3>Organizasyon ekibi</h3><p>En aktif gönüllülerle festival günlerinde rehberlik, kayıt ve pasaport noktaları yürütülür.</p><span class="when">Ağustos–Eylül</span></div>
+  </div>
+  <p class="foot in" style="--d:.8s">ℹ️ <span>Katılım sayısı çağrıya gelen ilgiye göre belirlenir; <b>festival öncesi 1 günlük bilgilendirme</b> yapılır.</span></p>
+</section>
+
+<section class="slide" id="s-net" data-sec="4" data-title="Uluslararası YEG ağı">
+  <div class="kicker in">Proje · Uluslararası</div>
+  <h2 class="in" style="--d:.1s">YEG Kardeş: <em>uluslararası YEG ağı</em></h2>
+  <div class="net">
+    <div class="netviz in" style="--d:.3s">
+      <svg viewBox="0 0 800 560" preserveAspectRatio="none"><path d="M400 280 L140 90"/><path d="M400 280 L660 90"/><path d="M400 280 L90 330"/><path d="M400 280 L710 330"/><path d="M400 280 L230 500"/><path d="M400 280 L570 500"/></svg>
+      <div class="nd hub" style="left:50%;top:50%">YEGFEST</div>
+      <div class="nd" style="left:17.5%;top:16%">🇹🇷 Türkiye YEG'leri</div>
+      <div class="nd" style="left:82.5%;top:16%">🇪🇺 Avrupa YEG'leri</div>
+      <div class="nd" style="left:11%;top:59%">🤝 Eşleştirme</div>
+      <div class="nd" style="left:89%;top:59%">💡 Ortak proje fikri</div>
+      <div class="nd" style="left:29%;top:89%">✉️ Festival daveti</div>
+      <div class="nd" style="left:71%;top:89%">🎓 Deneyim paylaşımı</div>
+    </div>
+    <div class="feat">
+      <div class="fe in right" style="--d:.35s"><i>🌍</i><div><b>3D YEG küresi</b><span>Türkiye ve Avrupa YEG'leri tek haritada, profil ve ürünleriyle</span></div></div>
+      <div class="fe in right" style="--d:.45s"><i>🤝</i><div><b>Kardeş YEG eşleştirmesi</b><span>Ürün, tema ve önceliklere göre uyum önerisi</span></div></div>
+      <div class="fe in right" style="--d:.55s"><i>💡</i><div><b>Açık projeler</b><span>Bir YEG fikir açar, diğerleri ortak olarak katılır</span></div></div>
+      <div class="fe in right" style="--d:.65s"><i>✉️</i><div><b>Festival daveti ve ortak finansman</b><span>Davet ve program tek yerden; Erasmus+ ve ESC imkânları</span></div></div>
+      <div class="netqr in" style="--d:.8s" data-int><img src="data:image/png;base64,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" alt="YEG Kardeş QR"><div><span class="live2">● Canlı prototip</span><b>kardesyeg.vercel.app</b><a href="https://kardesyeg.vercel.app" target="_blank" data-int>Platformu aç →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= BÖLÜM 5 ================= -->
+<section class="slide div" id="d5" data-sec="5" data-title="Bölüm kapağı">
+  <div class="dv">
+    <div class="big in pop">05</div>
+    <div><div class="kicker in" style="--d:.15s">Bölüm 5</div><h1 class="in" style="--d:.2s">Uygulama <em>planı</em></h1>
+      <p class="in" style="--d:.35s">Kasım 2026'dan Ekim 2027'ye takvim, ilk adımlar ve ölçme.</p>
+      <div class="dvlist in" style="--d:.5s"></div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-gantt" data-sec="5" data-title="Ana takvim">
+  <div class="kicker in">Ana takvim</div>
+  <h2 class="in" style="--d:.1s">Kasım 2026 → <em>Ekim 2027</em></h2>
+  <div class="gantt in" style="--d:.2s">
+    <div></div>
+    <div class="gh"><span>KAS</span><span>ARA</span><span>OCA</span><span>ŞUB</span><span>MAR</span><span>NİS</span><span>MAY</span><span>HAZ</span><span>TEM</span><span>AĞU</span><span>EYL</span><span>EKİ</span></div>
+    <div class="gl"><i>🤝</i>Kuruluş ve ekip</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:0;width:calc(100%/12*2);--d:0.35s">Onay · çağrı · ekip</div></div>
+    <div class="gl"><i>🏷️</i>Marka ve şablonlar</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*1);width:calc(100%/12*2);--d:0.42s">Kılavuz + 60 sn şablon</div></div>
+    <div class="gl"><i>🤲</i>Bütçe ve sponsorluk</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*2);width:calc(100%/12*6);--d:0.5s">Dosya · görüşme · protokol</div></div>
+    <div class="gl"><i>📱</i>İlçe çekimleri</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*2);width:calc(100%/12*8);--d:0.57s">İlçelerin kendi takvimine göre</div></div>
+    <div class="gl"><i>📣</i>Instagram yayını</div><div class="gr"><div class="festcol"></div><div class="bar gold" style="left:calc(100%/12*4);width:calc(100%/12*8);--d:0.65s">Haftada 7 ilçe · yıl boyu</div></div>
+    <div class="gl"><i>💻</i>Dijital platform</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*1);width:calc(100%/12*5);--d:0.72s">Simülasyon hazır → pilot</div><div class="bar light" style="left:calc(100%/12*6);width:calc(100%/12*6);--d:1.05s">Yayında</div></div>
+    <div class="gl"><i>💡</i>Hackathon</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*4);width:calc(100%/12*6);--d:0.8s">Duyuru → mentorluk → final</div></div>
+    <div class="gl"><i>🌍</i>YEG Kardeş ağı</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*2);width:calc(100%/12*8);--d:0.88s">Platform · davet · eşleştirme</div></div>
+    <div class="gl"><i>🙋</i>Gönüllüler</div><div class="gr"><div class="festcol"></div><div class="bar" style="left:calc(100%/12*7);width:calc(100%/12*3);--d:0.95s">Çağrı · ekip</div></div>
+    <div class="gl" style="color:var(--gold2)"><i>⭐</i>YEGFEST 2027</div><div class="gr"><div class="festcol"></div><div class="bar gold" style="left:calc(100%/12*10);width:calc(100%/12);--d:1.1s">FESTİVAL</div><div class="bar light" style="left:calc(100%/12*11);width:calc(100%/12);--d:1.15s">Rapor</div></div>
+  </div>
+</section>
+
+<section class="slide" id="s-90" data-sec="5" data-title="İlk 90 gün">
+  <div class="kicker in">İlk adımlar</div>
+  <h2 class="in" style="--d:.1s">İlk <em>90 gün</em></h2>
+  <div class="d90">
+    <div class="ln"><i></i></div>
+    <div class="sp">
+      <div class="in" style="--d:.3s"><div class="dot">✍️</div><small>Hafta 1–2</small><h4>Onay ve çağrı</h4><p>YEG'lere gönüllü ekip çağrısı</p></div>
+      <div class="in" style="--d:.45s"><div class="dot">🤝</div><small>Hafta 3–4</small><h4>Ekip kurulumu</h4><p>Görev dağılımı, açılış toplantısı</p></div>
+      <div class="in" style="--d:.6s"><div class="dot">🏷️</div><small>Hafta 5–8</small><h4>Marka ve şablon</h4><p>Marka kılavuzu, 60 sn şablon, çekim listesi</p></div>
+      <div class="in" style="--d:.75s"><div class="dot">☁️</div><small>Hafta 9–10</small><h4>İlçelere duyuru</h4><p>Drive yapısı, kısa çevrimiçi bilgilendirme</p></div>
+      <div class="in" style="--d:.9s"><div class="dot">🎬</div><small>Hafta 11–12</small><h4>Pilot</h4><p>İlk 10 ilçe videosu, sponsorluk dosyası</p></div>
+      <div class="in" style="--d:1.05s"><div class="dot">📝</div><small>Hafta 13</small><h4>İlk rapor</h4><p>Durum raporu Daire Başkanlığına</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" id="s-kpi" data-sec="5" data-title="Ölçme ve etki">
+  <div class="kicker in">Ölçme</div>
+  <h2 class="in" style="--d:.1s">Neyi ölçeceğiz, <em>nasıl raporlayacağız?</em></h2>
+  <div class="kp6">
+    <div class="in pop" style="--d:.3s"><i>📣</i><b>Sosyal medya erişimi</b><span>Takipçi, izlenme, paylaşım · haftalık</span></div>
+    <div class="in pop" style="--d:.4s"><i>🗺️</i><b>Platform ve QR</b><span>Sayfa ziyareti, QR okutma, pasaport · sürekli</span></div>
+    <div class="in pop" style="--d:.5s"><i>🤝</i><b>Sponsorluk</b><span>Nakdi ve ayni katkı, protokol sayısı · aylık</span></div>
+    <div class="in pop" style="--d:.6s"><i>💡</i><b>Hackathon</b><span>Başvuru, finalist, desteğe yönlenen fikir</span></div>
+    <div class="in pop" style="--d:.7s"><i>😊</i><b>Memnuniyet</b><span>Ziyaretçi ve YEG anketi · festival sonrası</span></div>
+    <div class="rep in pop" style="--d:.8s"><i>📘</i><b>Etki Raporu</b><span>Festivalden 30 gün sonra; bir sonraki yılın temeli</span></div>
+  </div>
+</section>
+
+<!-- ================= KAPANIŞ ================= -->
+<section class="slide" id="s-matrix" data-sec="0" data-title="Özet">
+  <div class="kicker in">Özet</div>
+  <h2 class="in" style="--d:.1s">Kim, kaç kişi, <em>nasıl, ne zaman?</em></h2>
+  <table class="t mx" style="margin-top:20px">
+    <tr class="in" style="--d:.2s"><th>Başlık</th><th>Kim</th><th>Kaç kişi</th><th>Nasıl</th><th>Ne zaman</th></tr>
+    <tr class="in" style="--d:.28s"><td>Koordinasyon</td><td>Koordinasyon Masası</td><td class="num" style="font-size:22px">2</td><td>Haftalık toplantı, aylık rapor</td><td>Kasım → sürekli</td></tr>
+    <tr class="in" style="--d:.36s"><td>Bütçe ve sponsorluk</td><td>Bütçe ve Sponsorluk grubu</td><td class="num" style="font-size:22px">2 + 7</td><td>Ayni ve nakdi paketler, protokol</td><td>Ocak–Haziran</td></tr>
+    <tr class="in" style="--d:.44s"><td>Marka ve video</td><td>Marka ve Tanıtım + 155 YEG</td><td class="num" style="font-size:22px">3 + 155</td><td>Ortak şablon, Drive, tek elden kurgu</td><td>Ocak → yıl boyu</td></tr>
+    <tr class="in" style="--d:.52s"><td>Dijital platform</td><td>Dijital Platform grubu</td><td class="num" style="font-size:22px">2</td><td>Aşamalı kurulum, pilot</td><td>Aralık–Mayıs</td></tr>
+    <tr class="in" style="--d:.6s"><td>Hackathon ve gönüllüler</td><td>Gençlik ve Uluslararası</td><td class="num" style="font-size:22px">2</td><td>Çağrı, mentorluk, festival finali</td><td>Mart–Eylül</td></tr>
+    <tr class="in" style="--d:.68s"><td>YEG Kardeş ağı</td><td>Gençlik ve Uluslararası</td><td class="num" style="font-size:22px">2</td><td>Platform, eşleştirme, davet</td><td>Ocak–Eylül</td></tr>
+    <tr class="in" style="--d:.76s"><td>Ölçme</td><td>Ölçme ve Raporlama</td><td class="num" style="font-size:22px">1</td><td>Analitik ve anket</td><td>Sürekli · rapor Ekim</td></tr>
+  </table>
+</section>
+
+<section class="slide" id="s-close" data-sec="0" data-title="Teşekkür">
+  <div class="ty">
+    <div class="kicker in">YEGFEST · Öneriden uygulamaya</div>
+    <h1 class="in" style="--d:.15s">Teşekkür <em>ederim</em></h1>
+    <p class="next in" style="--d:.4s">Uygun görülmesi hâlinde ilk adım: <b>gönüllü ekip çağrısı, marka ve video şablonu, 10 ilçelik pilot.</b></p>
+    <div class="contact in" style="--d:.6s"><b>Harun Eymen Vural</b><br>Buharkent Yerel Eylem Grubu Derneği<br>haruneymenvurall@gmail.com · +90 554 441 11 67<div class="links">yegfest-prototip.vercel.app <span>·</span> kardesyeg.vercel.app</div></div>
+  </div>
+</section>
+
+</div>
+<div id="prog"></div><div id="count"></div><div id="brand"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let slides=$$('.slide');let cur=0;
+const SECS=['','Stratejik yaklaşım','Bütçe ve sponsorluk','Tanıtım, reklam ve bilinirlik','Projeler','Uygulama planı'];
+
+/* scale stage */
+function fit(){const s=Math.min(innerWidth/1920,innerHeight/1080);$('#stage').style.transform=`translate(-50%,-50%) scale(${s})`}
+addEventListener('resize',fit);fit();
+
+/* photo loader (same folder; tolerant to extensions) */
+$$('.ph[data-img]').forEach(el=>loadImg(el,el.dataset.img));
+function loadImg(el,name){const base=name.replace(/\.(jpe?g|png|webp)$/i,''),ext=name.slice(base.length);
+  const list=[...new Set([ext,'.jpg','.jpeg','.png','.webp','.JPG','.JPEG','.PNG',ext+ext,'.jpg.jpg','.jpeg.jpeg','.png.png','.jpg.png','.png.jpg'])].map(e=>base+e);
+  let i=0;const img=new Image();
+  img.onload=()=>{el.style.backgroundImage=`url("${img.src}")`;el.classList.add('has')};
+  img.onerror=()=>{if(++i<list.length)img.src=list[i];else{el.classList.remove('has');el.style.backgroundImage=''}};
+  img.src=list[0]}
+
+/* divider lists */
+function fillDividers(){$$('.slide.div').forEach(d=>{const sec=d.dataset.sec;const box=d.querySelector('.dvlist');
+  box.innerHTML=slides.filter(s=>s.dataset.sec===sec&&!s.classList.contains('div')).map(s=>`<span>${s.dataset.title}</span>`).join('')})}
+
+/* footer section indicator */
+const brand=$('#brand');
+function drawBrand(){const sec=+(slides[cur].dataset.sec||0);
+  brand.innerHTML=`<span>${sec?('Bölüm '+sec+' · '+SECS[sec]):'YEGFEST · Öneriden uygulamaya'}</span><span class="dots">${[1,2,3,4,5].map(i=>`<i class="${i===sec?'on':''}"></i>`).join('')}</span>`}
+
+/* navigation */
+function go(n){
+  n=Math.max(0,Math.min(slides.length-1,n));
+  slides.forEach((s,i)=>{s.classList.toggle('active',i===n);s.classList.toggle('past',i<n);s.classList.remove('play')});
+  void slides[n].offsetWidth;
+  requestAnimationFrame(()=>requestAnimationFrame(()=>slides[n].classList.add('play')));
+  cur=n;$('#count').textContent=String(n+1).padStart(2,'0')+' / '+slides.length;
+  $('#prog').style.width=((n+1)/slides.length*100)+'%';
+  history.replaceState(null,'','#'+(n+1));drawBrand();
+  tplStop();if(slides[n].id==='s-tpl')setTimeout(tplPlay,900);
+}
+addEventListener('keydown',e=>{
+  if(['ArrowRight','PageDown',' ','Enter'].includes(e.key)){e.preventDefault();go(cur+1)}
+  else if(['ArrowLeft','PageUp','Backspace'].includes(e.key)){e.preventDefault();go(cur-1)}
+  else if(e.key==='Home')go(0);else if(e.key==='End')go(slides.length-1);
+  else if(e.key==='b'||e.key==='B'||e.key==='.'){document.body.classList.toggle('black')}
+  else if(e.key==='f'||e.key==='F'){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen()}
+});
+document.addEventListener('click',e=>{if(e.target.closest('[data-int]'))return;go(cur+1)});
+document.addEventListener('contextmenu',e=>{e.preventDefault();go(cur-1)});
+
+/* agenda jumps */
+$$('[data-go]').forEach(a=>a.addEventListener('click',e=>{e.stopPropagation();const i=slides.findIndex(s=>s.id===a.dataset.go);if(i>=0)go(i)}));
+
+/* flip cards */
+$$('.flip').forEach(f=>f.addEventListener('click',()=>f.classList.toggle('on')));
+
+/* 60 sn template player */
+const TPL=[
+ {t:0,e:5,name:'Kanca',img:'sb-1.jpg',g:'Güçlü bir ilk kare: gün doğumunda incir ağacı, yaprak arasından ışık',s:'Doğal ses. Ekranda tek cümle: “Her şey sabah, aynı ağacın altında başlar.”',w:'İzleyiciyi ilk 5 saniyede tutmak'},
+ {t:5,e:15,name:'İnsan',img:'sb-2.jpg',g:'Üreticinin yarım boy portresi; toprağa değen eller',s:'“Üç kuşaktır bu bahçede incir üretiyoruz.”',w:'Ürünün arkasındaki insanı tanıtmak'},
+ {t:15,e:25,name:'Süreç · hasat',img:'sb-3.jpg',g:'Yerden toplanan incirler, sepet, yakın plan eller',s:'“İncir dalda olgunlaşır, kendiliğinden düşer.”',w:'Emeği ve yöntemi göstermek'},
+ {t:25,e:40,name:'Süreç · kurutma',img:'sb-4.jpg',g:'Güneşte kuruyan sergiler, ayıklama, paketleme',s:'“Biz sadece güneşe emanet ederiz.”',w:'Ürünün özgünlüğünü anlatmak'},
+ {t:40,e:52,name:'Sofra',img:'sb-5.jpg',g:'Aile sofrası, incir uyutması servisi',s:'“Kışın sofradaki tatlımız da bu bahçeden.”',w:'Ürünü sofradaki karşılığıyla bağlamak'},
+ {t:52,e:60,name:'Kapanış',img:'sb-6.jpg',g:'Paketli ürün, YEGFEST logosu ve QR',s:'Ekranda: “Buharkent · Aydın — 155 hikâyeden biri.”',w:'Markayı ve platformu hatırlatmak'}];
+const SEGB=[0,5,15,40,52,60];
+let tplT=null,tplStart=0,tplLast=-1;
+function tplSet(sec){$('#thead').style.left=`calc(${sec/60*100}% - 2px)`;
+  const mm=Math.floor(sec),ss=String(mm).padStart(2,'0');$('#tnow').textContent='00:'+(mm>=60?'59':ss);
+  let si=0;for(let i=0;i<5;i++)if(sec>=SEGB[i])si=i;$$('.tseg').forEach((s,i)=>s.classList.toggle('on',i===si));
+  let k=0;TPL.forEach((x,i)=>{if(sec>=x.t)k=i});
+  if(k!==tplLast){tplLast=k;const x=TPL[k];loadImg($('#tph'),x.img);
+    $('#tdesc').innerHTML=`<div class="fade"><div class="now">${String(x.t).padStart(2,'0')}–${x.e} sn · Şu an</div><h3>${x.name}</h3>
+      <div class="ln"><small>Görüntü</small><span>${x.g}</span></div><div class="ln vo"><small>Ses / metin</small><span>${x.s}</span></div><div class="ln"><small>Amaç</small><span>${x.w}</span></div></div>`}}
+function tplPlay(){tplStop();tplStart=performance.now();tplLast=-1;
+  (function f(t){const sec=((t-tplStart)/1000*2.4)%60;tplSet(sec);tplT=requestAnimationFrame(f)})(tplStart)}
+function tplStop(){if(tplT)cancelAnimationFrame(tplT);tplT=null}
+tplSet(0);
+
+/* pilot video: hide slide if file missing */
+(function(){const v=$('#pvv');if(!v)return;
+  v.addEventListener('loadedmetadata',()=>$('#pv').classList.add('has'));
+  const drop=()=>{const sec=$('#s-pilot');if(!sec)return;const curId=slides[cur]&&slides[cur].id;
+    sec.remove();slides=$$('.slide');fillDividers();let i=slides.findIndex(x=>x.id===curId);go(i<0?Math.min(cur,slides.length-1):i)};
+  v.addEventListener('error',drop);
+  const chk=()=>{if(v.error||v.networkState===3)drop()};setTimeout(chk,300);setTimeout(chk,1200);setTimeout(chk,3000);
+})();
+
+/* background network */
+const c=$('#bg'),x=c.getContext('2d');let W,H,P=[];
+function rs(){const r=devicePixelRatio||1;W=innerWidth;H=innerHeight;c.width=W*r;c.height=H*r;x.setTransform(r,0,0,r,0,0)}
+addEventListener('resize',rs);rs();
+for(let i=0;i<70;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.22,vy:(Math.random()-.5)*.22,r:Math.random()*1.8+.6});
+(function bg(){if(document.hidden){setTimeout(()=>requestAnimationFrame(bg),400);return}x.clearRect(0,0,W,H);
+  for(let i=0;i<P.length;i++){const p=P[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+    for(let j=i+1;j<P.length;j++){const q=P[j],d=Math.hypot(p.x-q.x,p.y-q.y);if(d<150){x.strokeStyle=`rgba(31,58,95,${(1-d/150)*.09})`;x.lineWidth=1;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke()}}
+    x.fillStyle='rgba(31,58,95,.25)';x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+  requestAnimationFrame(bg)})();
+
+fillDividers();
+const h=parseInt(location.hash.slice(1));go(h>0&&h<=slides.length?h-1:0);
+</script>
+<div id="navbtn" data-int><button id="nbP" aria-label="Önceki" data-int>‹</button><button id="nbN" aria-label="Sonraki" data-int>›</button></div>
+<div id="hint">İlerlemek için tıklayın ya da → tuşuna basın · F: tam ekran</div>
+<div id="rot" data-int><b>📱</b>Sunumu en iyi görmek için telefonunuzu yatay çevirin.<small>Kaydırarak slaytlar arasında geçebilirsiniz.</small><button id="rotok" data-int>Dikey devam et</button></div>
+<script>
+(function(){
+ const tch=matchMedia('(pointer:coarse)').matches;
+ const H=document.getElementById('hint');if(tch)H.textContent='Kaydırarak ya da dokunarak ilerleyin';
+ setTimeout(()=>H.classList.add('off'),5000);
+ document.getElementById('nbP').addEventListener('click',e=>{e.stopPropagation();go(cur-1)});
+ document.getElementById('nbN').addEventListener('click',e=>{e.stopPropagation();go(cur+1)});
+ document.getElementById('rotok').addEventListener('click',e=>{e.stopPropagation();document.body.classList.add('rotok')});
+ let sx=0,sy=0,st=0,sw=false;
+ addEventListener('touchstart',e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=Date.now();sw=false},{passive:true});
+ addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-sx,dy=t.clientY-sy;
+   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.3&&Date.now()-st<800){sw=true;go(cur+(dx<0?1:-1))}},{passive:true});
+ document.addEventListener('click',e=>{if(sw){e.stopImmediatePropagation();sw=false}},true);
+})();
+</script>
+</body>
+</html>
